@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applications of Set Theory - DiscreteMathsHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #E6DAF5;
+      color: #f8f9fa;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .container {
+      max-width: 950px;
+      margin-top: 60px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 100, 0.2);
+    }
+
+    h1, h2 {
+      color: #00ff99;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    p {
+      color: #e4e4e4;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    ul li {
+      color: #ddd;
+    }
+
+    .example {
+      background: rgba(0, 255, 100, 0.1);
+      border-left: 4px solid #00ff99;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .btn-custom {
+      background-color: #00ff99;
+      color: black;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+      background-color: #00cc7a;
+      transform: scale(1.05);
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .input-section {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    input[type="text"] {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 2px solid #00ff99;
+      background-color: #1a1a1a;
+      color: #fff;
+      width: 40%;
+      margin: 10px;
+    }
+
+    select {
+      background-color: #1a1a1a;
+      color: #00ff99;
+      border: 2px solid #00ff99;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 10px;
+    }
+
+    #resultBox {
+      margin-top: 25px;
+      padding: 15px;
+      background: rgba(0, 255, 100, 0.1);
+      border-left: 4px solid #00ff99;
+      border-radius: 8px;
+      color: #fff;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Applications of Set Theory</h1>
+
+    <p>
+      Set theory is the foundation of modern mathematics and is widely applied across various domains.
+      Understanding how to classify, group, and operate on data through sets is crucial in solving real-world problems.
+      Applications include:
+    </p>
+
+    <ul>
+      <li><b>Database Management:</b> Performing operations like JOIN, UNION, and INTERSECTION between data tables.</li>
+      <li><b>Probability and Statistics:</b> Events in probability are treated as sets of outcomes.</li>
+      <li><b>Computer Science:</b> Used in data structures, algorithms, and artificial intelligence for grouping and filtering data.</li>
+      <li><b>Logic and Reasoning:</b> Set operations are used in propositional and predicate logic.</li>
+      <li><b>Classification Problems:</b> Used to categorize students, customers, or objects based on shared attributes.</li>
+    </ul>
+
+    <div class="example">
+      <b>Example:</b><br>
+      Let A = {Students who like Mathematics},<br>
+      and B = {Students who like Science}.<br>
+      Then:<br>
+      A ∩ B = Students who like both Mathematics and Science.<br>
+      A ∪ B = Students who like at least one of the subjects.
+    </div>
+
+    <h2 class="mt-4">🧠 Interactive Application Simulator</h2>
+    <p class="text-center">Enter two sets to explore their relationships (e.g., students who like different subjects):</p>
+
+    <div class="input-section">
+      <input type="text" id="setA" placeholder="Set A (e.g., Riya, John, Priya)" />
+      <input type="text" id="setB" placeholder="Set B (e.g., Priya, Aarav, John)" />
+      <br />
+      <select id="operation">
+        <option value="union">Union (A ∪ B)</option>
+        <option value="intersection">Intersection (A ∩ B)</option>
+        <option value="difference">Difference (A - B)</option>
+      </select>
+      <br />
+      <button class="btn-custom" id="applyBtn">Apply Operation</button>
+    </div>
+
+    <div id="resultBox"></div>
+
+    <div class="nav-buttons">
+      <a href="set_property.html" class="btn btn-custom">⬅ Previous</a>
+      <a href="set_theory_overview.html" class="btn btn-custom">🏠 Home</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("applyBtn").addEventListener("click", () => {
+      const A = parseSet(document.getElementById("setA").value);
+      const B = parseSet(document.getElementById("setB").value);
+      const operation = document.getElementById("operation").value;
+      const resultBox = document.getElementById("resultBox");
+
+      if (A.size === 0 || B.size === 0) {
+        alert("Please enter valid non-empty sets.");
+        return;
+      }
+
+      let result = new Set();
+      let operationText = "";
+
+      if (operation === "union") {
+        result = union(A, B);
+        operationText = "Union (A ∪ B)";
+      } else if (operation === "intersection") {
+        result = intersection(A, B);
+        operationText = "Intersection (A ∩ B)";
+      } else if (operation === "difference") {
+        result = difference(A, B);
+        operationText = "Difference (A - B)";
+      }
+
+      resultBox.innerHTML = `
+        <b>Operation:</b> ${operationText}<br>
+        <b>Result Set:</b> {${[...result].join(", ")}}<br><br>
+        ${
+          operation === "union"
+            ? "Represents all unique elements from both sets."
+            : operation === "intersection"
+            ? "Represents only the common elements between both sets."
+            : "Represents elements in A that are not in B."
+        }
+      `;
+      resultBox.style.display = "block";
+    });
+
+    function parseSet(str) {
+      return new Set(str.split(",").map((x) => x.trim()).filter((x) => x !== ""));
+    }
+
+    function union(A, B) {
+      return new Set([...A, ...B]);
+    }
+
+    function intersection(A, B) {
+      return new Set([...A].filter((x) => B.has(x)));
+    }
+
+    function difference(A, B) {
+      return new Set([...A].filter((x) => !B.has(x)));
+    }
+  </script>
+</body>
+</html>

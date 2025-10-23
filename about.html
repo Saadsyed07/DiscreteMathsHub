@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>About Us — DiscreteMathsHub</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family: Inter, system-ui, Arial, sans-serif;
+    background:#E6DAF5;
+    color:#fff;
+    line-height:1.6;
+  }
+
+  /* NAV */
+  nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 48px;
+    background:transparent;
+  }
+  .logo{color:#8A4FFF;font-weight:700;font-size:22px;letter-spacing:1px}
+  .menu{display:flex;gap:22px;list-style:none}
+  .menu a{color:black;text-decoration:none;font-weight:600;font-size:14px}
+  .menu a:hover{color:#8A4FFF}
+
+  /* About Section */
+  .about-section{
+    max-width:1100px;
+    margin:60px auto;
+    padding:0 24px;
+    text-align:center;
+  }
+  .about-section h1{
+    font-size:clamp(28px,5vw,52px);
+    font-weight:800;
+    color:#8A4FFF;
+    margin-bottom:20px;
+  }
+  .about-section p{
+    font-size:18px;
+    color:black;
+    margin-bottom:24px;
+  }
+
+  /* Cards for team/mission/vision */
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+    margin-top:40px;
+  }
+  .card{
+    background:#ded1fd;
+    border-radius:14px;
+    padding:28px 22px;
+    box-shadow:0 4px 12px rgba(0,0,0,.4);
+    transition:transform .25s;
+  }
+  .card:hover{transform:translateY(-6px)}
+  .card h2{
+    font-size:22px;
+    color:#8A4FFF;
+    margin-bottom:12px;
+  }
+  .card p{
+    color:black;
+    font-size:15px;
+  }
+
+  /* Call-to-action */
+  .cta{
+    margin-top:60px;
+    text-align:center;
+  }
+  .btn{
+    padding:12px 28px;
+    border-radius:28px;
+    background:#8A4FFF;
+    border:none;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(16,120,65,.12);
+  }
+
+  /* responsive */
+  @media(max-width:700px){
+    nav{padding:12px 20px}
+    .menu{display:none}
+  }
+
+  /*profile icon*/
+   .logo{color:#8A4FFF;font-weight:700;font-size:22px;letter-spacing:1px}
+  .menu{display:flex;gap:22px;list-style:none;align-items:center;}
+  .menu a{color:black;text-decoration:none;font-weight:600;font-size:14px}
+  .menu a:hover{color:#8A4FFF}
+
+  /* Profile icon */
+  .profile-icon{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#8A4FFF;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .2s;
+  }
+  .profile-icon:hover{
+    transform:scale(1.1);
+  }
+  .profile-icon svg{
+    width:22px;
+    height:22px;
+    fill:#0f1110;
+  }
+
+  @media(max-width:700px){
+    nav{padding:12px 20px}
+    .menu{display:none}
+  }
+
+  /* Dropdown */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #1c1f1e;
+    min-width: 180px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 100;
+  }
+
+  .dropdown-content a {
+    display: block;
+    padding: 10px 14px;
+    color: #ddd;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .dropdown-content a:hover {
+    background: #8A4FFF;
+    color: #0f1110;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width:700px){
+    nav{padding:12px 20px}
+    .menu{display:none}
+    .arrow{width:40px;height:40px;font-size:22px}
+    .dot{width:26px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">DiscreteMathsHub</div>
+  <ul class="menu">
+    <li><a href="index.html">HOME</a></li>
+      <li class="dropdown">
+        <a href="#">EXPLORE ▾</a>
+        <div class="dropdown-content">
+          <a href="set_theory.html">Set Theory</a>
+          <a href="graph.html">Graph Theory</a>
+          <a href="#tree">Trees</a>
+          <a href="#logic">Logic</a>
+          <a href="#combinatorics">Combinatorics</a>
+          <a href="#relations">Relations & Functions</a>
+        </div>
+      </li>
+    <li><a href="./about.html" style="color:#8A4FFF;">ABOUT</a></li>
+    <li><a href="./login.html">LOGIN</a></li>
+    <li><a href="/register.html">REGISTER</a></li>
+    <li>
+      <!-- Profile Icon with Person -->
+      <a href="/profile.html" class="profile-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<section class="about-section">
+  <h1>About Us</h1>
+  <p>Welcome to <strong>DiscreteMathsHub</strong> — a platform created to make learning Discrete Mathematics engaging, visual, and practical for Computer Science students.</p>
+  <p>We believe that concepts like logic, set theory, graph theory, and combinatorics are the foundation of programming and algorithms. Our mission is to simplify these topics using visual examples, interactive notes, and practice resources.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h2>Our Mission</h2>
+      <p>To provide CS students with an intuitive understanding of Discrete Mathematics, bridging the gap between theory and practical applications.</p>
+    </div>
+    <div class="card">
+      <h2>Our Vision</h2>
+      <p>To become the go-to learning platform for Discrete Mathematics and help students excel in academics, coding, and competitive exams.</p>
+    </div>
+    <div class="card">
+      <h2>Our Team</h2>
+      <p>We are a group of passionate educators, learners, and developers dedicated to making mathematics fun, accessible, and relevant.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

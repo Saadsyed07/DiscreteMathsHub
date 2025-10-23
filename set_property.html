@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Properties of Sets — DiscreteMathsHub</title>
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f9f9f9;
+      --card: #ffffff;
+      --text: #1c1c1c;
+      --muted: #555;
+      --accent: #6f42c1;
+      --accent-light: rgba(111,66,193,0.1);
+    }
+
+    *{ box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:240px;
+      background:#2c2f33;
+      color:#fff;
+      padding-top:20px;
+      overflow-y:auto;
+      z-index:1000;
+    }
+    .sidebar h2{
+      text-align:center;
+      font-size:20px;
+      color:var(--accent);
+      margin-bottom:15px;
+    }
+    .sidebar a{
+      display:block;
+      padding:10px 20px;
+      color:#fff;
+      text-decoration:none;
+      font-size:14px;
+    }
+    .sidebar a:hover,
+    .sidebar a.active{
+      background:var(--accent);
+      color:#fff;
+      border-radius:6px;
+    }
+
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:240px; right:0;
+      height:60px;
+      background:#fff;
+      border-bottom:1px solid #ddd;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 20px;
+      z-index:999;
+    }
+    .topnav h3{margin:0;color:var(--accent);}
+    .topnav a{
+      margin-left:15px;
+      text-decoration:none;
+      color:var(--accent);
+      font-weight:500;
+    }
+
+    /* Main Content */
+    main.container-main{
+      margin-left:240px;
+      margin-top:60px;
+      padding:20px 40px;
+      min-height:100vh;
+    }
+
+    /* Content Card */
+    .content{
+      background: var(--card);
+      border-radius:12px;
+      padding:25px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom:20px;
+      color:var(--text);
+    }
+
+    h1, h2{
+      text-align:center;
+      color: var(--accent);
+      font-weight:700;
+      margin-bottom:15px;
+    }
+
+    p, ul li{
+      color: var(--muted);
+      line-height:1.6;
+    }
+
+    .example-box{
+      background: var(--accent-light);
+      border-left:4px solid var(--accent);
+      padding:12px;
+      border-radius:8px;
+      margin:10px 0;
+      color:#333;
+    }
+
+    /* Inputs & Buttons */
+    label{color:var(--accent); font-weight:600; display:block; margin-top:10px;}
+    .form-control{
+      border:1px solid rgba(111,66,193,0.3);
+      padding:8px 12px;
+      border-radius:6px;
+      margin-bottom:10px;
+      color:#333;
+    }
+    .form-control::placeholder{color:#aaa}
+
+    .btn-custom{
+      background: linear-gradient(90deg,var(--accent),#a77de0);
+      color:#fff;
+      border:none;
+      padding:8px 18px;
+      border-radius:20px;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:5px;
+    }
+    .btn-custom:hover{opacity:0.9}
+    .btn-custom:active{transform:translateY(1px)}
+
+    /* Results Box */
+    #resultBox{
+      margin-top:15px;
+      padding:12px;
+      border-radius:8px;
+      border:1px solid rgba(111,66,193,0.3);
+      background:#f5f5f5;
+      color:#333;
+      white-space: pre-wrap;
+      display:block;
+    }
+
+    /* Navigation Row */
+    .nav-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    @media(max-width:768px){
+      main.container-main{margin-left:0;padding:20px;}
+      .sidebar{width:100%;position:relative;}
+      .topnav{left:0;}
+      .nav-row{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Set Theory</h2>
+    <a href="set_defination.html">Set Introduction</a>
+    <a href="set_operations.html">Set Operations</a>
+    <a href="set_venndiagram.html">Venn Diagrams</a>
+    <a href="subsets.html">Subsets</a>   
+     <a href="set_property.html">Properties Sets</a>
+    <a href="cartesian.html">Cartesian Products</a>
+    <a href="applications.html" class="active">Applications</a>
+  </div>
+
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
+    </div>
+  </div>
+
+  <main class="container-main">
+    <h1>Properties of Sets</h1>
+
+    <div class="content">
+      <p>
+        Sets follow certain algebraic laws that help simplify expressions and verify relationships between them.  
+        Major properties include:
+      </p>
+      <ul>
+        <li><b>Commutative Laws:</b> A ∪ B = B ∪ A, and A ∩ B = B ∩ A</li>
+        <li><b>Associative Laws:</b> (A ∪ B) ∪ C = A ∪ (B ∪ C)</li>
+        <li><b>Distributive Laws:</b> A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)</li>
+        <li><b>Identity Laws:</b> A ∪ ∅ = A and A ∩ U = A</li>
+        <li><b>Complement Laws:</b> A ∪ A′ = U and A ∩ A′ = ∅</li>
+        <li><b>De Morgan’s Laws:</b> (A ∪ B)' = A' ∩ B' and (A ∩ B)' = A' ∪ B'</li>
+      </ul>
+
+      <div class="example-box">
+        <b>Example:</b><br>
+        Let A = {1, 2, 3}, B = {3, 4, 5}.<br>
+        A ∪ B = {1,2,3,4,5} and B ∪ A = {1,2,3,4,5}. Hence, the <b>Commutative Law of Union</b> holds.
+      </div>
+    </div>
+
+    <div class="content">
+      <h2>Interactive Property Checker</h2>
+      <label for="setA">Set A</label>
+      <input type="text" id="setA" placeholder="1,2,3" class="form-control">
+      <label for="setB">Set B</label>
+      <input type="text" id="setB" placeholder="3,4,5" class="form-control">
+      <label for="property">Choose Property</label>
+      <select id="property" class="form-control">
+        <option value="commutativeUnion">Commutative Law (Union)</option>
+        <option value="commutativeIntersection">Commutative Law (Intersection)</option>
+        <option value="distributive">Distributive Law</option>
+        <option value="identity">Identity Law</option>
+        <option value="deMorgan">De Morgan’s Law</option>
+      </select>
+      <button class="btn-custom" id="checkBtn">Check Property</button>
+
+      <div id="resultBox"></div>
+    </div>
+
+    <div class="nav-row">
+      <a href="set_venndiagram.html" class="btn-custom">⬅ Previous</a>
+      <a href="set_application.html" class="btn-custom">Next ➡</a>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("checkBtn").addEventListener("click", () => {
+      const A = parseSet(document.getElementById("setA").value);
+      const B = parseSet(document.getElementById("setB").value);
+      const property = document.getElementById("property").value;
+
+      if (A.size === 0 || B.size === 0) {
+        alert("Please enter valid non-empty sets.");
+        return;
+      }
+
+      const resultBox = document.getElementById("resultBox");
+      let result = "";
+      let holds = false;
+
+      switch (property) {
+        case "commutativeUnion":
+          holds = equalSets(union(A, B), union(B, A));
+          result = `A ∪ B = {${[...union(A, B)].join(", ")}}<br>
+                    B ∪ A = {${[...union(B, A)].join(", ")}}`;
+          break;
+
+        case "commutativeIntersection":
+          holds = equalSets(intersection(A, B), intersection(B, A));
+          result = `A ∩ B = {${[...intersection(A, B)].join(", ")}}<br>
+                    B ∩ A = {${[...intersection(B, A)].join(", ")}}`;
+          break;
+
+        case "distributive":
+          const C = new Set(["x","y"]);
+          const left = intersection(A, union(B, C));
+          const right = union(intersection(A, B), intersection(A, C));
+          holds = equalSets(left, right);
+          result = `(A ∩ (B ∪ C)) = {${[...left].join(", ")}}<br>
+                    (A ∩ B) ∪ (A ∩ C) = {${[...right].join(", ")}}`;
+          break;
+
+        case "identity":
+          const empty = new Set();
+          holds = equalSets(union(A, empty), A);
+          result = `A ∪ ∅ = {${[...union(A, empty)].join(", ")}}`;
+          break;
+
+        case "deMorgan":
+          const U = new Set([...A, ...B, "x", "y", "z"]);
+          const leftLaw = complement(union(A, B), U);
+          const rightLaw = intersection(complement(A, U), complement(B, U));
+          holds = equalSets(leftLaw, rightLaw);
+          result = `(A ∪ B)' = {${[...leftLaw].join(", ")}}<br>
+                    A' ∩ B' = {${[...rightLaw].join(", ")}}`;
+          break;
+      }
+
+      resultBox.innerHTML = `<b>Property:</b> ${document.getElementById("property").selectedOptions[0].text}<br><br>
+                             ${result}<br><br>
+                             <b>Result:</b> ${
+                               holds
+                                 ? "<span style='color:#6f42c1'>✅ Property holds true</span>"
+                                 : "<span style='color:#ff4d4d'>❌ Property does not hold</span>"
+                             }`;
+    });
+
+    function parseSet(str){ return new Set(str.split(",").map(x=>x.trim()).filter(x=>x!=="")); }
+    function union(A,B){ return new Set([...A,...B]); }
+    function intersection(A,B){ return new Set([...A].filter(x=>B.has(x))); }
+    function complement(A,U){ return new Set([...U].filter(x=>!A.has(x))); }
+    function equalSets(A,B){ return A.size===B.size && [...A].every(x=>B.has(x)); }
+  </script>
+</body>
+</html>

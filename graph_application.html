@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applications of Graph Theory</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #E6DAF5; /* Black background */
+      color: #fff; /* White text */
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      margin-top: 60px;
+      max-width: 1000px;
+      background-color: #111; /* Slightly lighter black */
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    }
+
+    h1, h2 {
+      color: #00ff7f; /* Green headings */
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #fff;
+    }
+
+    .card {
+      background-color: #0f0f0f;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+      transition: 0.3s;
+    }
+
+    .card h3 {
+      color: #00ff7f;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      color: #f9f6f6;
+      margin-left: 20px;
+    }
+
+   .btn-custom {
+      background: #2fe07a;
+      color: #0f1110;
+      border: none;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+    }
+
+    .btn-custom:hover {
+      background: #26c36a;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 15px;
+      background: #1c1f1e;
+      color: #888;
+      border-top: 1px solid #2fe07a33;
+    }
+
+    .highlight {
+      color: #00ff7f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Applications of Graph Theory</h1>
+
+    <p>
+      <strong>Graph Theory</strong> plays a vital role in solving real-world problems by representing objects and their relationships through nodes and edges.  
+      It forms the foundation of numerous applications in <span class="highlight">Computer Science</span> and other fields such as biology, geography, and social networks.
+    </p>
+
+    <!-- Applications in Computer Science -->
+    <div class="card">
+      <h2>💻 Applications in Computer Science</h2>
+
+      <h3>1. Computer Networks</h3>
+      <p>
+        Graphs model the <strong>structure of networks</strong> such as LANs, WANs, or the Internet.
+        Each device (computer, router, switch) is represented as a vertex, and each connection as an edge.
+      </p>
+      <ul>
+        <li>Finding shortest paths using algorithms like <strong>Dijkstra’s</strong> or <strong>Bellman-Ford</strong>.</li>
+        <li>Detecting network connectivity and routing optimization.</li>
+      </ul>
+
+      <h3>2. Social Networks</h3>
+      <p>
+        Social platforms like Facebook, Instagram, and LinkedIn use graphs where users are nodes and friendships or connections are edges.
+      </p>
+      <ul>
+        <li>Suggesting friends using <strong>graph traversal</strong> techniques.</li>
+        <li>Community detection and influencer identification using connected components.</li>
+      </ul>
+
+      <h3>3. Database and Web Structure</h3>
+      <p>
+        Graph theory helps model <strong>relationships between entities</strong> in databases and web pages.
+      </p>
+      <ul>
+        <li>Google’s PageRank algorithm uses graphs to rank websites.</li>
+        <li>Graph databases like <strong>Neo4j</strong> store and query relational data efficiently.</li>
+      </ul>
+
+      <h3>4. Compiler Design</h3>
+      <p>
+        Compilers use graphs to represent <strong>syntax trees</strong>, <strong>control flow</strong>, and <strong>dependency graphs</strong>.
+      </p>
+      <ul>
+        <li>Register allocation through graph coloring.</li>
+        <li>Dependency resolution between code blocks.</li>
+      </ul>
+
+      <h3>5. Artificial Intelligence and Machine Learning</h3>
+      <p>
+        In AI/ML, graphs are used for <strong>knowledge representation</strong>, <strong>neural networks</strong>, and <strong>recommendation systems</strong>.
+      </p>
+      <ul>
+        <li>Graph Neural Networks (GNNs) learn patterns from graph data.</li>
+        <li>Pathfinding in robotics uses BFS/DFS algorithms.</li>
+      </ul>
+    </div>
+
+    <!-- Applications in Other Fields -->
+    <div class="card">
+      <h2>🌍 Applications in Other Fields</h2>
+
+      <h3>1. Biology</h3>
+      <p>
+        Graphs are used to model biological networks such as <strong>gene interaction</strong>, <strong>protein structures</strong>, and <strong>neural networks</strong>.
+      </p>
+      <ul>
+        <li>Helps in studying evolutionary relationships.</li>
+        <li>Analyzes pathways and cell connections.</li>
+      </ul>
+
+      <h3>2. Transportation and Logistics</h3>
+      <p>
+        Roads, flight paths, and rail networks can be represented as graphs to find the <strong>shortest or most efficient routes</strong>.
+      </p>
+      <ul>
+        <li>Google Maps and GPS systems rely on graph algorithms.</li>
+        <li>Used for delivery route optimization and traffic management.</li>
+      </ul>
+
+      <h3>3. Chemistry</h3>
+      <p>
+        Molecular structures are modeled as graphs where <strong>atoms are vertices</strong> and <strong>bonds are edges</strong>.
+      </p>
+      <ul>
+        <li>Helps identify similar compounds and predict chemical reactions.</li>
+      </ul>
+
+      <h3>4. Electrical Engineering</h3>
+      <p>
+        Circuits can be represented as graphs to analyze <strong>current flow</strong> and <strong>network connectivity</strong>.
+      </p>
+
+      <h3>5. Sociology and Psychology</h3>
+      <p>
+        Used to study <strong>social interactions</strong> and <strong>relationship networks</strong> among people or organizations.
+      </p>
+      <ul>
+        <li>Helps analyze group dynamics and influence patterns.</li>
+      </ul>
+    </div>
+
+   <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <a href="graph_component.html" class="btn btn-custom">⬅ Previous</a>
+      <a href="graph_quizz.html" class="btn btn-custom">Next➡</a>
+    </div>
+  </div>
+
+  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

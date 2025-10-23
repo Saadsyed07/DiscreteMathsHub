@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore - DiscreteMathsHub</title>
+
+  <!-- Bootstrap + AOS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #E6DAF5;
+      color: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 48px;
+      background: transparent;
+    }
+
+    .logo {
+      color: #8A4FFF;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .menu {
+      display: flex;
+      gap: 22px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .menu a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .menu a:hover {
+      color: #8A4FFF;
+    }
+
+    /* Dropdown */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      background: #1c1f1e;
+      min-width: 180px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 100;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #8A4FFF;
+      color: #0f1110;
+    }
+
+    /* Search bar */
+    #searchBar {
+      max-width: 400px;
+      margin: 30px auto;
+      display: block;
+      border-radius: 50px;
+      background: white;
+      color:black;
+      border: 2px solid #8A4FFF;
+    }
+
+    /* Cards */
+    .topic-card {
+      background: #1c1f1e;
+      padding: 25px;
+      border-radius: 12px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 20px #8A4FFF;
+    }
+
+    .topic-card h3 {
+      color: #8A4FFF;
+      font-weight: 600;
+    }
+
+    .topic-card p {
+      color: #ccc;
+      font-size: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: black;
+      background: #ded1fd;
+      margin-top: 40px;
+      border-top: 1px solid #8A4FFF;
+    }
+    /* Profile icon */
+  .profile-icon{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#8A4FFF;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .2s;
+  }
+  .profile-icon:hover{
+    transform:scale(1.1);
+  }
+  .profile-icon svg{
+    width:22px;
+    height:22px;
+    fill:#0f1110;
+  }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+  <div class="logo">DiscreteMathsHub</div>
+  <ul class="menu">
+    <li><a href="index.html">HOME</a></li>
+      <li class="dropdown">
+        <a href="#">EXPLORE ▾</a>
+        <div class="dropdown-content">
+          <!-- UPDATED: point to separate pages (make sure these files exist in the same folder) -->
+          <a href="set_theory.html">Set Theory</a>
+          <a href="graph.html">Graph Theory</a>
+          <a href="tree.html">Trees</a>
+          <a href="logic.html">Logic</a>
+          <a href="combinatorics.html">Combinatorics</a>
+          <a href="relations.html">Relations & Functions</a>
+        </div>
+      </li>
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="login.html">LOGIN</a></li>
+    <li><a href="register.html">REGISTER</a></li>
+    <li>
+      <!-- Profile Icon with Person -->
+      <a href="profile.html" class="profile-icon" title="Profile">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </a>
+    </li>
+</ul>
+</nav>
+
+
+  <!-- Main Content -->
+  <main class="container text-center mt-4">
+    <h1 class="mb-3 text-success fw-bold">Explore Discrete Mathematics</h1>
+    <p class="text-secondary mb-4">Select a topic or search below to start learning.</p>
+
+    <input type="text" id="searchBar" class="form-control" placeholder="🔍 Search Topics...">
+
+    <div class="row g-4 mt-4" id="topics">
+      <div class="col-md-4" data-aos="fade-up">
+        <div class="topic-card shadow-lg">
+          <h3>Set Theory</h3>
+          <p>Learn about sets, subsets, operations on sets, and Venn diagrams.</p>
+          <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#setModal">Learn More</button>
+        </div>
+      </div>
+
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="topic-card shadow-lg">
+          <h3>Graph Theory</h3>
+          <p>Study graphs, edges, vertices, paths, and their real-world applications.</p>
+          <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#graphModal">Learn More</button>
+        </div>
+      </div>
+
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="topic-card shadow-lg">
+          <h3>Logic</h3>
+          <p>Understand propositional and predicate logic through examples.</p>
+          <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#logicModal">Learn More</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Set Theory Modal -->
+  <div class="modal fade" id="setModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header border-success">
+          <h5 class="modal-title text-success">Set Theory Overview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Set Theory forms the foundation of Discrete Mathematics. It focuses on the study of sets, operations, and relationships between elements.
+        </div>
+        <div class="modal-footer">
+          <a href="set_theory.html" class="btn btn-success">Go to Topic</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graph Theory Modal -->
+  <div class="modal fade" id="graphModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header border-success">
+          <h5 class="modal-title text-success">Graph Theory Overview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Graph Theory helps model relationships between objects using vertices and edges — vital in networks, AI, and optimization problems.
+        </div>
+        <div class="modal-footer">
+          <a href="graph.html" class="btn btn-success">Go to Topic</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logic Modal -->
+  <div class="modal fade" id="logicModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header border-success">
+          <h5 class="modal-title text-success">Logic Overview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Logic provides tools for reasoning and decision-making using propositions, truth tables, and logical operations.
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-success">Go to Topic</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 DiscreteMathsHub | Learn, Visualize & Master Discrete Mathematics
+  </footer>
+
+  <!-- Bootstrap + AOS + Search Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+
+  <script>
+    // Search filter
+    const searchBar = document.getElementById("searchBar");
+    searchBar.addEventListener("keyup", () => {
+      const filter = searchBar.value.toLowerCase();
+      document.querySelectorAll(".topic-card").forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.parentElement.style.display = text.includes(filter) ? "block" : "none";
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Traversal | DiscreteMathsHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #E6DAF5;
+      color: #e6edf3;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      margin-top: 60px;
+      max-width: 1000px;
+      background: #161b22;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.2);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #36e26f;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #c9d1d9;
+    }
+
+    .btn-custom {
+      background: #2fe07a;
+      color: #0f1110;
+      border: none;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+    }
+
+    .btn-custom:hover {
+      background: #26c36a;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 15px;
+      background: #1c1f1e;
+      color: #888;
+      border-top: 1px solid #2fe07a33;
+    }
+
+    .simulator {
+      background-color: #0b0f14;
+      border: 1px solid #2fcf69;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #11161c;
+      border-radius: 8px;
+      color: #29e43f;
+      font-weight: bold;
+      min-height: 50px;
+    }
+
+    .highlight {
+      background-color: #29df42;
+      color: #000;
+      border-radius: 5px;
+      padding: 2px 6px;
+      margin: 2px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Graph Traversal</h1>
+    <p>
+      Graph traversal is the process of visiting every vertex in a graph in a systematic way.
+      Traversing a graph helps us explore its structure and relationships between nodes.
+      There are two main types of graph traversal:
+      <strong>Breadth-First Search (BFS)</strong> and <strong>Depth-First Search (DFS)</strong>.
+    </p>
+
+    <h2>Breadth-First Search (BFS)</h2>
+    <p>
+      BFS starts from a selected node and explores all its neighboring nodes first, before moving to the next level.
+      It uses a <strong>queue</strong> to keep track of vertices to be visited.
+    </p>
+    <p><strong>Example:</strong> If the graph has edges (A–B), (A–C), (B–D), (C–E), then starting BFS from A gives → A, B, C, D, E.</p>
+
+    <h2>Depth-First Search (DFS)</h2>
+    <p>
+      DFS explores as far as possible along a branch before backtracking. It uses a <strong>stack</strong> (or recursion).
+      DFS is useful in detecting cycles, path finding, and topological sorting.
+    </p>
+    <p><strong>Example:</strong> Using the same graph, DFS starting from A gives → A, B, D, C, E.</p>
+
+    <div class="simulator">
+      <h2>Traversal Simulator</h2>
+      <p>Enter your graph and choose traversal type to see the traversal order.</p>
+      <div class="mb-3">
+        <label class="form-label">Enter edges (e.g., A-B, A-C, B-D):</label>
+        <input type="text" id="edgesInput" class="form-control" placeholder="A-B, A-C, B-D, C-E">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Start Node:</label>
+        <input type="text" id="startNode" class="form-control" placeholder="A">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Select Traversal Type:</label>
+        <select id="traversalType" class="form-select">
+          <option value="BFS">Breadth-First Search (BFS)</option>
+          <option value="DFS">Depth-First Search (DFS)</option>
+        </select>
+      </div>
+      <button class="btn btn-custom" onclick="performTraversal()">Run Simulation</button>
+      <div class="output" id="outputArea"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="graph_representation.html" class="btn btn-custom">⬅ Previous</a>
+      <a href="graph_component.html" class="btn btn-custom">Next➡</a>
+    </div>
+  </div>
+
+  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function buildGraph(edgesInput) {
+      const edges = edgesInput.split(",").map(e => e.trim().split("-"));
+      const graph = {};
+      for (let [u, v] of edges) {
+        if (!graph[u]) graph[u] = [];
+        if (!graph[v]) graph[v] = [];
+        graph[u].push(v);
+        graph[v].push(u);
+      }
+      return graph;
+    }
+
+    function performTraversal() {
+      const edgesInput = document.getElementById("edgesInput").value;
+      const startNode = document.getElementById("startNode").value.trim();
+      const traversalType = document.getElementById("traversalType").value;
+      const outputArea = document.getElementById("outputArea");
+      outputArea.innerHTML = "";
+
+      if (!edgesInput || !startNode) {
+        outputArea.innerHTML = "⚠ Please enter edges and start node!";
+        return;
+      }
+
+      const graph = buildGraph(edgesInput);
+      const visited = new Set();
+      const order = [];
+
+      if (traversalType === "BFS") {
+        const queue = [startNode];
+        visited.add(startNode);
+        while (queue.length > 0) {
+          const node = queue.shift();
+          order.push(node);
+          for (let neighbor of graph[node] || []) {
+            if (!visited.has(neighbor)) {
+              visited.add(neighbor);
+              queue.push(neighbor);
+            }
+          }
+        }
+      } else {
+        function dfs(node) {
+          visited.add(node);
+          order.push(node);
+          for (let neighbor of graph[node] || []) {
+            if (!visited.has(neighbor)) dfs(neighbor);
+          }
+        }
+        dfs(startNode);
+      }
+
+      // Animate traversal
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < order.length) {
+          const nodeSpan = document.createElement("span");
+          nodeSpan.className = "highlight";
+          nodeSpan.textContent = order[i];
+          outputArea.appendChild(nodeSpan);
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 800);
+    }
+  </script>
+</body>
+</html>

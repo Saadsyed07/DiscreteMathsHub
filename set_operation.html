@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Set Operations — DiscreteMathsHub</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f9f9f9;
+      --card:#ffffff;
+      --text:#1c1c1c;
+      --muted:#555;
+      --accent:#6f42c1;
+      --accent-light:rgba(111,66,193,0.1);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:240px;
+      background:#2c2f33;
+      color:#fff;
+      padding-top:20px;
+      overflow-y:auto;
+      z-index:1000;
+    }
+    .sidebar h2{
+      text-align:center;
+      font-size:20px;
+      color:var(--accent);
+      margin-bottom:15px;
+    }
+    .sidebar a{
+      display:block;
+      padding:10px 20px;
+      color:#fff;
+      text-decoration:none;
+      font-size:14px;
+    }
+    .sidebar a:hover,
+    .sidebar a.active{
+      background:var(--accent);
+      color:#fff;
+      border-radius:6px;
+    }
+
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:240px; right:0;
+      height:60px;
+      background:#fff;
+      border-bottom:1px solid #ddd;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 20px;
+      z-index:999;
+    }
+    .topnav h3{margin:0;color:var(--accent);}
+    .topnav a{
+      margin-left:15px;
+      text-decoration:none;
+      color:var(--accent);
+      font-weight:500;
+    }
+
+    /* Main Content */
+    main.container-main{
+      margin-left:240px;
+      margin-top:60px;
+      padding:20px 40px;
+      min-height:100vh;
+    }
+
+    /* Content Cards */
+    .content{
+      background:var(--card);
+      border-radius:12px;
+      padding:25px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom:20px;
+      color:var(--text);
+    }
+    h1{
+      text-align:center;
+      color:var(--accent);
+      margin-bottom:15px;
+      font-weight:800;
+    }
+    .lead{color:var(--muted);line-height:1.6}
+
+    /* Examples */
+    .example-box{
+      background:var(--accent-light);
+      border-left:4px solid var(--accent);
+      padding:12px;
+      border-radius:8px;
+      margin-top:12px;
+      color:#333;
+    }
+
+    /* Inputs & Buttons */
+    label{color:var(--accent);font-weight:600;margin-top:10px;display:block;}
+    .form-control{
+      border:1px solid rgba(111,66,193,0.3);
+      padding:8px 12px;
+      border-radius:6px;
+      margin-bottom:10px;
+      color:#333;
+    }
+    .form-control::placeholder{color:#aaa}
+
+    .btn-custom{
+      background: linear-gradient(90deg,var(--accent),#a77de0);
+      color:#fff;
+      border:none;
+      padding:8px 18px;
+      border-radius:20px;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:5px;
+    }
+    .btn-custom:hover{opacity:0.9}
+    .btn-custom:active{transform:translateY(1px)}
+
+    /* Results Box */
+    .results{
+      margin-top:15px;
+      padding:12px;
+      border-radius:8px;
+      border:1px solid rgba(111,66,193,0.3);
+      background:#f5f5f5;
+      color:#333;
+    }
+
+    /* Accordion */
+    .accordion-button{
+      font-weight:600;
+      color:var(--text);
+    }
+
+    /* Navigation Row */
+    .nav-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+      main.container-main{margin-left:0;padding:20px;}
+      .sidebar{width:100%;position:relative;}
+      .topnav{left:0;}
+      .nav-row{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Set Theory</h2>
+    <a href="set_defination.html">Set Introduction</a>
+    <a href="set_operation.html" class="active">Set Operations</a>
+    <a href="set_venndiagram.html">Venn Diagrams</a>
+    <a href="subset.html">Subsets</a>
+     <a href="set_property.html">Properties Sets</a>
+    <a href="cartesian.html">Cartesian Products</a>
+    <a href="applications.html">Applications</a>
+  </div>
+
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container-main">
+    <h1>Set Operations</h1>
+
+    <div class="content">
+      <p class="lead">
+        Set operations let us combine and compare sets to form new sets. Below you will find definitions, examples, and an interactive simulator — fully styled like the Set Definition page.
+      </p>
+    </div>
+
+    <section class="content" aria-labelledby="ops-heading">
+      <h2 id="ops-heading" style="color:var(--accent);margin-bottom:10px">Common Operations</h2>
+
+      <div class="muted small">
+        <strong>Union (A ∪ B)</strong><br>The union returns all elements in A or B (or both).
+      </div>
+      <div class="example-box"><strong>Example:</strong> A = {1,2,3}, B = {3,4,5} → <strong>A ∪ B = {1,2,3,4,5}</strong></div>
+
+      <div class="muted small" style="margin-top:10px">
+        <strong>Intersection (A ∩ B)</strong><br>Elements common to A and B.
+      </div>
+      <div class="example-box"><strong>Example:</strong> A = {1,2,3}, B = {3,4,5} → <strong>A ∩ B = {3}</strong></div>
+
+      <div class="muted small" style="margin-top:10px">
+        <strong>Difference (A − B)</strong><br>Elements in A not in B.
+      </div>
+      <div class="example-box"><strong>Example:</strong> A = {1,2,3}, B = {3,4,5} → <strong>A − B = {1,2}</strong></div>
+
+      <div class="muted small" style="margin-top:10px">
+        <strong>Complement (A′)</strong><br>All elements in universal set U not in A.
+      </div>
+      <div class="example-box"><strong>Example:</strong> U = {1,2,3,4,5}, A = {1,2} → <strong>A′ = {3,4,5}</strong></div>
+    </section>
+
+    <section class="content">
+      <h2 style="color:var(--accent);margin-bottom:10px">Interactive Simulator</h2>
+      <p class="muted small">Type elements separated by commas. Duplicates removed automatically.</p>
+
+      <label for="aInput">Set A</label>
+      <input id="aInput" class="form-control" placeholder="1,2,3" type="text">
+
+      <label for="bInput">Set B</label>
+      <input id="bInput" class="form-control" placeholder="3,4,5" type="text">
+
+      <label for="uInput">Universal Set U (optional)</label>
+      <input id="uInput" class="form-control" placeholder="1,2,3,4,5" type="text">
+
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-custom" onclick="runAll()">Show All Results</button>
+        <button class="btn-custom" onclick="doOp('union')">A ∪ B</button>
+        <button class="btn-custom" onclick="doOp('intersection')">A ∩ B</button>
+        <button class="btn-custom" onclick="doOp('a-b')">A − B</button>
+        <button class="btn-custom" onclick="doOp('b-a')">B − A</button>
+      </div>
+
+      <div id="out" class="results" aria-live="polite"></div>
+    </section>
+
+    <section class="content">
+      <h2 style="color:var(--accent);margin-bottom:10px">Quick Questions</h2>
+      <div class="accordion" id="qaAccordion">
+        <div class="accordion-item" style="border:none">
+          <h2 class="accordion-header" id="qOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQ1">
+              Why remove duplicates in sets?
+            </button>
+          </h2>
+          <div id="collapseQ1" class="accordion-collapse collapse" data-bs-parent="#qaAccordion">
+            <div class="accordion-body">
+              A set contains distinct elements, so duplicates are removed in results.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="nav-row">
+      <a href="set_notation.html" class="btn-custom">⬅ Previous</a>
+      <a href="set_type.html" class="btn-custom">Next➡</a>
+    </div>
+
+  </main>
+
+  <footer style="max-width:900px;margin:30px auto;text-align:center;color:#555">
+    © 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function parse(str){ return [...new Set(str.split(',').map(s=>s.trim()).filter(s=>s!==''))]; }
+    function union(a,b){ return [...new Set([...a,...b])]; }
+    function intersection(a,b){ return a.filter(x=>b.includes(x)); }
+    function difference(a,b){ return a.filter(x=>!b.includes(x)); }
+    function complement(a,u){ return u.filter(x=>!a.includes(x)); }
+    function formatSet(arr){ return "{ "+(arr.length?arr.join(', '):'')+" }"; }
+
+    function doOp(op){
+      const A=parse(document.getElementById('aInput').value);
+      const B=parse(document.getElementById('bInput').value);
+      const U=parse(document.getElementById('uInput').value);
+      if(A.length===0||B.length===0){
+        document.getElementById('out').innerHTML="<div class='results' style='border-color:#f0ad4e;color:#856404'>⚠ Please enter both Set A and Set B.</div>";
+        return;
+      }
+      let resHtml='';
+      if(op==='union') resHtml="<b>A ∪ B:</b> "+formatSet(union(A,B));
+      if(op==='intersection') resHtml="<b>A ∩ B:</b> "+formatSet(intersection(A,B));
+      if(op==='a-b') resHtml="<b>A − B:</b> "+formatSet(difference(A,B));
+      if(op==='b-a') resHtml="<b>B − A:</b> "+formatSet(difference(B,A));
+      document.getElementById('out').innerHTML="<div class='results'>"+resHtml+"</div>";
+    }
+
+    function runAll(){
+      const A=parse(document.getElementById('aInput').value);
+      const B=parse(document.getElementById('bInput').value);
+      const U=parse(document.getElementById('uInput').value);
+      if(A.length===0||B.length===0){
+        document.getElementById('out').innerHTML="<div class='results' style='border-color:#f0ad4e;color:#856404'>⚠ Please enter both Set A and Set B.</div>";
+        return;
+      }
+      let html="<div class='results'>";
+      html+="<p><b>A ∪ B:</b> "+formatSet(union(A,B))+"</p>";
+      html+="<p><b>A ∩ B:</b> "+formatSet(intersection(A,B))+"</p>";
+      html+="<p><b>A − B:</b> "+formatSet(difference(A,B))+"</p>";
+      html+="<p><b>B − A:</b> "+formatSet(difference(B,A))+"</p>";
+      if(U.length>0){
+        html+="<hr>";
+        html+="<p><b>A′:</b> "+formatSet(complement(A,U))+" (relative to U)</p>";
+        html+="<p><b>B′:</b> "+formatSet(complement(B,U))+" (relative to U)</p>";
+      }
+      html+="</div>";
+      document.getElementById('out').innerHTML=html;
+    }
+  </script>
+
+</body>
+</html>

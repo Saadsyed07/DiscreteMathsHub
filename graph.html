@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graph Theory - DiscreteMathsHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #E6DAF5;
+      color: black;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 48px;
+      background: transparent;
+    }
+
+    .logo {
+      color: #8A4FFF;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .menu {
+      display: flex;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .menu a {
+      color: black;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .menu a:hover {
+      color: #8A4FFF;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #8A4FFF;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .search-bar {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .search-bar input {
+      width: 80%;
+      padding: 12px;
+      border-radius: 30px;
+      border: 2px solid #8A4FFF;
+      background-color: white;
+      color: black;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .topics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: #ded1fd;
+      padding: 20px;
+      border-radius: 12px;
+      transition: transform 0.2s, background 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      background: #ded1fd;
+    }
+
+    .card h3 {
+      color: #8A4FFF;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color:black;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 15px;
+      background: #ded1fd;
+      color: black;
+      border-top: 1px solid #ded1fd;
+    }
+
+    /* Modal Custom Styling */
+    .modal-content {
+      background-color: #ded1fd;
+      color: black;
+      border-radius: 12px;
+      border: 2px solid #8A4FFF;
+    }
+
+    .btn-custom {
+      background: #8A4FFF;
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 25px;
+    }
+
+    .btn-custom:hover {
+      background: #8A4FFF;
+    }
+
+    /* Profile icon */
+  .profile-icon{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#8A4FFF;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .2s;
+  }
+  .profile-icon:hover{
+    transform:scale(1.1);
+  }
+  .profile-icon svg{
+    width:22px;
+    height:22px;
+    fill:#0f1110;
+  }
+
+  /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #1c1f1e;
+      min-width: 180px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 14px;
+      color: #ddd;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #8A4FFF;
+      color: #0f1110;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+  <div class="logo">DiscreteMathsHub</div>
+  <ul class="menu">
+    <li><a href="index.html">HOME</a></li>
+      <li class="dropdown">
+        <a href="#">EXPLORE ▾</a>
+        <div class="dropdown-content">
+          <!-- UPDATED: point to separate pages (make sure these files exist in the same folder) -->
+          <a href="set_theory.html">Set Theory</a>
+          <a href="graph.html">Graph Theory</a>
+          <a href="tree.html">Trees</a>
+          <a href="logic.html">Logic</a>
+          <a href="combinatorics.html">Combinatorics</a>
+          <a href="relations.html">Relations & Functions</a>
+        </div>
+      </li>
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="login.html">LOGIN</a></li>
+    <li><a href="register.html">REGISTER</a></li>
+    <li>
+      <!-- Profile Icon with Person -->
+      <a href="profile.html" class="profile-icon" title="Profile">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </a>
+    </li>
+</ul>
+</nav>
+
+  <div class="container">
+    <h1>Graph Theory</h1>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="🔍 Search topics like 'operations', 'notation', or 'application'...">
+    </div>
+
+    <div class="topics" id="topics">
+      <div class="card" data-bs-toggle="modal" data-bs-target="#basicConceptModal" data-topic="basic definition definition intro">
+        <h3>📘 Basic Concepts</h3>
+        <p>Understand vertices, edges, and the foundation of graph theory with simple examples.</p>
+      </div>
+
+      <div class="card" data-bs-toggle="modal" data-bs-target="#typesofgraphModal" data-topic="notation symbols representation">
+        <h3>🔤 Types of Graph</h3>
+        <p>Learn about simple, directed, weighted, and complete graphs with diagrams.</p>
+      </div>
+
+      <div class="card" data-bs-toggle="modal" data-bs-target="#representationModal" data-topic="set operations union intersection difference complement">
+        <h3>⚙ Graph representation</h3>
+        <p>Explore adjacency matrix, adjacency list, and incidence matrix structures.</p>
+      </div>
+
+      <div class="card" data-bs-toggle="modal" data-bs-target="#traversalModal" data-topic="types of sets subset superset null finite infinite">
+        <h3>📚 Graph Traversal</h3>
+        <p>Understand BFS and DFS algorithms with step-by-step examples and animations.</p>
+      </div>
+
+      <div class="card" data-bs-toggle="modal" data-bs-target="#componentModal" data-topic="venn diagram visualization representation">
+        <h3>🎨 Connected Components</h3>
+        <p>Explore connected and disconnected graphs and their properties.</p>
+      </div>
+
+      <div class="card" data-bs-toggle="modal" data-bs-target="#applicationsModal" data-topic="applications real life computer science probability logic">
+        <h3>💡 Applications of Graph Theory</h3>
+        <p>See real-world uses of graphs in computer networks, AI, and social media.</p>
+      </div>
+
+     <div class="card" data-bs-toggle="modal" data-bs-target="#quizzModal" data-topic="properties laws associative commutative distributive identity">
+        <h3>⚖ Solve Quizzes</h3>
+        <p>Test your understanding of graph theory with interactive quizzes and instant feedback.</p>
+      </div>
+      
+    </div>
+
+  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
+
+  <!-- Modals (Popups) -->
+  <div class="modal fade" id="basicConceptModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">📘 Basic Concept</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          A <b>set</b> is a collection of distinct objects, called elements. Example: A = {1, 2, 3}.  
+          <br><br>🟢 Real-life: The set of days in a week = {Mon, Tue, Wed, Thu, Fri, Sat, Sun}.
+        </div>
+        <div class="modal-footer">
+          <a href="graph_basicconcept.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="typesofgraphModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">🔤 Types of Graph</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Learn about Roster and Set-builder notation. Example:  
+          <b>A = {x | x is an even number less than 10}</b>.
+        </div>
+        <div class="modal-footer">
+          <a href="graph_type.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="representationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">⚙ Graph Representation</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Learn about Roster and Set-builder notation. Example:  
+          <b>A = {x | x is an even number less than 10}</b>.
+        </div>
+        <div class="modal-footer">
+          <a href="graph_representation.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="traversalModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">📚 Graph Traversal</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Learn about Roster and Set-builder notation. Example:  
+          <b>A = {x | x is an even number less than 10}</b>.
+        </div>
+        <div class="modal-footer">
+          <a href="graph_traversal.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="componentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">🎨 Connected components</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Learn about Roster and Set-builder notation. Example:  
+          <b>A = {x | x is an even number less than 10}</b>.
+        </div>
+        <div class="modal-footer">
+          <a href="graph_component.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="applicationsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">💡 Applications of Graph Theory</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Learn about Roster and Set-builder notation. Example:  
+          <b>A = {x | x is an even number less than 10}</b>.
+        </div>
+        <div class="modal-footer">
+          <a href="graph_application.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="quizzModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">💡 Set theory quizzes</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Ready to solve quizzes
+        </div>
+        <div class="modal-footer">
+          <a href="graph_quizz.html" class="btn btn-custom">Go to Topic →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- You can duplicate the modal block above for each topic (operations, types, etc.) as needed -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const topicCards = document.querySelectorAll(".card");
+
+    searchInput.addEventListener("input", function() {
+      const searchTerm = this.value.toLowerCase();
+      topicCards.forEach(card => {
+        const topic = card.getAttribute("data-topic").toLowerCase();
+        card.style.display = topic.includes(searchTerm) ? "block" : "none";
+      });
+    });
+  </script>
+</body>
+</html>
