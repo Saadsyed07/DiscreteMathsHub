@@ -1,299 +1,730 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Venn Diagrams — DiscreteMathsHub</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     :root{
-      --bg:#f9f9f9;
-      --card:#ffffff;
-      --text:#1c1c1c;
-      --muted:#555;
-      --accent:#6f42c1;
-      --accent-light:rgba(111,66,193,0.1);
-      --venn-a:#00ff99;
-      --venn-b:#ff0099;
-      --venn-intersect:#ffff00;
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
+      --venn-a:#7C3AED;
+      --venn-b:#FF5C9E;
+      --venn-intersect:#06B6D4;
     }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family: Inter, system-ui, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
+
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
 
     /* Sidebar */
     .sidebar{
       position: fixed;
       top:0; left:0; bottom:0;
-      width:240px;
-      background:#2c2f33;
-      color:#fff;
-      padding-top:20px;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
       overflow-y:auto;
       z-index:1000;
     }
+    
     .sidebar h2{
       text-align:center;
-      font-size:20px;
-      color:var(--accent);
-      margin-bottom:15px;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
     }
+    
     .sidebar a{
       display:block;
-      padding:10px 20px;
-      color:#fff;
+      padding:12px 24px;
+      color: var(--text-secondary);
       text-decoration:none;
       font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
     }
-    .sidebar a:hover,
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
+    }
+    
     .sidebar a.active{
-      background:var(--accent);
-      color:#fff;
-      border-radius:6px;
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
     }
 
     /* Top Navbar */
     .topnav{
       position: fixed;
-      top:0; left:240px; right:0;
-      height:60px;
-      background:#fff;
-      border-bottom:1px solid #ddd;
+      top:0; left:260px; right:0;
+      height: var(--nav-height);
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 20px;
+      padding:0 32px;
       z-index:999;
     }
-    .topnav h3{margin:0;color:var(--accent);}
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
     .topnav a{
-      margin-left:15px;
       text-decoration:none;
-      color:var(--accent);
+      color: var(--text-secondary);
       font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
     }
 
     /* Main Content */
     main.container-main{
-      margin-left:240px;
-      margin-top:60px;
-      padding:20px 40px;
+      margin-left:260px;
+      margin-top: var(--nav-height);
+      padding:40px 50px;
       min-height:100vh;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Content Card */
-    .content{
-      background:var(--card);
-      border-radius:12px;
-      padding:25px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom:20px;
-      color:var(--text);
-    }
-    h1{text-align:center;color:var(--accent);margin-bottom:15px;font-weight:800;}
-    h2{color:var(--accent);margin-top:20px;text-align:center;}
-    p.lead{color:var(--muted);line-height:1.6;text-align:center;}
-
-    /* Example Box */
-    .example-box{
-      background:var(--accent-light);
-      border-left:4px solid var(--accent);
-      padding:12px;
-      border-radius:8px;
-      margin-top:12px;
-      color:#333;
-    }
-
-    /* Inputs & Buttons */
-    .input-section{text-align:center;margin-top:20px;}
-    input[type="text"]{
-      padding:8px 10px;
-      border-radius:6px;
-      border:1px solid var(--accent);
-      background-color:#f5f5f5;
-      color:#333;
-      width:40%;
-      margin:10px;
-    }
-    .btn-custom{
-      background: linear-gradient(90deg,var(--accent),#a77de0);
-      color:#fff;
-      border:none;
-      border-radius:20px;
-      padding:8px 18px;
-      font-weight:600;
-      cursor:pointer;
-      margin-top:10px;
-    }
-    .btn-custom:hover{opacity:0.9;}
-    .btn-custom:active{transform:translateY(1px);}
-
-    /* Result Box */
-    #resultBox{
-      margin-top:20px;
-      padding:15px;
-      background:var(--accent-light);
-      border-left:4px solid var(--accent);
-      border-radius:8px;
-      color:#333;
+    /* Page Title */
+    h1{
       text-align:center;
-      display:none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 30px;
+      letter-spacing: -1px;
+    }
+
+    /* Content Cards */
+    .content{
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-bottom:28px;
+      color: var(--text-primary);
+    }
+    
+    .lead{
+      color: var(--text-secondary);
+      line-height:1.8;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .lead strong, .lead b{
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    /* Section Headers */
+    h2{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      margin-top: 30px;
+      position: relative;
+      padding-left: 18px;
+      text-align: left;
+    }
+    
+    h2::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 28px;
+      background: var(--gradient-1);
+      border-radius: 3px;
+    }
+
+    /* Examples */
+    .example-box{
+      background: rgba(124,58,237,0.08);
+      border-left:4px solid var(--primary);
+      padding:18px 20px;
+      border-radius:10px;
+      margin-top:14px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    
+    .example-box strong, .example-box b{
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    /* Input Section */
+    .input-section{
+      text-align: center;
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+
+    input[type="text"]{
+      width: 100%;
+      max-width: 350px;
+      border: 2px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      margin: 8px;
+      outline: none;
+    }
+
+    input[type="text"]:focus{
+      border-color: var(--primary);
+      background: rgba(15,15,30,0.8);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    input[type="text"]::placeholder{
+      color: rgba(180,180,191,0.5);
+    }
+
+    .btn-custom{
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+      margin-top: 10px;
+    }
+
+    .btn-custom:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,58,237,0.35);
+    }
+
+    .btn-custom:active{
+      transform: translateY(0);
     }
 
     /* Canvas */
     #vennCanvas{
-      background-color:#fff;
-      border-radius:12px;
-      display:block;
-      margin:20px auto;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(15,15,30,0.6);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 16px;
+      display: block;
+      margin: 24px auto;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      max-width: 100%;
     }
 
-    /* Navigation */
-    .nav-buttons{
-      display:flex;
-      justify-content:space-between;
-      margin-top:30px;
+    /* Result Box */
+    #resultBox{
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.8;
+      display: none;
+    }
+
+    #resultBox b{
+      color: var(--text-primary);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* Info Card */
+    .info-card{
+      background: rgba(6,182,212,0.08);
+      border-left: 4px solid var(--accent);
+      padding: 20px 24px;
+      border-radius: 10px;
+      margin-top: 24px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .info-card h3{
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Legend */
+    .legend{
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .legend-color{
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .legend-color.set-a{
+      background: var(--venn-a);
+    }
+
+    .legend-color.set-b{
+      background: var(--venn-b);
+    }
+
+    .legend-color.intersect{
+      background: var(--venn-intersect);
+    }
+
+    /* Navigation Row */
+    .nav-row{
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    
+    .nav-btn{
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block;
+    }
+    
+    .nav-btn.prev{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+    }
+    
+    .nav-btn.prev:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+      transform: translateX(-4px);
+    }
+    
+    .nav-btn.next{
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(124,58,237,0.3);
+    }
+    
+    .nav-btn.next:hover{
+      transform: translateX(4px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.4);
+    }
+
+    /* Footer */
+    footer{
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-left: 260px;
+      border-top: 1px solid rgba(124,58,237,0.06);
+    }
+
+    /* Responsive */
+    @media(max-width:992px){
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      main.container-main{
+        margin-left: 0;
+        padding: 30px 24px;
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      footer{
+        margin-left: 0;
+      }
     }
 
     @media(max-width:768px){
-      main.container-main{margin-left:0;padding:20px;}
-      .sidebar{width:100%;position:relative;}
-      .topnav{left:0;}
-      input[type="text"]{width:80%;}
-      .nav-buttons{flex-direction:column;gap:10px;}
+      main.container-main{
+        padding: 24px 20px;
+      }
+      
+      .content{
+        padding: 24px;
+      }
+      
+      h1{
+        font-size: 32px;
+      }
+      
+      h2{
+        font-size: 22px;
+      }
+      
+      .topnav-links{
+        display: none;
+      }
+      
+      .nav-row{
+        flex-direction: column;
+      }
+
+      input[type="text"]{
+        width: 100%;
+        max-width: 100%;
+        margin: 8px 0;
+      }
+
+      #vennCanvas{
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    @media(max-width:420px){
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+      
+      main.container-main{
+        padding: 20px 16px;
+      }
+      
+      .content{
+        padding: 20px;
+      }
+      
+      h1{
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
   <!-- Sidebar -->
   <div class="sidebar">
     <h2>Set Theory</h2>
     <a href="set_defination.html">Set Introduction</a>
-    <a href="set_operations.html">Set Operations</a>
+    <a href="set_operation.html">Set Operations</a>
     <a href="set_venndiagram.html" class="active">Venn Diagrams</a>
     <a href="subset.html">Subsets</a>
     <a href="set_property.html">Properties Sets</a>
-    <a href="cartesian.html">Cartesian Products</a>
-    <a href="applications.html">Applications</a>
+    <a href="set_application.html">Applications</a>
   </div>
 
   <!-- Top Navbar -->
   <div class="topnav">
     <h3>Discrete Mathematics</h3>
-    <div>
+    <div class="topnav-links">
       <a href="index.html">Home</a>
       <a href="#">About</a>
       <a href="#">Help</a>
     </div>
   </div>
 
+  <!-- Main Content -->
   <main class="container-main">
+    <h1>Venn Diagrams</h1>
+
     <div class="content">
-      <h1>Venn Diagrams</h1>
       <p class="lead">
-        A <strong>Venn Diagram</strong> visually shows relationships between sets using overlapping circles. Introduced by <b>John Venn</b>, it illustrates union, intersection, and difference of sets.
+        A <strong>Venn Diagram</strong> visually shows relationships between sets using overlapping circles. Introduced by <b>John Venn</b> in 1880, it illustrates union, intersection, and difference of sets in an intuitive way.
       </p>
 
+      <div class="info-card">
+        <h3>💡 Why Use Venn Diagrams?</h3>
+        Venn diagrams provide a visual representation that makes it easier to understand complex set relationships. They're widely used in mathematics, logic, statistics, computer science, and even business analysis to show commonalities and differences between groups.
+      </div>
+
       <div class="example-box">
-        Example:<br>
-        Let A = {1, 2, 3, 4} and B = {3, 4, 5, 6}.<br>
-        • A ∪ B = {1, 2, 3, 4, 5, 6} (Union)<br>
-        • A ∩ B = {3, 4} (Intersection)<br>
-        • A − B = {1, 2} (Difference)
+        <b>Example:</b><br>
+        Let A = {1, 2, 3, 4} and B = {3, 4, 5, 6}.<br><br>
+        • <b>A ∪ B</b> = {1, 2, 3, 4, 5, 6} (Union - all elements in either set)<br>
+        • <b>A ∩ B</b> = {3, 4} (Intersection - common elements)<br>
+        • <b>A − B</b> = {1, 2} (Difference - elements only in A)<br>
+        • <b>B − A</b> = {5, 6} (Difference - elements only in B)
       </div>
 
       <h2>Interactive Venn Diagram</h2>
       <p class="lead">Enter your own sets to visualize their Union, Intersection, and Difference.</p>
 
       <div class="input-section">
-        <input type="text" id="setA" placeholder="Set A (e.g., 1,2,3)">
-        <input type="text" id="setB" placeholder="Set B (e.g., 3,4,5)">
+        <input type="text" id="setA" placeholder="Set A (e.g., 1,2,3,4)">
+        <input type="text" id="setB" placeholder="Set B (e.g., 3,4,5,6)">
         <br>
-        <button class="btn-custom" onclick="processSets()">Visualize</button>
+        <button class="btn-custom" onclick="processSets()">Visualize Diagram</button>
       </div>
 
-      <canvas id="vennCanvas" width="500" height="300"></canvas>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color set-a"></div>
+          <span>Set A</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color set-b"></div>
+          <span>Set B</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color intersect"></div>
+          <span>Intersection</span>
+        </div>
+      </div>
+
+      <canvas id="vennCanvas" width="600" height="350"></canvas>
 
       <div id="resultBox"></div>
+    </div>
 
-      <div class="nav-buttons">
-        <a href="types_of_set.html" class="btn-custom">⬅ Previous</a>
-        <a href="set_property.html" class="btn-custom">Next ➡</a>
-      </div>
+    <div class="nav-row">
+      <a href="set_type.html" class="nav-btn prev">⬅ Previous</a>
+      <a href="set_property.html" class="nav-btn next">Next ➡</a>
     </div>
   </main>
+
+  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
 
   <script>
     const canvas = document.getElementById("vennCanvas");
     const ctx = canvas.getContext("2d");
 
     function drawBase(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      drawCircle(180,150,'var(--venn-a)','A');
-      drawCircle(320,150,'var(--venn-b)','B');
-    }
-
-    function drawCircle(x,y,color,label){
-      ctx.globalAlpha = 0.3;
-      ctx.fillStyle = color;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw Set A circle
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = '#7C3AED';
       ctx.beginPath();
-      ctx.arc(x,y,80,0,Math.PI*2);
+      ctx.arc(220, 175, 100, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = color;
+      ctx.strokeStyle = '#7C3AED';
+      ctx.lineWidth = 3;
       ctx.stroke();
-      ctx.fillStyle = color;
-      ctx.font = "18px Inter";
-      ctx.fillText(label,x-10,y+5);
+      
+      // Draw Set B circle
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = '#FF5C9E';
+      ctx.beginPath();
+      ctx.arc(380, 175, 100, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = '#FF5C9E';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      
+      // Labels
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = "bold 20px 'Space Grotesk'";
+      ctx.fillText('A', 160, 185);
+      ctx.fillText('B', 440, 185);
     }
 
     function processSets(){
       const setAInput = document.getElementById("setA").value.trim();
       const setBInput = document.getElementById("setB").value.trim();
+      
       if(!setAInput || !setBInput){
-        alert("Please enter both sets!");
+        alert("⚠ Please enter both Set A and Set B!");
         return;
       }
 
-      const A = new Set(setAInput.split(',').map(x=>x.trim()));
-      const B = new Set(setBInput.split(',').map(x=>x.trim()));
+      const A = new Set(setAInput.split(',').map(x => x.trim()).filter(x => x !== ''));
+      const B = new Set(setBInput.split(',').map(x => x.trim()).filter(x => x !== ''));
 
-      const union = new Set([...A,...B]);
-      const intersection = new Set([...A].filter(x=>B.has(x)));
-      const difference = new Set([...A].filter(x=>!B.has(x)));
+      const union = new Set([...A, ...B]);
+      const intersection = new Set([...A].filter(x => B.has(x)));
+      const differenceAB = new Set([...A].filter(x => !B.has(x)));
+      const differenceBA = new Set([...B].filter(x => !A.has(x)));
 
       // Show textual result
       const resultBox = document.getElementById("resultBox");
       resultBox.innerHTML = `
+        <b>Your Sets:</b><br>
+        Set A = {${[...A].join(", ")}}<br>
+        Set B = {${[...B].join(", ")}}<br><br>
         <b>Results:</b><br>
-        A = {${[...A].join(", ")}}<br>
-        B = {${[...B].join(", ")}}<br><br>
         <b>Union (A ∪ B):</b> {${[...union].join(", ")}}<br>
-        <b>Intersection (A ∩ B):</b> {${[...intersection].join(", ")}}<br>
-        <b>Difference (A - B):</b> {${[...difference].join(", ")}}<br>
+        <b>Intersection (A ∩ B):</b> {${intersection.size > 0 ? [...intersection].join(", ") : '∅ (empty)'}}<br>
+        <b>Difference (A − B):</b> {${differenceAB.size > 0 ? [...differenceAB].join(", ") : '∅ (empty)'}}<br>
+        <b>Difference (B − A):</b> {${differenceBA.size > 0 ? [...differenceBA].join(", ") : '∅ (empty)'}}
       `;
-      resultBox.style.display="block";
+      resultBox.style.display = "block";
 
-      // Draw Venn
+      // Draw base Venn diagram
       drawBase();
-      if(intersection.size>0){
-        ctx.globalAlpha=0.4;
-        ctx.fillStyle = "var(--venn-intersect)";
+      
+      // Highlight intersection if exists
+      if(intersection.size > 0){
+        ctx.globalCompositeOperation = 'source-atop';
+        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = '#06B6D4';
         ctx.beginPath();
-        ctx.arc(250,150,40,0,Math.PI*2);
+        ctx.arc(300, 175, 60, 0, Math.PI * 2);
         ctx.fill();
-        ctx.globalAlpha=1;
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+        
+        // Label intersection
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = "bold 16px 'Space Grotesk'";
+        ctx.fillText('A ∩ B', 270, 185);
+      }
+      
+      // Draw element labels
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = "12px 'Inter'";
+      
+      // A only elements (left side)
+      if(differenceAB.size > 0){
+        const elementsA = [...differenceAB].slice(0, 3).join(', ');
+        ctx.fillText(elementsA, 150, 160);
+      }
+      
+      // B only elements (right side)
+      if(differenceBA.size > 0){
+        const elementsB = [...differenceBA].slice(0, 3).join(', ');
+        ctx.fillText(elementsB, 400, 160);
+      }
+      
+      // Intersection elements (center)
+      if(intersection.size > 0){
+        const elementsInt = [...intersection].slice(0, 2).join(', ');
+        ctx.fillText(elementsInt, 280, 200);
       }
     }
 
+    // Draw initial diagram
     drawBase();
   </script>
 

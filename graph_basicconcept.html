@@ -1,185 +1,655 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graph Theory: Basic Concepts | DiscreteMathsHub</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Graph Theory: Basic Concepts — DiscreteMathsHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
+    }
+
     body {
-      background-color: #E6DAF5;
-      color: #e0e0e0;
-      font-family: 'Poppins', sans-serif;
-      padding: 20px;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
-    h2 {
-      color: #00ff99;
-      font-weight: 700;
-      text-align: center;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
 
-    .container {
-      max-width: 900px;
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
+      overflow-y:auto;
+      z-index:1000;
     }
-
-    .highlight-box {
-      background: #1a1a1a;
-      border-left: 4px solid #00ff99;
-      padding: 15px 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
+    
+    .sidebar h2{
+      text-align:center;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
     }
-
-    h4 {
-      color: #00ff99;
-      margin-top: 25px;
+    
+    .sidebar a{
+      display:block;
+      padding:12px 24px;
+      color: var(--text-secondary);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
     }
-
-    ul {
-      color: #cccccc;
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
     }
-
-    .faq {
-      background-color: #1a1a1a;
-      border: none;
-      border-radius: 10px;
-      margin-top: 10px;
-      color: #e0e0e0;
-    }
-
-    .faq button {
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      color: #00ff99;
+    
+    .sidebar a.active{
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
       font-weight: 600;
-      font-size: 1rem;
-      padding: 10px;
     }
 
-    .faq .content {
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:260px; right:0;
+      height: var(--nav-height);
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px;
+      z-index:999;
+    }
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
+    .topnav a{
+      text-decoration:none;
+      color: var(--text-secondary);
+      font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
+    }
+
+    /* Main Content */
+    main.container-main{
+      margin-left:260px;
+      margin-top: var(--nav-height);
+      padding:40px 50px;
+      min-height:100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Page Title */
+    h1{
+      text-align:center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .page-intro{
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Content Cards */
+    .content{
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-bottom:28px;
+      color: var(--text-primary);
+    }
+
+    /* Highlight/Definition Box */
+    .highlight{
+      background: rgba(124,58,237,0.08);
+      border-left:4px solid var(--primary);
+      padding:20px 24px;
+      border-radius:10px;
+      margin-bottom:24px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .highlight strong{
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .highlight p{
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .highlight p:last-child{
+      margin-bottom: 0;
+    }
+
+    /* Section Headers */
+    h2, h4{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      margin-top: 30px;
+      position: relative;
+      padding-left: 18px;
+    }
+    
+    h2::before, h4::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 24px;
+      background: var(--gradient-1);
+      border-radius: 3px;
+    }
+
+    h4{
+      font-size: 19px;
+    }
+
+    h4::before{
+      height: 20px;
+    }
+
+    /* Lists */
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 12px;
+    }
+    
+    ul li {
+      color: var(--text-secondary);
+      padding: 8px 0;
+      padding-left: 28px;
+      position: relative;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    
+    ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    ul li strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    p{
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    /* FAQ Accordion */
+    .faq{
+      background: rgba(15,15,30,0.6);
+      border: 1px solid rgba(124,58,237,0.15);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq:hover{
+      border-color: rgba(124,58,237,0.3);
+    }
+
+    .faq > button{
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .faq > button:hover{
+      background: rgba(124,58,237,0.08);
+    }
+
+    .faq > button:focus{
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .faq .content{
+      padding: 0 20px 16px;
+      color: var(--text-secondary);
       display: none;
-      padding: 0 15px 10px;
-      color: #cccccc;
+      line-height: 1.7;
+      font-size: 15px;
     }
 
-    .faq.active .content {
+    .faq.active .content{
       display: block;
     }
 
-    .btn-custom {
-      background: #2fe07a;
-      color: #0f1110;
-      border: none;
-      font-weight: 600;
-      padding: 10px 24px;
-      border-radius: 25px;
+    .faq .content strong{
+      color: var(--text-primary);
+      font-weight: 700;
     }
 
-    .btn-custom:hover {
-      background: #26c36a;
+    .chevron{
+      transition: transform 0.3s ease;
+      color: var(--primary);
+      font-size: 18px;
+      flex-shrink: 0;
     }
 
-    .nav-buttons {
+    .faq.active .chevron{
+      transform: rotate(180deg);
+    }
+
+    /* Navigation Row */
+    .nav-row{
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    
+    .nav-btn{
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block;
+    }
+    
+    .nav-btn.prev{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+    }
+    
+    .nav-btn.prev:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+      transform: translateX(-4px);
+    }
+    
+    .nav-btn.next{
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(124,58,237,0.3);
+    }
+    
+    .nav-btn.next:hover{
+      transform: translateX(4px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.4);
     }
 
-    footer {
+    /* Footer */
+    footer{
       text-align: center;
-      color: #999;
-      font-size: 0.9rem;
-      margin-top: 40px;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-left: 260px;
+      border-top: 1px solid rgba(124,58,237,0.06);
+    }
+
+    /* Responsive */
+    @media(max-width:992px){
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      main.container-main{
+        margin-left: 0;
+        padding: 30px 24px;
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      footer{
+        margin-left: 0;
+      }
+    }
+
+    @media(max-width:768px){
+      main.container-main{
+        padding: 24px 20px;
+      }
+      
+      .content{
+        padding: 24px;
+      }
+      
+      h1{
+        font-size: 32px;
+      }
+      
+      h2, h4{
+        font-size: 20px;
+      }
+      
+      .topnav-links{
+        display: none;
+      }
+      
+      .nav-row{
+        flex-direction: column;
+      }
+    }
+
+    @media(max-width:420px){
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+      
+      main.container-main{
+        padding: 20px 16px;
+      }
+      
+      .content{
+        padding: 20px;
+      }
+      
+      h1{
+        font-size: 28px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h2>Graph Theory: Basic Concepts</h2>
-    <p class="text-center">Learn the fundamental components and ideas used in graph theory with examples and real-life applications.</p>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
-    <div class="highlight-box">
-      <p><strong>A graph</strong> is a collection of <strong>vertices (nodes)</strong> connected by <strong>edges (links)</strong>.
-        Graphs are used to represent networks such as roads, communication lines, and social media connections.</p>
-      <p><strong>Example:</strong><br>
-      G = (V, E) where<br>
-      V = {A, B, C, D}<br>
-      E = {(A, B), (A, C), (B, D)}</p>
-    </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Graph Theory</h2>
+    <a href="graph.html">Introduction</a>
+    <a href="graph_basicconcept.html" class="active">Basic Concepts</a>
+    <a href="graph_type.html">Types of Graphs</a>
+    <a href="graph_traversal.html">Graph Traversal</a>
+    <a href="graph_application.html">Applications</a>
+  </div>
 
-    <h4>Real-Life Examples</h4>
-    <ul>
-      <li>Google Maps uses graphs to find the shortest route between two cities.</li>
-      <li>Social networks represent people as vertices and friendships as edges.</li>
-      <li>Computer networks use graphs to model connections between devices.</li>
-    </ul>
-
-    <h4>Representation of Graphs</h4>
-    <p>Graphs can be represented in various ways, mainly using adjacency methods:</p>
-    <ul>
-      <li><strong>Adjacency Matrix:</strong> A 2D array where each cell (i, j) shows if an edge exists between vertices i and j.</li>
-      <li><strong>Adjacency List:</strong> Each vertex has a list of adjacent vertices.</li>
-    </ul>
-
-    <div class="highlight-box">
-      <p><strong>Example:</strong>  
-        <br>For a graph G with V = {A, B, C} and E = {(A,B), (B,C)}:  
-        <br>Adjacency List:
-        <br>A → B  
-        <br>B → C  
-        <br>C → (none)
-      </p>
-    </div>
-
-    <h4>Common Graph Terminology</h4>
-    <ul>
-      <li><strong>Degree:</strong> Number of edges incident to a vertex.</li>
-      <li><strong>Path:</strong> A sequence of edges connecting vertices.</li>
-      <li><strong>Cycle:</strong> A path where the start and end vertices are the same.</li>
-      <li><strong>Connected Graph:</strong> Every vertex is reachable from any other vertex.</li>
-    </ul>
-
-    <h4>Interactive Section</h4>
-    <p>Click below to reveal common questions about <strong>graphs</strong> 👇</p>
-
-    <div class="faq">
-      <button>What makes a collection of points a graph?</button>
-      <div class="content">A graph must have vertices (points) and edges (lines) connecting them. The connections define relationships between pairs of vertices.</div>
-    </div>
-
-    <div class="faq">
-      <button>Can a graph have no edges?</button>
-      <div class="content">Yes, such a graph is called a <strong>null graph</strong>. It consists of isolated vertices with no connections.</div>
-    </div>
-
-    <div class="faq">
-      <button>What is the difference between directed and undirected graphs?</button>
-      <div class="content">In directed graphs, edges have direction (A → B), while in undirected graphs, they do not (A—B).</div>
-    </div>
-
-    <div class="faq">
-      <button>Can graphs have loops?</button>
-      <div class="content">Yes, a graph where a vertex connects to itself has a <strong>loop</strong>. Such graphs are called pseudographs.</div>
-    </div>
-
-    <!-- Navigation Buttons -->
-    <div class="nav-buttons">
-      <a href="graph.html" class="btn btn-custom">⬅ Previous</a>
-      <a href="graph_type.html" class="btn btn-custom">Next➡</a>
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
     </div>
   </div>
 
+  <!-- Main Content -->
+  <main class="container-main">
+    <h1>Graph Theory: Basic Concepts</h1>
+    <p class="page-intro">Learn the fundamental components and ideas used in graph theory with examples and real-life applications.</p>
+
+    <div class="content">
+      <div class="highlight">
+        <p><strong>A graph</strong> is a collection of <strong>vertices (nodes)</strong> connected by <strong>edges (links)</strong>.
+          Graphs are used to represent networks such as roads, communication lines, and social media connections.</p>
+        <p><strong>Example:</strong><br>
+          G = (V, E) where<br>
+          V = {A, B, C, D}<br>
+          E = {(A, B), (A, C), (B, D)}</p>
+      </div>
+
+      <h4>Real-Life Examples</h4>
+      <ul>
+        <li><strong>Google Maps:</strong> Uses graphs to find the shortest route between two cities</li>
+        <li><strong>Social Networks:</strong> Represent people as vertices and friendships as edges</li>
+        <li><strong>Computer Networks:</strong> Model connections between devices using graph structures</li>
+        <li><strong>Transportation Systems:</strong> Airlines, railways, and road networks are all graphs</li>
+      </ul>
+
+      <h4>Representation of Graphs</h4>
+      <p>Graphs can be represented in various ways, mainly using adjacency methods:</p>
+      <ul>
+        <li><strong>Adjacency Matrix:</strong> A 2D array where each cell (i, j) shows if an edge exists between vertices i and j</li>
+        <li><strong>Adjacency List:</strong> Each vertex has a list of adjacent vertices (more space-efficient)</li>
+        <li><strong>Edge List:</strong> A simple list of all edges in the graph</li>
+      </ul>
+
+      <div class="highlight">
+        <p><strong>Example:</strong><br>
+          For a graph G with V = {A, B, C} and E = {(A,B), (B,C)}:</p>
+        <p><strong>Adjacency List:</strong><br>
+          A → B<br>
+          B → C<br>
+          C → (none)</p>
+      </div>
+
+      <h4>Common Graph Terminology</h4>
+      <ul>
+        <li><strong>Degree:</strong> Number of edges incident to a vertex (in undirected graphs)</li>
+        <li><strong>In-degree & Out-degree:</strong> For directed graphs, edges coming in vs. going out</li>
+        <li><strong>Path:</strong> A sequence of edges connecting vertices</li>
+        <li><strong>Cycle:</strong> A path where the start and end vertices are the same</li>
+        <li><strong>Connected Graph:</strong> Every vertex is reachable from any other vertex</li>
+        <li><strong>Complete Graph:</strong> Every pair of vertices is connected by an edge</li>
+        <li><strong>Weighted Graph:</strong> Edges have associated numerical values (weights)</li>
+      </ul>
+
+      <h4>Interactive Section</h4>
+      <p>Click below to reveal common questions about <strong>graphs</strong> 👇</p>
+
+      <div class="faq" id="faq-1">
+        <button type="button" aria-expanded="false" aria-controls="faq-1-content">
+          <span>What makes a collection of points a graph?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-1-content" class="content" aria-hidden="true">
+          A graph must have vertices (points) and edges (lines) connecting them. The connections define relationships between pairs of vertices. Without edges, you just have isolated points.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-2">
+        <button type="button" aria-expanded="false" aria-controls="faq-2-content">
+          <span>Can a graph have no edges?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-2-content" class="content" aria-hidden="true">
+          Yes, such a graph is called a <strong>null graph</strong> or <strong>empty graph</strong>. It consists of isolated vertices with no connections. While uncommon, it's still a valid graph structure.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-3">
+        <button type="button" aria-expanded="false" aria-controls="faq-3-content">
+          <span>What is the difference between directed and undirected graphs?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-3-content" class="content" aria-hidden="true">
+          In <strong>directed graphs</strong> (digraphs), edges have direction (A → B), meaning the relationship is one-way. In <strong>undirected graphs</strong>, edges have no direction (A—B), representing mutual relationships. Social media follows vs. friendships are good examples.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-4">
+        <button type="button" aria-expanded="false" aria-controls="faq-4-content">
+          <span>Can graphs have loops?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-4-content" class="content" aria-hidden="true">
+          Yes, a graph where a vertex connects to itself has a <strong>loop</strong> (also called a self-loop). Graphs that allow loops and multiple edges between the same vertices are called <strong>multigraphs</strong> or <strong>pseudographs</strong>.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-5">
+        <button type="button" aria-expanded="false" aria-controls="faq-5-content">
+          <span>What's the difference between a tree and a graph?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-5-content" class="content" aria-hidden="true">
+          A <strong>tree</strong> is a special type of graph that is connected and has no cycles. Every tree with n vertices has exactly n-1 edges. Trees are hierarchical structures, while general graphs can have cycles and multiple paths between vertices.
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="nav-row">
+        <a href="graph.html" class="nav-btn prev">⬅ Previous</a>
+        <a href="graph_type.html" class="nav-btn next">Next ➡</a>
+      </div>
+    </div>
+  </main>
+
   <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+  <!-- FAQ toggle script -->
+  <script>
+    (function () {
+      const faqs = Array.from(document.querySelectorAll('.faq'));
+      faqs.forEach(faq => {
+        const btn = faq.querySelector('button');
+        const contentId = btn.getAttribute('aria-controls');
+        const content = document.getElementById(contentId);
+
+        if (!btn || !content) return;
+
+        btn.addEventListener('click', () => {
+          const isOpen = faq.classList.toggle('active');
+          btn.setAttribute('aria-expanded', String(isOpen));
+          content.setAttribute('aria-hidden', String(!isOpen));
+        });
+
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

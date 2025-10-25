@@ -1,241 +1,583 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Types of Sets - DiscreteMathsHub</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Types of Sets — DiscreteMathsHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #E6DAF5;
-      color: #fff;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
 
-    /* Navbar */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 48px;
-      background: transparent;
-    }
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
 
-    .logo {
-      color: #2fe07a;
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: 1px;
-    }
-
-    .menu {
-      display: flex;
-      gap: 22px;
-      list-style: none;
-    }
-
-    .menu a {
-      color: #ddd;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .menu a:hover {
-      color: #2fe07a;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #2fe07a;
-      margin-bottom: 20px;
-      font-weight: 700;
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
+      overflow-y:auto;
+      z-index:1000;
     }
     
-    p.intro {
-      text-align: center;
-      color: #cec5c5;
-      margin-bottom: 40px;
-      font-size: 16px;
+    .sidebar h2{
+      text-align:center;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
     }
-
-    /* Section Cards */
-    .card {
-      background: #1c1f1e;
-      padding: 25px;
-      border-radius: 12px;
-      transition: transform 0.2s, background 0.3s;
-      margin-bottom: 20px;
+    
+    .sidebar a{
+      display:block;
+      padding:12px 24px;
+      color: var(--text-secondary);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
     }
-
-    .card:hover {
-      transform: translateY(-6px);
-      background: #001008;
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
     }
-
-    .card h3 {
-      color: #2fe07a;
-      margin-bottom: 10px;
+    
+    .sidebar a.active{
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
       font-weight: 600;
     }
 
-    .example-box {
-      background: #0f1110;
-      border-left: 4px solid #2fe07a;
-      padding: 10px 15px;
-      border-radius: 6px;
-      color: #ccc;
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:260px; right:0;
+      height: var(--nav-height);
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px;
+      z-index:999;
+    }
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
+    .topnav a{
+      text-decoration:none;
+      color: var(--text-secondary);
+      font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
+    }
+
+    /* Main Content */
+    main.container-main{
+      margin-left:260px;
+      margin-top: var(--nav-height);
+      padding:40px 50px;
+      min-height:100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Page Title */
+    h1{
+      text-align:center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .intro{
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* Type Cards */
+    .type-card{
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-bottom:20px;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .type-card::before{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-1);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .type-card:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 24px 70px rgba(124,58,237,0.3);
+      border-color: rgba(124,58,237,0.3);
+    }
+
+    .type-card:hover::before{
+      transform: scaleX(1);
+    }
+
+    .type-card h3{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .type-card h3 .icon{
+      font-size: 24px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .type-card p{
+      color: var(--text-secondary);
       font-size: 15px;
-      margin-top: 10px;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    /* Examples */
+    .example-box{
+      background: rgba(124,58,237,0.08);
+      border-left:4px solid var(--primary);
+      padding:14px 18px;
+      border-radius:10px;
+      margin-top:12px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .example-box b{
+      color: var(--text-primary);
+      font-weight: 700;
     }
 
     /* Simulator Section */
-    .simulator {
-      background: #1c1f1e;
-      padding: 30px;
-      border-radius: 12px;
-      margin-top: 40px;
+    .simulator{
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-top:40px;
+      margin-bottom:28px;
       text-align: center;
     }
 
-    .simulator input {
-      width: 70%;
-      padding: 10px;
-      border-radius: 20px;
-      border: 2px solid #2fe07a;
-      background-color: #0f1110;
-      color: #fff;
+    .simulator h2{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .simulator p{
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .simulator input{
+      width: 100%;
+      max-width: 500px;
+      border: 2px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      padding: 14px 20px;
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
       outline: none;
       margin-bottom: 20px;
     }
 
-    .simulator button {
-      background-color: #2fe07a;
-      border: none;
-      color: #000;
-      font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: 0.3s;
+    .simulator input:focus{
+      border-color: var(--primary);
+      background: rgba(15,15,30,0.8);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
     }
 
-    .simulator button:hover {
-      background-color: #27c36b;
+    .simulator input::placeholder{
+      color: rgba(180,180,191,0.5);
+    }
+
+    .simulator button{
+      background: var(--gradient-1);
       color: #fff;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.25);
     }
 
-    .result {
-      margin-top: 20px;
-      color: #2fe07a;
-      font-weight: 600;
-      font-size: 18px;
+    .simulator button:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,58,237,0.35);
     }
 
-    /* Navigation Buttons */
-    .nav-buttons {
+    .simulator button:active{
+      transform: translateY(0);
+    }
+
+    .result{
+      margin-top: 24px;
+      padding: 18px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 17px;
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(124,58,237,0.08);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--text-primary);
+    }
+
+    .result.success{
+      background: rgba(6,182,212,0.08);
+      border-color: rgba(6,182,212,0.3);
+      color: var(--accent);
+    }
+
+    .result.error{
+      background: rgba(255,92,158,0.08);
+      border-color: rgba(255,92,158,0.3);
+      color: var(--secondary);
+    }
+
+    /* Navigation Row */
+    .nav-row{
       display: flex;
       justify-content: space-between;
+      gap: 16px;
       margin-top: 40px;
     }
-
-    .btn-nav {
-      background-color: #2fe07a;
-      color: #000;
-      border: none;
-      font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 25px;
+    
+    .nav-btn{
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
       text-decoration: none;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block;
     }
-
-    .btn-nav:hover {
-      background-color: #27c36b;
+    
+    .nav-btn.prev{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+    }
+    
+    .nav-btn.prev:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+      transform: translateX(-4px);
+    }
+    
+    .nav-btn.next{
+      background: var(--gradient-1);
       color: #fff;
+      box-shadow: 0 10px 30px rgba(124,58,237,0.3);
     }
-  
-  p {
-    color: #fff;
-  }
+    
+    .nav-btn.next:hover{
+      transform: translateX(4px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.4);
+    }
 
-    footer {
+    /* Footer */
+    footer{
       text-align: center;
-      margin-top: 50px;
-      padding: 15px;
-      background: #1c1f1e;
-      color: #888;
-      border-top: 1px solid #2fe07a33;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-left: 260px;
+      border-top: 1px solid rgba(124,58,237,0.06);
+    }
+
+    /* Responsive */
+    @media(max-width:992px){
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      main.container-main{
+        margin-left: 0;
+        padding: 30px 24px;
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      footer{
+        margin-left: 0;
+      }
+    }
+
+    @media(max-width:768px){
+      main.container-main{
+        padding: 24px 20px;
+      }
+      
+      .type-card, .simulator{
+        padding: 24px;
+      }
+      
+      h1{
+        font-size: 32px;
+      }
+      
+      .topnav-links{
+        display: none;
+      }
+      
+      .nav-row{
+        flex-direction: column;
+      }
+    }
+
+    @media(max-width:420px){
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+      
+      main.container-main{
+        padding: 20px 16px;
+      }
+      
+      .type-card, .simulator{
+        padding: 20px;
+      }
+      
+      h1{
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
-  <!-- Navbar -->
-  <nav>
-    <div class="logo">📘 DiscreteMathsHub</div>
-    <ul class="menu">
-      <li><a href="index.html">HOME</a></li>
-      <li><a href="explore.html">EXPLORE</a></li>
-      <li><a href="about.html">ABOUT</a></li>
-      <li><a href="profile.html">PROFILE</a></li>
-    </ul>
-  </nav>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Set Theory</h2>
+    <a href="set_defination.html">Set Introduction</a>
+    <a href="set_operation.html">Set Operations</a>
+    <a href="set_venndiagram.html">Venn Diagrams</a>
+    <a href="subset.html">Subsets</a>
+    <a href="set_property.html">Properties Sets</a>
+    <a href="set_application.html">Applications</a>
+    <a href="set_type.html" class="active">Types of Sets</a>
+  </div>
 
-  <!-- Content -->
-  <div class="container">
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container-main">
     <h1>📚 Types of Sets</h1>
     <p class="intro">Learn about different types of sets in discrete mathematics and test your understanding with an interactive simulator!</p>
 
-    <div class="card">
-      <h3>⿡ Empty Set (Null Set)</h3>
-      <p>A set containing no elements is called an empty set.</p>
-      <div class="example-box"><b>Example:</b> Set of negative natural numbers → ∅</div>
+    <div class="type-card">
+      <h3><span class="icon">∅</span> Empty Set (Null Set)</h3>
+      <p>A set containing no elements is called an empty set. It is denoted by ∅ or { }. The empty set is a subset of every set.</p>
+      <div class="example-box"><b>Example:</b> Set of negative natural numbers → ∅<br>Set of whole numbers less than 0 → ∅</div>
     </div>
 
-    <div class="card">
-      <h3>⿢ Finite Set</h3>
-      <p>A set having a definite number of elements is called a finite set.</p>
-      <div class="example-box"><b>Example:</b> Set of vowels in English → {a, e, i, o, u}</div>
+    <div class="type-card">
+      <h3><span class="icon">📊</span> Finite Set</h3>
+      <p>A set having a definite number of elements is called a finite set. We can count all elements in a finite set.</p>
+      <div class="example-box"><b>Example:</b> Set of vowels in English → {a, e, i, o, u}<br>Set of days in a week → {Mon, Tue, Wed, Thu, Fri, Sat, Sun}</div>
     </div>
 
-    <div class="card">
-      <h3>⿣ Infinite Set</h3>
-      <p>A set that has an uncountable number of elements is called an infinite set.</p>
-      <div class="example-box"><b>Example:</b> Set of all whole numbers → {0, 1, 2, 3, ...}</div>
+    <div class="type-card">
+      <h3><span class="icon">∞</span> Infinite Set</h3>
+      <p>A set that has an uncountable number of elements is called an infinite set. Elements continue indefinitely.</p>
+      <div class="example-box"><b>Example:</b> Set of all whole numbers → {0, 1, 2, 3, ...}<br>Set of all real numbers → ℝ</div>
     </div>
 
-    <div class="card">
-      <h3>⿤ Subset</h3>
-      <p>If every element of set A is also an element of set B, then A is a subset of B.</p>
-      <div class="example-box"><b>Example:</b> A = {1,2}, B = {1,2,3,4} ⇒ A ⊆ B</div>
+    <div class="type-card">
+      <h3><span class="icon">⊆</span> Subset</h3>
+      <p>If every element of set A is also an element of set B, then A is a subset of B, denoted as A ⊆ B.</p>
+      <div class="example-box"><b>Example:</b> A = {1, 2}, B = {1, 2, 3, 4} ⇒ A ⊆ B<br>Every set is a subset of itself: A ⊆ A</div>
     </div>
 
-    <div class="card">
-      <h3>⿥ Universal Set</h3>
-      <p>The set that contains all possible elements for a discussion is called a universal set.</p>
-      <div class="example-box"><b>Example:</b> U = {1,2,3,4,5}, A = {2,4} ⇒ U is universal.</div>
+    <div class="type-card">
+      <h3><span class="icon">⊂</span> Proper Subset</h3>
+      <p>If A ⊆ B and A ≠ B, then A is a proper subset of B, denoted as A ⊂ B. A proper subset cannot be equal to the original set.</p>
+      <div class="example-box"><b>Example:</b> A = {1, 2}, B = {1, 2, 3} ⇒ A ⊂ B<br>The empty set ∅ is a proper subset of any non-empty set</div>
+    </div>
+
+    <div class="type-card">
+      <h3><span class="icon">🌐</span> Universal Set</h3>
+      <p>The set that contains all possible elements for a particular discussion is called a universal set, denoted by U.</p>
+      <div class="example-box"><b>Example:</b> U = {1, 2, 3, 4, 5}, A = {2, 4} ⇒ U is universal for A<br>In discussing digits: U = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}</div>
+    </div>
+
+    <div class="type-card">
+      <h3><span class="icon">⊕</span> Disjoint Sets</h3>
+      <p>Two sets are disjoint if they have no elements in common. Their intersection is the empty set: A ∩ B = ∅.</p>
+      <div class="example-box"><b>Example:</b> A = {1, 2, 3}, B = {4, 5, 6} ⇒ A and B are disjoint<br>Set of even numbers and set of odd numbers are disjoint</div>
+    </div>
+
+    <div class="type-card">
+      <h3><span class="icon">=</span> Equal Sets</h3>
+      <p>Two sets A and B are equal if they contain exactly the same elements. Order doesn't matter in sets.</p>
+      <div class="example-box"><b>Example:</b> A = {1, 2, 3}, B = {3, 2, 1} ⇒ A = B<br>{a, b, c} = {c, a, b}</div>
     </div>
 
     <!-- Simulator -->
     <div class="simulator">
       <h2>🧠 Set Type Simulator</h2>
-      <p>Enter elements separated by commas (e.g., 1, 2, 3)</p>
+      <p>Enter elements separated by commas (e.g., 1, 2, 3) or leave empty to test an empty set</p>
       <input type="text" id="setInput" placeholder="Enter set elements...">
       <br>
       <button onclick="checkSetType()">Check Type</button>
@@ -243,11 +585,11 @@
     </div>
 
     <!-- Navigation Buttons -->
-    <div class="nav-buttons">
-      <a href="set_operation.html" class="btn-nav">⬅ Previous</a>
-      <a href="set_venndiagram.html" class="btn-nav">Next➡</a>
+    <div class="nav-row">
+      <a href="set_operation.html" class="nav-btn prev">⬅ Previous</a>
+      <a href="set_venndiagram.html" class="nav-btn next">Next ➡</a>
     </div>
-  </div>
+  </main>
 
   <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
 
@@ -257,27 +599,34 @@
       const result = document.getElementById("result");
 
       if (input === "") {
-        result.innerText = "This is an Empty Set (∅)";
+        result.innerText = "∅ This is an Empty Set (Null Set)";
+        result.className = "result success";
         return;
       }
 
-      const elements = input.split(",").map(e => e.trim());
+      const elements = input.split(",").map(e => e.trim()).filter(e => e !== "");
       const uniqueElements = [...new Set(elements)];
 
       if (uniqueElements.length !== elements.length) {
-        result.innerText = "This is NOT a valid set (duplicate elements found)";
+        result.innerText = "❌ This is NOT a valid set (duplicate elements found)";
+        result.className = "result error";
         return;
       }
 
-      if (uniqueElements.length < 5) {
-        result.innerText = "This is a Finite Set ✅";
-      } else if (uniqueElements.length >= 5 && !input.includes("...")) {
-        result.innerText = "This is a Large Finite Set 🔢";
-      } else if (input.includes("...")) {
-        result.innerText = "This represents an Infinite Set ♾";
+      let message = "";
+      result.className = "result success";
+
+      if (input.includes("...")) {
+        message = "♾ This represents an Infinite Set";
+      } else if (uniqueElements.length === 1) {
+        message = "✅ This is a Singleton Set (contains exactly one element)";
+      } else if (uniqueElements.length < 10) {
+        message = `✅ This is a Finite Set with ${uniqueElements.length} elements`;
       } else {
-        result.innerText = "Cannot determine the type clearly. Try again!";
+        message = `✅ This is a Large Finite Set with ${uniqueElements.length} elements`;
       }
+
+      result.innerText = message;
     }
   </script>
 

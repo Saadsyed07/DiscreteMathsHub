@@ -1,223 +1,339 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>About Us — DiscreteMathsHub</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family: Inter, system-ui, Arial, sans-serif;
-    background:#E6DAF5;
-    color:#fff;
-    line-height:1.6;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About Us — DiscreteMathsHub</title>
 
-  /* NAV */
-  nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:18px 48px;
-    background:transparent;
-  }
-  .logo{color:#8A4FFF;font-weight:700;font-size:22px;letter-spacing:1px}
-  .menu{display:flex;gap:22px;list-style:none}
-  .menu a{color:black;text-decoration:none;font-weight:600;font-size:14px}
-  .menu a:hover{color:#8A4FFF}
+  <!-- Fonts (match main site) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  /* About Section */
-  .about-section{
-    max-width:1100px;
-    margin:60px auto;
-    padding:0 24px;
-    text-align:center;
-  }
-  .about-section h1{
-    font-size:clamp(28px,5vw,52px);
-    font-weight:800;
-    color:#8A4FFF;
-    margin-bottom:20px;
-  }
-  .about-section p{
-    font-size:18px;
-    color:black;
-    margin-bottom:24px;
-  }
+  <style>
+    :root{
+      --primary: #7C3AED;
+      --primary-2: #6D28D9;
+      --secondary: #FF5C9E;
+      --accent: #06B6D4;
+      --bg-dark: #0F0F1E;
+      --card-bg: rgba(26,26,46,0.6);
+      --glass-border: rgba(124,58,237,0.12);
+      --text-primary: #FFFFFF;
+      --text-muted: #A8A8B0;
+      --gradient-1: linear-gradient(135deg,#7C3AED 0%,#FF5C9E 100%);
+      --container-max: 1200px;
+      --nav-height: 72px;
+    }
 
-  /* Cards for team/mission/vision */
-  .cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:28px;
-    margin-top:40px;
-  }
-  .card{
-    background:#ded1fd;
-    border-radius:14px;
-    padding:28px 22px;
-    box-shadow:0 4px 12px rgba(0,0,0,.4);
-    transition:transform .25s;
-  }
-  .card:hover{transform:translateY(-6px)}
-  .card h2{
-    font-size:22px;
-    color:#8A4FFF;
-    margin-bottom:12px;
-  }
-  .card p{
-    color:black;
-    font-size:15px;
-  }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg-dark);
+      color:var(--text-primary);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+    }
 
-  /* Call-to-action */
-  .cta{
-    margin-top:60px;
-    text-align:center;
-  }
-  .btn{
-    padding:12px 28px;
-    border-radius:28px;
-    background:#8A4FFF;
-    border:none;
-    color:#fff;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 6px 18px rgba(16,120,65,.12);
-  }
+    /* animated gradient orbs (same site visual) */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.28; will-change:transform; }
+    .orb1{ width:520px;height:520px;background:var(--gradient-1); top:-200px; right:-200px; }
+    .orb2{ width:420px;height:420px;background:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%); bottom:-160px; left:-160px; }
+    .orb3{ width:360px;height:360px;background:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%); top:50%; left:50%; transform:translate(-50%,-50%); }
 
-  /* responsive */
-  @media(max-width:700px){
-    nav{padding:12px 20px}
-    .menu{display:none}
-  }
+    /* container helper */
+    .container-wide{
+      width:100%;
+      max-width:var(--container-max);
+      margin:0 auto;
+      padding:0 20px;
+    }
 
-  /*profile icon*/
-   .logo{color:#8A4FFF;font-weight:700;font-size:22px;letter-spacing:1px}
-  .menu{display:flex;gap:22px;list-style:none;align-items:center;}
-  .menu a{color:black;text-decoration:none;font-weight:600;font-size:14px}
-  .menu a:hover{color:#8A4FFF}
+    /* NAV */
+    nav{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:var(--nav-height);
+      display:flex; align-items:center;
+      z-index:1200;
+      background: rgba(15,15,30,0.6);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(124,58,237,0.06);
+    }
+    .nav-inner{
+      width:100%; max-width:var(--container-max); margin:0 auto; padding:0 20px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .logo{
+      font-family:'Space Grotesk', sans-serif;
+      font-weight:700; font-size:20px;
+      background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; letter-spacing:-0.3px;
+    }
+    .nav-menu{ display:flex; gap:18px; align-items:center; list-style:none; margin:0; padding:0; }
+    .nav-menu a{ color:var(--text-muted); text-decoration:none; font-weight:600; font-size:14px; padding:8px 10px; border-radius:8px; transition:all .18s ease; }
+    .nav-menu a:hover{ color:var(--text-primary); background: rgba(255,255,255,0.02); }
 
-  /* Profile icon */
-  .profile-icon{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:#8A4FFF;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:transform .2s;
-  }
-  .profile-icon:hover{
-    transform:scale(1.1);
-  }
-  .profile-icon svg{
-    width:22px;
-    height:22px;
-    fill:#0f1110;
-  }
+    .dropdown{ position:relative; }
+    .dropdown-content{
+      position:absolute; top:calc(100% + 8px); left:0;
+      background: rgba(18,18,30,0.98); border:1px solid var(--glass-border); border-radius:10px; min-width:220px; padding:6px;
+      box-shadow:0 12px 40px rgba(2,2,8,0.6); display:none;
+    }
+    .dropdown:hover .dropdown-content{ display:block; }
+    .dropdown-content a{ display:block; padding:10px 14px; color:var(--text-muted); text-decoration:none; border-radius:8px; }
+    .dropdown-content a:hover{ background: rgba(124,58,237,0.08); color:var(--primary); padding-left:16px; }
 
-  @media(max-width:700px){
-    nav{padding:12px 20px}
-    .menu{display:none}
-  }
+    .profile-icon{
+      width:44px;height:44px;border-radius:10px;background:var(--gradient-1);
+      display:inline-flex;align-items:center;justify-content:center; cursor:pointer; transition:transform .18s;
+      box-shadow:0 8px 26px rgba(124,58,237,0.16);
+    }
+    .profile-icon svg{ width:18px;height:18px; fill:#fff; }
 
-  /* Dropdown */
-  .dropdown {
-    position: relative;
-  }
+    .hamburger{ display:none; width:44px;height:44px;border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); align-items:center; justify-content:center; cursor:pointer; }
+    .hamburger .bar{ width:20px;height:2px;background:var(--text-primary); position:relative; display:block; }
+    .hamburger .bar::before, .hamburger .bar::after{ content:''; position:absolute; left:0; width:20px;height:2px;background:var(--text-primary); }
+    .hamburger .bar::before{ top:-6px; } .hamburger .bar::after{ top:6px; }
 
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #1c1f1e;
-    min-width: 180px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    z-index: 100;
-  }
+    .mobile-nav{ display:none; }
+    body.nav-open .mobile-nav{ display:block; position:fixed; top:var(--nav-height); left:12px; right:12px; background: rgba(12,12,24,0.96); border:1px solid var(--glass-border); border-radius:12px; padding:12px; max-height:calc(100vh - var(--nav-height) - 24px); overflow:auto; z-index:1199; }
 
-  .dropdown-content a {
-    display: block;
-    padding: 10px 14px;
-    color: #ddd;
-    font-size: 14px;
-    text-decoration: none;
-  }
+    /* PAGE HEADER / ABOUT INTRO */
+    main{ padding-top: calc(var(--nav-height) + 28px); padding-bottom:56px; }
+    .about-section{
+      padding:56px 0 32px;
+    }
+    .about-inner{
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:40px;
+      align-items:start;
+      margin-bottom:20px;
+    }
+    .about-text h1{
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(28px, 4.6vw, 48px);
+      font-weight:800;
+      margin:0 0 12px 0;
+      color:var(--text-primary);
+      letter-spacing:-0.6px;
+    }
+    .about-text p{ color:var(--text-muted); font-size:16px; margin:0 0 12px 0; }
 
-  .dropdown-content a:hover {
-    background: #8A4FFF;
-    color: #0f1110;
-  }
+    /* right column card */
+    .about-card{
+      background:var(--card-bg);
+      border:1px solid var(--glass-border);
+      padding:24px;
+      border-radius:14px;
+      box-shadow:0 20px 50px rgba(2,2,8,0.5);
+    }
+    .about-card h3{ margin:0 0 10px 0; color:var(--primary); font-family:'Space Grotesk',sans-serif; }
+    .about-card p{ color:var(--text-muted); font-size:14px; }
 
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
+    /* mission/vision/team cards */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:20px;
+      margin-top:26px;
+    }
+    .card{
+      background:var(--card-bg);
+      border:1px solid var(--glass-border);
+      padding:20px;
+      border-radius:14px;
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover{ transform:translateY(-6px); box-shadow:0 22px 48px rgba(124,58,237,0.08); }
+    .card h2{ margin:0 0 8px 0; color:var(--primary); font-family:'Space Grotesk',sans-serif; }
+    .card p{ margin:0; color:var(--text-muted); }
 
-  /* Responsive tweaks */
-  @media (max-width:700px){
-    nav{padding:12px 20px}
-    .menu{display:none}
-    .arrow{width:40px;height:40px;font-size:22px}
-    .dot{width:26px}
-  }
-</style>
+    /* CTA */
+    .cta{
+      margin-top:36px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .btn-primary{
+      padding:12px 28px;
+      border-radius:999px;
+      background:var(--gradient-1);
+      color:#fff;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 14px 40px rgba(124,58,237,0.18);
+    }
+
+    footer{
+      padding:28px 0; margin-top:48px; border-top:1px solid rgba(124,58,237,0.04); color:var(--text-muted); text-align:center;
+    }
+
+    /* responsive */
+    @media (max-width: 980px){
+      .about-inner{ grid-template-columns: 1fr; }
+      .about-card{ order: -1; margin-bottom:18px; }
+      .nav-menu{ display:none; }
+      .hamburger{ display:flex; }
+    }
+    @media (max-width: 640px){
+      .container-wide{ padding:0 14px; }
+      .about-text p{ font-size:15px; }
+      .cards{ gap:14px; }
+    }
+  </style>
 </head>
 <body>
-
-<nav>
-  <div class="logo">DiscreteMathsHub</div>
-  <ul class="menu">
-    <li><a href="index.html">HOME</a></li>
-      <li class="dropdown">
-        <a href="#">EXPLORE ▾</a>
-        <div class="dropdown-content">
-          <a href="set_theory.html">Set Theory</a>
-          <a href="graph.html">Graph Theory</a>
-          <a href="#tree">Trees</a>
-          <a href="#logic">Logic</a>
-          <a href="#combinatorics">Combinatorics</a>
-          <a href="#relations">Relations & Functions</a>
-        </div>
-      </li>
-    <li><a href="./about.html" style="color:#8A4FFF;">ABOUT</a></li>
-    <li><a href="./login.html">LOGIN</a></li>
-    <li><a href="/register.html">REGISTER</a></li>
-    <li>
-      <!-- Profile Icon with Person -->
-      <a href="/profile.html" class="profile-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-        </svg>
-      </a>
-    </li>
-  </ul>
-</nav>
-
-<section class="about-section">
-  <h1>About Us</h1>
-  <p>Welcome to <strong>DiscreteMathsHub</strong> — a platform created to make learning Discrete Mathematics engaging, visual, and practical for Computer Science students.</p>
-  <p>We believe that concepts like logic, set theory, graph theory, and combinatorics are the foundation of programming and algorithms. Our mission is to simplify these topics using visual examples, interactive notes, and practice resources.</p>
-
-  <div class="cards">
-    <div class="card">
-      <h2>Our Mission</h2>
-      <p>To provide CS students with an intuitive understanding of Discrete Mathematics, bridging the gap between theory and practical applications.</p>
-    </div>
-    <div class="card">
-      <h2>Our Vision</h2>
-      <p>To become the go-to learning platform for Discrete Mathematics and help students excel in academics, coding, and competitive exams.</p>
-    </div>
-    <div class="card">
-      <h2>Our Team</h2>
-      <p>We are a group of passionate educators, learners, and developers dedicated to making mathematics fun, accessible, and relevant.</p>
-    </div>
+  <!-- animated orbs -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
   </div>
-</section>
 
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner container-wide">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="logo">DiscreteMathsHub</div>
+      </div>
+
+      <ul class="nav-menu" role="menubar" aria-label="Primary">
+        <li><a href="index.html">HOME</a></li>
+        <li class="dropdown">
+          <a href="#" aria-haspopup="true">EXPLORE ▾</a>
+          <div class="dropdown-content" role="menu" aria-label="Explore">
+            <a href="set_theory.html">Set Theory</a>
+            <a href="graph.html">Graph Theory</a>
+            <a href="tree.html">Trees</a>
+            <a href="logic.html">Logic</a>
+            <a href="combinatorics.html">Combinatorics</a>
+            <a href="relations.html">Relations & Functions</a>
+          </div>
+        </li>
+        <li><a href="explore.html">EXPLORE</a></li>
+        <li><a href="login.html">LOGIN</a></li>
+        <li><a href="register.html">REGISTER</a></li>
+      </ul>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="profile.html" class="profile-icon" title="Profile" aria-label="Profile">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        </a>
+
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false" type="button">
+          <span class="bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- mobile nav -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true" role="dialog" aria-label="Mobile navigation">
+      <a class="d-block p-2 mb-1 text-muted" href="index.html">HOME</a>
+      <details style="padding:6px 4px; border-radius:8px;">
+        <summary style="cursor:pointer; color:var(--text-muted); font-weight:700;">EXPLORE ▾</summary>
+        <div style="margin-top:8px; padding-left:8px;">
+          <a class="d-block p-2 text-muted" href="set_theory.html">Set Theory</a>
+          <a class="d-block p-2 text-muted" href="graph.html">Graph Theory</a>
+          <a class="d-block p-2 text-muted" href="tree.html">Trees</a>
+          <a class="d-block p-2 text-muted" href="logic.html">Logic</a>
+          <a class="d-block p-2 text-muted" href="combinatorics.html">Combinatorics</a>
+          <a class="d-block p-2 text-muted" href="relations.html">Relations & Functions</a>
+        </div>
+      </details>
+      <a class="d-block p-2 text-muted" href="login.html">LOGIN</a>
+      <a class="d-block p-2 text-muted" href="register.html">REGISTER</a>
+    </div>
+  </nav>
+
+  <!-- MAIN: About content -->
+  <main>
+    <div class="container-wide about-section">
+      <div class="about-inner">
+        <div class="about-text">
+          <h1>About DiscreteMathsHub</h1>
+          <p>Welcome to <strong>DiscreteMathsHub</strong> — a learning platform built to make Discrete Mathematics visual, practical, and enjoyable for computer science students. We use interactive diagrams, concise explanations, and hands-on exercises to bridge theory with real-world applications.</p>
+          <p>Topics include logic, set theory, graph theory, combinatorics, relations, and number theory — all presented with clarity to help you build strong foundations for algorithms, systems, and cryptography.</p>
+
+          <div class="cards" aria-hidden="false">
+            <div class="card">
+              <h2>Our Mission</h2>
+              <p>Democratize discrete math education by providing approachable, visual lessons and meaningful practice that prepare students for academics and industry.</p>
+            </div>
+            <div class="card">
+              <h2>Our Vision</h2>
+              <p>Become the most trusted resource for discrete mathematics learners worldwide, where concepts stick and students build confidence.</p>
+            </div>
+            <div class="card">
+              <h2>Our Team</h2>
+              <p>A small, passionate team of educators, designers and engineers committed to turning complex ideas into intuitive learning experiences.</p>
+            </div>
+          </div>
+
+          <div class="cta">
+            <a href="explore.html" class="btn-primary" aria-label="Explore topics">Explore Topics →</a>
+          </div>
+        </div>
+
+        <aside class="about-card" aria-labelledby="why-title">
+          <h3 id="why-title">Why we built this</h3>
+          <p>Many students struggle to see how abstract math maps to code. We emphasize visual intuition and progressive examples so you can apply discrete math directly to algorithms, proofs and system design.</p>
+
+          <hr style="border:none;border-top:1px solid rgba(124,58,237,0.04);margin:18px 0">
+
+          <h3>Get involved</h3>
+          <p>Contribute content, suggest improvements, or report issues on our GitHub. We're community-driven and welcome learners and contributors of all levels.</p>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container-wide">
+      © 2025 DiscreteMathsHub — Learn, Visualize & Master Discrete Mathematics
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const bodyEl = document.body;
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    function setMobileOpen(open){
+      if(!hamburger || !mobileNav) return;
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if(open) bodyEl.classList.add('nav-open'); else bodyEl.classList.remove('nav-open');
+    }
+    if(hamburger){
+      hamburger.addEventListener('click', ()=>{
+        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+        setMobileOpen(!isOpen);
+      });
+      document.addEventListener('click', (e)=>{
+        if(!bodyEl.classList.contains('nav-open')) return;
+        const path = e.composedPath ? e.composedPath() : (e.path || []);
+        if(!path.includes(mobileNav) && !path.includes(hamburger)) setMobileOpen(false);
+      });
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') setMobileOpen(false); });
+    }
+
+    // Parallax for background orbs (lightweight)
+    document.addEventListener('mousemove', (e)=>{
+      const mx = e.clientX / window.innerWidth;
+      const my = e.clientY / window.innerHeight;
+      document.querySelectorAll('.gradient-orb').forEach((orb, i)=>{
+        const speed = (i + 1) * 12;
+        const x = (mx - 0.5) * speed;
+        const y = (my - 0.5) * speed;
+        orb.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
+  </script>
 </body>
 </html>

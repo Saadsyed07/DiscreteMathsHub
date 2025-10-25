@@ -1,421 +1,678 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graph Theory - DiscreteMathsHub</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Graph Theory | DiscreteMathsHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #E6DAF5;
-      color: black;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    nav {
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
+
+    /* Navigation */
+    nav.site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      z-index: 1200;
+      padding: 12px 0;
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 18px 48px;
-      background: transparent;
+      animation: slideDown .5s ease-out;
+    }
+    @keyframes slideDown{from{transform:translateY(-100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
     }
 
     .logo {
-      color: #8A4FFF;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       font-size: 22px;
-      letter-spacing: 1px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.3px;
+      text-decoration: none;
     }
 
     .menu {
       display: flex;
-      gap: 22px;
+      gap: 28px;
+      align-items: center;
       list-style: none;
     }
 
     .menu a {
-      color: black;
+      color: var(--text-secondary);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
+      letter-spacing: .4px;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width .25s ease;
     }
 
     .menu a:hover {
-      color: #8A4FFF;
+      color: var(--text-primary);
     }
 
-    .container {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 20px;
+    .menu a:hover::after {
+      width: 100%;
     }
 
-    h1 {
-      text-align: center;
-      color: #8A4FFF;
-      margin-bottom: 30px;
-      font-weight: 700;
-    }
-
-    .search-bar {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .search-bar input {
-      width: 80%;
-      padding: 12px;
-      border-radius: 30px;
-      border: 2px solid #8A4FFF;
-      background-color: white;
-      color: black;
-      font-size: 16px;
-      outline: none;
-    }
-
-    .topics {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-    }
-
-    .card {
-      background: #ded1fd;
-      padding: 20px;
-      border-radius: 12px;
-      transition: transform 0.2s, background 0.3s;
-      cursor: pointer;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      background: #ded1fd;
-    }
-
-    .card h3 {
-      color: #8A4FFF;
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      color:black;
-      font-size: 14px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 50px;
-      padding: 15px;
-      background: #ded1fd;
-      color: black;
-      border-top: 1px solid #ded1fd;
-    }
-
-    /* Modal Custom Styling */
-    .modal-content {
-      background-color: #ded1fd;
-      color: black;
-      border-radius: 12px;
-      border: 2px solid #8A4FFF;
-    }
-
-    .btn-custom {
-      background: #8A4FFF;
-      color: white;
-      border: none;
-      font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 25px;
-    }
-
-    .btn-custom:hover {
-      background: #8A4FFF;
-    }
-
-    /* Profile icon */
-  .profile-icon{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:#8A4FFF;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:transform .2s;
-  }
-  .profile-icon:hover{
-    transform:scale(1.1);
-  }
-  .profile-icon svg{
-    width:22px;
-    height:22px;
-    fill:#0f1110;
-  }
-
-  /* Dropdown */
-    .dropdown {
-      position: relative;
-    }
-
+    .dropdown { position: relative; }
     .dropdown-content {
-      display: none;
       position: absolute;
-      top: 100%;
+      top: calc(100% + 10px);
       left: 0;
-      background: #1c1f1e;
-      min-width: 180px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      z-index: 100;
+      background: rgba(26,26,46,0.98);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius: 12px;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all .18s ease;
+      z-index: 60;
+      padding: 8px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
 
     .dropdown-content a {
       display: block;
-      padding: 10px 14px;
-      color: #ddd;
-      font-size: 14px;
+      padding: 10px 16px;
+      color: var(--text-secondary);
       text-decoration: none;
+      font-size: 14px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
 
     .dropdown-content a:hover {
-      background: #8A4FFF;
-      color: #0f1110;
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      padding-left: 18px;
     }
 
-    .dropdown:hover .dropdown-content {
-      display: block;
+    .profile-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .18s;
+      box-shadow: 0 6px 22px rgba(124,58,237,0.18);
+    }
+
+    .profile-icon:hover {
+      transform: scale(1.06);
+    }
+
+    .profile-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    /* Page */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 40px) 24px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header.page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header.page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 6vw, 52px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0 0 16px 0;
+      letter-spacing: -1px;
+    }
+
+    header.page-header p.lead {
+      color: var(--text-secondary);
+      font-size: 17px;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    /* Search */
+    .search-bar {
+      text-align: center;
+      margin: 0 0 40px;
+    }
+
+    .search-bar input {
+      width: 90%;
+      max-width: 720px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      border: 2px solid rgba(124,58,237,0.2);
+      background: rgba(26,26,46,0.6);
+      backdrop-filter: blur(12px);
+      color: var(--text-primary);
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .search-bar input:focus {
+      border-color: var(--primary);
+      background: rgba(26,26,46,0.8);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .search-bar input::placeholder {
+      color: rgba(180,180,191,0.5);
+    }
+
+    /* Topics grid */
+    .topics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .topic-card {
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-1);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .32s ease;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(124,58,237,0.28);
+      box-shadow: 0 20px 40px rgba(124,58,237,0.15);
+    }
+
+    .topic-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .topic-card h3 {
+      color: var(--text-primary);
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .topic-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Modal styling */
+    .modal-content {
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 20px;
+      color: var(--text-primary);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+    }
+
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .modal-body p {
+      margin-bottom: 12px;
+    }
+
+    .modal-body strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .modal-footer {
+      border-top: 1px solid rgba(124,58,237,0.1);
+    }
+
+    .btn-close {
+      filter: brightness(0) invert(1);
+      opacity: 0.7;
+    }
+
+    .btn-close:hover {
+      opacity: 1;
+    }
+
+    .btn-custom {
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,58,237,0.35);
+      color: #fff;
+    }
+
+    /* Footer */
+    footer.site-footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid rgba(124,58,237,0.06);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu {
+        display: none;
+      }
+
+      .page {
+        padding: calc(var(--nav-height) + 30px) 20px 40px;
+      }
+
+      .search-bar input {
+        width: 95%;
+      }
+
+      .topics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .nav-container {
+        padding: 0 16px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      header.page-header h1 {
+        font-size: 32px;
+      }
+
+      .topic-card {
+        padding: 24px;
+      }
+
+      .topic-card h3 {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
   <!-- Navbar -->
-  <nav>
-  <div class="logo">DiscreteMathsHub</div>
-  <ul class="menu">
-    <li><a href="index.html">HOME</a></li>
-      <li class="dropdown">
-        <a href="#">EXPLORE ▾</a>
-        <div class="dropdown-content">
-          <!-- UPDATED: point to separate pages (make sure these files exist in the same folder) -->
-          <a href="set_theory.html">Set Theory</a>
-          <a href="graph.html">Graph Theory</a>
-          <a href="tree.html">Trees</a>
-          <a href="logic.html">Logic</a>
-          <a href="combinatorics.html">Combinatorics</a>
-          <a href="relations.html">Relations & Functions</a>
-        </div>
-      </li>
-    <li><a href="about.html">ABOUT</a></li>
-    <li><a href="login.html">LOGIN</a></li>
-    <li><a href="register.html">REGISTER</a></li>
-    <li>
-      <!-- Profile Icon with Person -->
-      <a href="profile.html" class="profile-icon" title="Profile">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-        </svg>
-      </a>
-    </li>
-</ul>
-</nav>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-container">
+      <a class="logo" href="index.html">DiscreteMathsHub</a>
 
-  <div class="container">
-    <h1>Graph Theory</h1>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="🔍 Search topics like 'operations', 'notation', or 'application'...">
+      <ul class="menu" role="menubar" aria-label="Primary">
+        <li role="none"><a role="menuitem" href="index.html">HOME</a></li>
+
+        <li class="dropdown" role="none" aria-haspopup="true">
+          <a role="menuitem" href="#" aria-expanded="false">EXPLORE ▾</a>
+          <div class="dropdown-content" role="menu" aria-label="Explore topics">
+            <a role="menuitem" href="set_theory.html">Set Theory</a>
+            <a role="menuitem" href="graph_basicconcept.html">Graph Basics</a>
+            <a role="menuitem" href="graph_type.html">Types of Graphs</a>
+            <a role="menuitem" href="graph_representation.html">Representation</a>
+            <a role="menuitem" href="graph_traversal.html">Traversal</a>
+            <a role="menuitem" href="graph_component.html">Connected Components</a>
+          </div>
+        </li>
+
+        <li role="none"><a role="menuitem" href="about.html">ABOUT</a></li>
+        <li role="none"><a role="menuitem" href="login.html">LOGIN</a></li>
+        <li role="none"><a role="menuitem" href="register.html">REGISTER</a></li>
+
+        <li role="none">
+          <a href="profile.html" class="profile-icon" title="Profile" aria-label="Profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main page -->
+  <main class="page" id="main-content">
+    <header class="page-header" role="banner">
+      <h1>Graph Theory</h1>
+      <p class="lead">Explore topics, run interactive simulators and test your understanding with quizzes.</p>
+    </header>
+
+    <div class="search-bar" role="search">
+      <input id="searchInput" type="search" aria-label="Search topics" placeholder="🔍 Search topics like 'traversal', 'representation', 'applications'...">
     </div>
 
-    <div class="topics" id="topics">
-      <div class="card" data-bs-toggle="modal" data-bs-target="#basicConceptModal" data-topic="basic definition definition intro">
+    <section class="topics" id="topics" aria-labelledby="topics-heading">
+      <div class="topic-card" data-topic="basic definition intro" data-bs-toggle="modal" data-bs-target="#basicConceptModal" tabindex="0" role="button">
         <h3>📘 Basic Concepts</h3>
-        <p>Understand vertices, edges, and the foundation of graph theory with simple examples.</p>
+        <p>Understand vertices, edges, graphs and common definitions with examples.</p>
       </div>
 
-      <div class="card" data-bs-toggle="modal" data-bs-target="#typesofgraphModal" data-topic="notation symbols representation">
+      <div class="topic-card" data-topic="types notation representation" data-bs-toggle="modal" data-bs-target="#typesofgraphModal" tabindex="0" role="button">
         <h3>🔤 Types of Graph</h3>
-        <p>Learn about simple, directed, weighted, and complete graphs with diagrams.</p>
+        <p>Simple graphs, multigraphs, directed graphs, weighted and bipartite graphs.</p>
       </div>
 
-      <div class="card" data-bs-toggle="modal" data-bs-target="#representationModal" data-topic="set operations union intersection difference complement">
-        <h3>⚙ Graph representation</h3>
-        <p>Explore adjacency matrix, adjacency list, and incidence matrix structures.</p>
+      <div class="topic-card" data-topic="representation adjacency matrix list incidence" data-bs-toggle="modal" data-bs-target="#representationModal" tabindex="0" role="button">
+        <h3>⚙ Graph Representation</h3>
+        <p>Adjacency matrix, adjacency list and incidence representations explained.</p>
       </div>
 
-      <div class="card" data-bs-toggle="modal" data-bs-target="#traversalModal" data-topic="types of sets subset superset null finite infinite">
+      <div class="topic-card" data-topic="traversal bfs dfs algorithms" data-bs-toggle="modal" data-bs-target="#traversalModal" tabindex="0" role="button">
         <h3>📚 Graph Traversal</h3>
-        <p>Understand BFS and DFS algorithms with step-by-step examples and animations.</p>
+        <p>Breadth-first and depth-first traversal with interactive simulators and animations.</p>
       </div>
 
-      <div class="card" data-bs-toggle="modal" data-bs-target="#componentModal" data-topic="venn diagram visualization representation">
+      <div class="topic-card" data-topic="components connected disconnected" data-bs-toggle="modal" data-bs-target="#componentModal" tabindex="0" role="button">
         <h3>🎨 Connected Components</h3>
-        <p>Explore connected and disconnected graphs and their properties.</p>
+        <p>Discover connected & disconnected components and how to compute them.</p>
       </div>
 
-      <div class="card" data-bs-toggle="modal" data-bs-target="#applicationsModal" data-topic="applications real life computer science probability logic">
-        <h3>💡 Applications of Graph Theory</h3>
-        <p>See real-world uses of graphs in computer networks, AI, and social media.</p>
+      <div class="topic-card" data-topic="applications real world networks social ai" data-bs-toggle="modal" data-bs-target="#applicationsModal" tabindex="0" role="button">
+        <h3>💡 Applications</h3>
+        <p>Real-world applications in networking, AI, transportation and social graphs.</p>
       </div>
 
-     <div class="card" data-bs-toggle="modal" data-bs-target="#quizzModal" data-topic="properties laws associative commutative distributive identity">
-        <h3>⚖ Solve Quizzes</h3>
-        <p>Test your understanding of graph theory with interactive quizzes and instant feedback.</p>
+      <div class="topic-card" data-topic="quizzes practice test" data-bs-toggle="modal" data-bs-target="#quizzModal" tabindex="0" role="button">
+        <h3>⚖ Quizzes</h3>
+        <p>Interactive quizzes to test your knowledge with instant feedback.</p>
       </div>
-      
-    </div>
+    </section>
 
-  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
+    <footer class="site-footer">© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
+  </main>
 
-  <!-- Modals (Popups) -->
-  <div class="modal fade" id="basicConceptModal" tabindex="-1">
+  <!-- Modals -->
+  <div class="modal fade" id="basicConceptModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">📘 Basic Concept</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">📘 Basic Concepts</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          A <b>set</b> is a collection of distinct objects, called elements. Example: A = {1, 2, 3}.  
-          <br><br>🟢 Real-life: The set of days in a week = {Mon, Tue, Wed, Thu, Fri, Sat, Sun}.
+          <p><strong>Graph</strong> — a set of vertices (nodes) connected by edges (links). Example: G = (V, E), V = {A,B,C}, E = {(A,B),(B,C)}.</p>
+          <p>Use the topic pages for full explanations, examples and interactive simulators.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_basicconcept.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_basicconcept.html" class="btn-custom" role="button">Open Topic →</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="typesofgraphModal" tabindex="-1">
+  <div class="modal fade" id="typesofgraphModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">🔤 Types of Graph</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Learn about Roster and Set-builder notation. Example:  
-          <b>A = {x | x is an even number less than 10}</b>.
+          <p>Simple graphs, multigraphs, directed graphs, weighted graphs, complete graphs and bipartite graphs — each with short examples.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_type.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_type.html" class="btn-custom" role="button">Open Topic →</a>
         </div>
       </div>
     </div>
   </div>
 
-
-  <div class="modal fade" id="representationModal" tabindex="-1">
+  <div class="modal fade" id="representationModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">⚙ Graph Representation</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Learn about Roster and Set-builder notation. Example:  
-          <b>A = {x | x is an even number less than 10}</b>.
+          <p>Adjacency matrix, adjacency list and incidence matrix — learn how graphs are stored and used by algorithms.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_representation.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_representation.html" class="btn-custom" role="button">Open Topic →</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="traversalModal" tabindex="-1">
+  <div class="modal fade" id="traversalModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">📚 Graph Traversal</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Learn about Roster and Set-builder notation. Example:  
-          <b>A = {x | x is an even number less than 10}</b>.
+          <p>Explore BFS and DFS with interactive simulators and sample graphs on the topic page.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_traversal.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_traversal.html" class="btn-custom" role="button">Open Topic →</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="componentModal" tabindex="-1">
+  <div class="modal fade" id="componentModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">🎨 Connected components</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">🎨 Connected Components</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Learn about Roster and Set-builder notation. Example:  
-          <b>A = {x | x is an even number less than 10}</b>.
+          <p>Compute connected components, visualize clusters and learn algorithms to identify them.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_component.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_component.html" class="btn-custom" role="button">Open Topic →</a>
         </div>
       </div>
     </div>
   </div>
 
-   <div class="modal fade" id="applicationsModal" tabindex="-1">
+  <div class="modal fade" id="applicationsModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">💡 Applications of Graph Theory</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">💡 Applications</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Learn about Roster and Set-builder notation. Example:  
-          <b>A = {x | x is an even number less than 10}</b>.
+          <p>Routing, social networks, recommendation systems, dependency graphs and many more real-world uses.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_application.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_application.html" class="btn-custom" role="button">Open Topic →</a>
         </div>
       </div>
     </div>
   </div>
 
-   <div class="modal fade" id="quizzModal" tabindex="-1">
+  <div class="modal fade" id="quizzModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">💡 Set theory quizzes</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">⚖ Quizzes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Ready to solve quizzes
+          <p>Interactive quizzes and practice problems to test your understanding.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph_quizz.html" class="btn btn-custom">Go to Topic →</a>
+          <a href="graph_quizz.html" class="btn-custom" role="button">Open Quizzes →</a>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- You can duplicate the modal block above for each topic (operations, types, etc.) as needed -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const searchInput = document.getElementById("searchInput");
-    const topicCards = document.querySelectorAll(".card");
+    (function () {
+      const searchInput = document.getElementById('searchInput');
+      const topicCards = Array.from(document.querySelectorAll('.topic-card'));
 
-    searchInput.addEventListener("input", function() {
-      const searchTerm = this.value.toLowerCase();
-      topicCards.forEach(card => {
-        const topic = card.getAttribute("data-topic").toLowerCase();
-        card.style.display = topic.includes(searchTerm) ? "block" : "none";
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim().toLowerCase();
+        topicCards.forEach(card => {
+          const tags = (card.getAttribute('data-topic') || '').toLowerCase();
+          card.style.display = tags.includes(q) ? '' : 'none';
+        });
       });
-    });
+
+      topicCards.forEach(card => {
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      });
+
+      document.querySelectorAll('.dropdown > a').forEach(link => {
+        const parent = link.closest('.dropdown');
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const open = parent.classList.toggle('open');
+          link.setAttribute('aria-expanded', String(open));
+        });
+      });
+    })();
   </script>
 </body>
 </html>

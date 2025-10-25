@@ -1,166 +1,308 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Profile - DiscreteMathsHub</title>
+
+  <!-- Same fonts used on the home page -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Inlined site theme (matches the home page visuals exactly) -->
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  :root{
+    --primary:#7C3AED;
+    --primary-2:#6D28D9;
+    --secondary:#FF5C9E;
+    --accent:#06B6D4;
+    --bg-dark:#0E0E1A;
+    --bg-card:#151525;
+    --text-primary:#FFFFFF;
+    --text-secondary:#B4B4BF;
+    --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+    --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+    --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+    --nav-height:68px;
+    --radius-lg:18px;
+    --radius-md:10px;
+    --card-pad:24px;
+  }
 
-    body {
-      font-family: Inter, system-ui, Arial, sans-serif;
-      background: #E6DAF5;
-      color: black;
-    }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    background:var(--bg-dark);
+    color:var(--text-primary);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
 
-    /* Navbar */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 48px;
-      background: transparent;
-    }
+  /* Animated background orbs (keep them for the same home look) */
+  .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+  .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+  .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+  .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+  .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
 
-    .logo {
-      color: #8A4FFF;
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: 1px;
-    }
+  /* NAV */
+  nav{ position:fixed; top:0; left:0; right:0; height:var(--nav-height); z-index:1200; padding:12px 0;
+    background: rgba(15,15,30,0.75); backdrop-filter: blur(12px); border-bottom:1px solid rgba(124,58,237,0.06); display:flex; align-items:center; }
+  .nav-container{ max-width:1400px; margin:0 auto; padding:0 28px; display:flex; align-items:center; justify-content:space-between; width:100%;}
+  .logo{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-0.3px; }
 
-    .menu {
-      display: flex;
-      gap: 22px;
-      list-style: none;
-    }
+  .nav-menu{ display:flex; gap:20px; align-items:center; list-style:none; }
+  .nav-menu a{ color:var(--text-secondary); text-decoration:none; font-weight:500; font-size:14px; position:relative; }
+  .nav-menu a:hover{ color:var(--text-primary); }
+  .nav-menu a.home-cta{ color:var(--text-primary); background:transparent; padding:8px 14px; border-radius:999px; border:1px solid rgba(255,255,255,0.04); }
+  .nav-menu a.home-cta:hover{ background: rgba(124,58,237,0.08); color:var(--primary); transform:translateY(-2px); }
 
-    .menu a {
-      color: black;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-    }
+  .hamburger{ display:none; width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); align-items:center; justify-content:center; cursor:pointer; }
+  .hamburger .bar{ width:20px; height:2px; background:var(--text-primary); display:block; position:relative; }
+  .hamburger .bar::before, .hamburger .bar::after{ content:''; position:absolute; left:0; width:20px; height:2px; background:var(--text-primary); }
+  .hamburger .bar::before{ top:-6px; } .hamburger .bar::after{ top:6px; }
 
-    .menu a:hover {
-      color: #8A4FFF;
-    }
+  .mobile-nav{ display:none; }
+  body.nav-open .mobile-nav{
+    display:block; position:fixed; top:var(--nav-height); right:12px; left:12px; max-height:calc(100vh - var(--nav-height) - 24px); overflow:auto;
+    background: rgba(12,12,24,0.98); border:1px solid rgba(124,58,237,0.12); border-radius:14px; padding:16px; z-index:1199;
+  }
+  .mobile-nav a{ display:block; padding:12px 8px; color:var(--text-secondary); text-decoration:none; font-weight:600; border-radius:8px; }
+  .mobile-nav a:hover{ background: rgba(124,58,237,0.06); color:var(--text-primary); }
 
-    /* Profile content */
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 80vh;
-      text-align: center;
-      padding: 20px;
-    }
+  /* Page container */
+  .page { max-width:1100px; margin: 110px auto 60px auto; padding: 20px; }
 
-    main h1 {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
+  /* Profile card */
+  .profile-card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(124,58,237,0.08);
+    border-radius:20px;
+    padding:28px;
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:24px;
+    align-items:center;
+    box-shadow: 0 14px 40px rgba(15,23,42,0.06);
+  }
 
-    main p {
-      font-size: 18px;
-      color: black;
-      margin-bottom: 22px;
-    }
-
-    /* Logout Button */
-    .btn {
-      padding: 12px 28px;
-      border-radius: 28px;
-      background: #8A4FFF;
-      border: none;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(16,120,65,.12);
-      transition: transform 0.2s ease, background 0.3s ease;
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-      background: #8A4FFF;
-    }
-
-    /*profile icon*/
-   .logo{color:#8A4FFF;font-weight:700;font-size:22px;letter-spacing:1px}
-  .menu{display:flex;gap:22px;list-style:none;align-items:center;}
-  .menu a{color:black;text-decoration:none;font-weight:600;font-size:14px}
-  .menu a:hover{color:#8A4FFF}
-
-  /* Profile icon */
-  .profile-icon{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:#8A4FFF;
+  .avatar{
+    width:180px;
+    height:180px;
+    border-radius:18px;
     display:flex;
     align-items:center;
     justify-content:center;
-    cursor:pointer;
-    transition:transform .2s;
-  }
-  .profile-icon:hover{
-    transform:scale(1.1);
-  }
-  .profile-icon svg{
-    width:22px;
-    height:22px;
-    fill:#0f1110;
+    background:linear-gradient(135deg, rgba(124,58,237,0.12), rgba(255,92,158,0.06));
+    border:1px solid rgba(124,58,237,0.06);
+    font-size:48px;
+    font-weight:800;
+    color:var(--primary);
   }
 
-  @media(max-width:700px){
-    nav{padding:12px 20px}
-    .menu{display:none}
+  .profile-meta h2{ margin-bottom:6px; font-size:26px; color:var(--primary); font-family:'Space Grotesk',sans-serif; }
+  .profile-meta p { margin-bottom:8px; color:var(--text-secondary); }
+
+  .profile-stats{ display:flex; gap:18px; margin-top:12px; }
+  .stat{ background: rgba(124,58,237,0.04); padding:12px 14px; border-radius:12px; text-align:center; }
+  .stat .num{ font-weight:800; font-size:20px; color:var(--primary); }
+  .stat .label{ color:var(--text-secondary); font-size:13px; }
+
+  .profile-actions{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
+  .btn {
+    padding:10px 18px; border-radius:999px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; border:none;
+  }
+  .btn-edit { background: var(--gradient-2); color:#fff; box-shadow:0 10px 30px rgba(6,182,212,0.08); }
+  .btn-logout { background: transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text-primary); }
+  .btn-home { background: var(--gradient-1); color:#fff; }
+
+  /* Secondary area: preferences / details */
+  .profile-details{ padding:18px; border-radius:12px; border:1px solid rgba(124,58,237,0.04); background: rgba(255,255,255,0.01); margin-top:18px; }
+  .details-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .detail-item{ flex:1 1 220px; }
+
+  footer.page-footer{ margin-top:40px; text-align:center; color:var(--text-secondary); }
+
+  @media(max-width:880px){
+    .profile-card{ grid-template-columns: 1fr; text-align:center; }
+    .avatar{ margin:0 auto; }
+    .profile-meta{ order:2; }
+    .profile-actions{ justify-content:center; }
   }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- Animated Background Orbs (same as home) -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
+
+  <!-- Navigation (matches home style) -->
   <nav>
-    <div class="logo">DiscreteMathsHub</div>
-    <ul class="menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="explore.html">Explore</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li>
-      <!-- Profile Icon with Person -->
-      <a href="/profile.html" class="profile-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-        </svg>
-      </a>
-    </li>
-    </ul>
+    <div class="nav-container">
+      <a class="logo" href="index.html">DiscreteMathsHub</a>
+
+      <ul class="nav-menu" role="menubar" aria-label="Primary">
+        <li role="none"><a role="menuitem" href="index.html" class="home-cta">Back to Home</a></li>
+        <li role="none"><a role="menuitem" href="explore.html">Explore</a></li>
+        <li role="none"><a role="menuitem" href="about.html">About</a></li>
+        <li role="none"><a role="menuitem" href="login.html">Login</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false" type="button">
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="explore.html" class="mobile-link">Explore</a>
+      <a href="about.html" class="mobile-link">About</a>
+      <a href="login.html" class="mobile-link">Login</a>
+      <a href="register.html" class="mobile-link">Register</a>
+      <a href="profile.html" class="mobile-link">Profile</a>
+    </div>
   </nav>
 
-  <!-- Profile Section -->
-  <main>
-    <h1>Welcome, User!</h1>
-    <p>This is your profile page where you can see your details.</p>
-    <button onclick="logout()" class="btn">Logout</button>
+  <!-- Main page content -->
+  <main class="page" id="main-content" role="main">
+    <section class="profile-card" aria-labelledby="profile-heading">
+      <div class="avatar" aria-hidden="true">U</div>
+
+      <div>
+        <div class="profile-meta">
+          <h2 id="profile-heading">SAMPLE USER</h2>
+          <p class="muted">student@example.com</p>
+
+          <div class="profile-stats" role="list" aria-label="Profile statistics">
+            <div class="stat" role="listitem">
+              <div class="num">24</div>
+              <div class="label">Completed Lessons</div>
+            </div>
+            <div class="stat" role="listitem">
+              <div class="num">8</div>
+              <div class="label">Badges Earned</div>
+            </div>
+            <div class="stat" role="listitem">
+              <div class="num">95%</div>
+              <div class="label">Progress</div>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button class="btn btn-edit" id="editProfileBtn" type="button">Edit Profile</button>
+            <button class="btn btn-home" id="backHomeBtn" type="button">Back to Home</button>
+            <button class="btn btn-logout" id="logoutBtn" type="button">Logout</button>
+          </div>
+        </div>
+
+        <div class="profile-details" aria-labelledby="prefs-heading">
+          <h3 id="prefs-heading" style="margin-bottom:10px;color:var(--primary);font-family:'Space Grotesk',sans-serif;">Account Details & Preferences</h3>
+
+          <div class="details-row">
+            <div class="detail-item">
+              <strong>Membership</strong>
+              <div class="muted">Free learner</div>
+            </div>
+
+            <div class="detail-item">
+              <strong>Preferred Topics</strong>
+              <div class="muted">Graph Theory, Algorithms</div>
+            </div>
+
+            <div class="detail-item">
+              <strong>Notifications</strong>
+              <div class="muted">Email enabled</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
   </main>
 
+  <!-- JS: mobile menu toggle, simple edit/home/logout handlers -->
   <script>
-    function logout() {
-      // clear saved user data
-      localStorage.removeItem("currentUser");
+    (function(){
+      const bodyEl = document.body;
+      const hamburger = document.getElementById('hamburger');
+      const mobileNav = document.getElementById('mobileNav');
+      const backHomeBtn = document.getElementById('backHomeBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const editBtn = document.getElementById('editProfileBtn');
 
-      // redirect to login page
-      window.location.href = "login.html";
-    }
+      function setMobileOpen(open){
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if(open) bodyEl.classList.add('nav-open'); else bodyEl.classList.remove('nav-open');
+      }
+
+      hamburger && hamburger.addEventListener('click', ()=>{
+        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+        setMobileOpen(!isOpen);
+      });
+
+      // close mobile menu when clicking a mobile link
+      mobileNav.querySelectorAll('a.mobile-link').forEach(a=>{
+        a.addEventListener('click', ()=> setMobileOpen(false));
+      });
+
+      // click outside to close mobile menu
+      document.addEventListener('click', (e)=>{
+        if(!bodyEl.classList.contains('nav-open')) return;
+        const path = e.composedPath ? e.composedPath() : (e.path || []);
+        const withinNav = path.includes(mobileNav) || path.includes(hamburger);
+        if(!withinNav) setMobileOpen(false);
+      });
+
+      // Escape to close
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape') setMobileOpen(false);
+      });
+
+      // Back to Home button
+      backHomeBtn && backHomeBtn.addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+
+      // Logout: clear saved user and go to login
+      logoutBtn && logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+      });
+
+      // Edit handler (placeholder)
+      editBtn && editBtn.addEventListener('click', () => {
+        // Example: open edit modal or navigate to edit page
+        alert('Edit profile feature coming soon.');
+      });
+
+      // Intersection observer for subtle entrance animation (keeps UX consistent)
+      const target = document.querySelector('.profile-card');
+      if (target) {
+        target.style.opacity = '0';
+        target.style.transform = 'translateY(16px)';
+        target.style.transition = 'all .6s cubic-bezier(.2,.9,.2,1)';
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        io.observe(target);
+      }
+    })();
   </script>
-
 </body>
 </html>

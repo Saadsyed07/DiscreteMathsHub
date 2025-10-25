@@ -1,100 +1,626 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Set Theory Quiz | DiscreteMathsHub</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Graph Theory Quiz — DiscreteMathsHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
+    }
+
     body {
-      background-color: #E6DAF5;
-      color: #f8f9fa;
-      font-family: 'Poppins', sans-serif;
-      padding: 20px;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
-    .container {
-      max-width: 800px;
-      background: #1f1f1f;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
+
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
+      overflow-y:auto;
+      z-index:1000;
     }
-    .btn-custom {
-      background-color: #28a745;
-      border: none;
-      color: white;
+    
+    .sidebar h2{
+      text-align:center;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
+    }
+    
+    .sidebar a{
+      display:block;
+      padding:12px 24px;
+      color: var(--text-secondary);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
+    }
+    
+    .sidebar a.active{
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
       font-weight: 600;
-      border-radius: 10px;
-      padding: 10px 20px;
-      transition: 0.3s;
     }
-    .btn-custom:hover {
-      background-color: #218838;
+
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:260px; right:0;
+      height: var(--nav-height);
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px;
+      z-index:999;
     }
-    .question {
-      font-size: 1.2rem;
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
+    .topnav a{
+      text-decoration:none;
+      color: var(--text-secondary);
+      font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
+    }
+
+    /* Main Content */
+    main.container-main{
+      margin-left:260px;
+      margin-top: var(--nav-height);
+      padding:40px 50px;
+      min-height:100vh;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Quiz Container */
+    .quiz-container{
+      max-width: 800px;
+      width: 100%;
+    }
+
+    /* Page Title */
+    h1{
+      text-align:center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .page-intro{
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Content Card */
+    .content{
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-bottom:28px;
+      color: var(--text-primary);
+    }
+
+    /* Level Buttons */
+    .level-buttons{
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-level{
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+      min-width: 120px;
+    }
+
+    .btn-level:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,58,237,0.35);
+    }
+
+    .btn-level:active{
+      transform: translateY(0);
+    }
+
+    .btn-level.easy{
+      background: var(--gradient-2);
+    }
+
+    .btn-level.hard{
+      background: var(--gradient-3);
+    }
+
+    /* Start Hint */
+    .start-hint{
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 16px;
+      padding: 40px 20px;
+      font-style: italic;
+    }
+
+    /* Question Section */
+    .question-card{
+      margin-bottom: 24px;
+    }
+
+    .question{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Option Buttons */
+    .option{
+      margin-bottom: 12px;
+    }
+
+    .option-btn{
+      width: 100%;
+      text-align: left;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .option-btn:hover:not(:disabled){
+      background: rgba(124,58,237,0.15);
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .option-btn:disabled{
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .option-btn.correct{
+      background: rgba(6,182,212,0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .option-btn.wrong{
+      background: rgba(255,92,158,0.15);
+      border-color: var(--secondary);
+      color: var(--secondary);
+    }
+
+    /* Feedback */
+    .feedback{
+      font-weight: 700;
+      font-size: 17px;
+      margin-top: 20px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feedback:empty{
+      display: none;
+    }
+
+    .feedback .correct-msg{
+      color: var(--accent);
+    }
+
+    .feedback .wrong-msg{
+      color: var(--secondary);
+    }
+
+    /* Score Display */
+    .score{
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text-primary);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Controls */
+    .controls{
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .btn-control{
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+    }
+
+    .btn-control:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,58,237,0.35);
+    }
+
+    .btn-control.secondary{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+      box-shadow: none;
+    }
+
+    .btn-control.secondary:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+    }
+
+    /* Completion Card */
+    .completion-card{
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .completion-card h4{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 20px;
     }
-    .option {
-      margin-bottom: 10px;
+
+    .completion-card .final-score{
+      font-size: 48px;
+      font-weight: 800;
+      background: var(--gradient-2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 20px 0;
+      font-family: 'Space Grotesk', sans-serif;
     }
-    .feedback {
-      font-weight: 600;
-      margin-top: 10px;
+
+    .completion-message{
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-top: 16px;
+    }
+
+    /* Footer */
+    footer{
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-left: 260px;
+      border-top: 1px solid rgba(124,58,237,0.06);
+    }
+
+    /* Responsive */
+    @media(max-width:992px){
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      main.container-main{
+        margin-left: 0;
+        padding: 30px 24px;
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      footer{
+        margin-left: 0;
+      }
+    }
+
+    @media(max-width:768px){
+      main.container-main{
+        padding: 24px 20px;
+      }
+      
+      .content{
+        padding: 24px;
+      }
+      
+      h1{
+        font-size: 32px;
+      }
+      
+      .topnav-links{
+        display: none;
+      }
+
+      .level-buttons{
+        flex-direction: column;
+      }
+
+      .btn-level{
+        width: 100%;
+      }
+
+      .controls{
+        flex-direction: column;
+      }
+
+      .btn-control{
+        width: 100%;
+      }
+    }
+
+    @media(max-width:420px){
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+      
+      main.container-main{
+        padding: 20px 16px;
+      }
+      
+      .content{
+        padding: 20px;
+      }
+      
+      h1{
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container text-center">
-    <h2 class="mb-4 text-success">Set Theory Quiz 🧠</h2>
-    <p>Select your difficulty level:</p>
-    <div class="d-flex justify-content-center mb-4">
-      <button class="btn btn-custom mx-2" onclick="window.location.href='set_easy.html'">Easy</button>
-      <button class="btn btn-custom mx-2" onclick="startQuiz('medium')">Medium</button>
-      <button class="btn btn-custom mx-2" onclick="startQuiz('hard')">Hard</button>
-    </div>
-
-    <div id="quiz-section" class="mt-4"></div>
-    <div id="feedback" class="feedback"></div>
-    <div id="score-section" class="mt-4"></div>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
   </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Graph Theory</h2>
+    <a href="graph.html">Introduction</a>
+    <a href="graph_basicconcept.html">Basic Concepts</a>
+    <a href="graph_type.html">Types of Graphs</a>
+    <a href="graph_traversal.html">Graph Traversal</a>
+    <a href="connected_components.html">Connected Components</a>
+    <a href="graph_application.html">Applications</a>
+    <a href="graph_quiz.html" class="active">Quiz</a>
+  </div>
+
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container-main">
+    <div class="quiz-container">
+      <h1>Graph Theory Quiz 🧠</h1>
+      <p class="page-intro">Choose a difficulty level and test your understanding of graph theory concepts.</p>
+
+      <div class="content">
+        <div class="level-buttons">
+          <button class="btn-level easy" type="button" data-level="easy">Easy</button>
+          <button class="btn-level" type="button" data-level="medium">Medium</button>
+          <button class="btn-level hard" type="button" data-level="hard">Hard</button>
+        </div>
+
+        <div id="quiz-container">
+          <div id="start-hint" class="start-hint">Select a difficulty level to begin the quiz</div>
+          <div id="quiz-section"></div>
+          <div id="feedback" class="feedback"></div>
+          <div id="score-section" class="score"></div>
+          <div class="controls" id="controls" style="display:none;">
+            <button id="nextBtn" class="btn-control" type="button">Next Question</button>
+            <button id="restartBtn" class="btn-control secondary" type="button">Restart Quiz</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
 
   <script>
     const quizzes = {
       easy: [
         {
-          q: "Which of the following is a set?",
-          options: ["A collection of random objects", "A well-defined collection of objects", "A list of words", "A paragraph"],
+          q: "What is a graph in graph theory?",
+          options: ["A mathematical chart", "A collection of vertices and edges", "A type of equation", "A visual diagram"],
           answer: 1
         },
         {
-          q: "Which symbol represents the empty set?",
-          options: ["{}", "0", "∅", "Ø"],
-          answer: 2
+          q: "What are the basic components of a graph?",
+          options: ["Nodes and links", "Vertices and edges", "Points and lines", "All of the above"],
+          answer: 3
+        },
+        {
+          q: "What is the degree of a vertex?",
+          options: ["Its position in the graph", "The number of edges connected to it", "Its distance from other vertices", "The angle it forms"],
+          answer: 1
         }
       ],
       medium: [
         {
-          q: "If A = {1, 2, 3} and B = {3, 4, 5}, find A ∪ B.",
-          options: ["{1, 2, 3, 4, 5}", "{3}", "{1,2,3}", "{4,5}"],
+          q: "In a directed graph, what is the difference between in-degree and out-degree?",
+          options: ["In-degree counts incoming edges, out-degree counts outgoing edges", "They are the same thing", "In-degree is for weighted graphs only", "Out-degree is always larger"],
           answer: 0
         },
         {
-          q: "If A = {a, b, c} and B = {b, c, d}, what is A ∩ B?",
-          options: ["{b, c}", "{a, b, c, d}", "{a, d}", "{a, b}"],
-          answer: 0
+          q: "What is a connected graph?",
+          options: ["A graph with no cycles", "A graph where every vertex is reachable from any other vertex", "A graph with weighted edges", "A graph with directed edges"],
+          answer: 1
+        },
+        {
+          q: "What is a complete graph?",
+          options: ["A graph with no edges", "A graph where every pair of vertices is connected", "A graph with cycles", "A graph with one vertex"],
+          answer: 1
         }
       ],
       hard: [
         {
-          q: "If U = {1,2,3,4,5,6}, A = {1,3,5}, what is A'?",
-          options: ["{1,3,5}", "{2,4,6}", "{1,2,3}", "{5,6}"],
-          answer: 1
+          q: "What is a spanning tree of a graph?",
+          options: ["A tree that includes all vertices with minimum edges", "A tree with maximum edges", "A disconnected subgraph", "A graph with cycles"],
+          answer: 0
         },
         {
-          q: "If A ⊆ B and B ⊆ C, which statement is true?",
-          options: ["A ⊆ C", "C ⊆ A", "A = B", "None of these"],
-          answer: 0
+          q: "In an undirected graph with n vertices, what is the maximum number of edges?",
+          options: ["n", "n²", "n(n-1)/2", "2n"],
+          answer: 2
+        },
+        {
+          q: "What algorithm is used to find the shortest path in a weighted graph?",
+          options: ["Depth-First Search", "Breadth-First Search", "Dijkstra's Algorithm", "Binary Search"],
+          answer: 2
         }
       ]
     };
@@ -102,46 +628,162 @@
     let currentQuiz = [];
     let currentQuestion = 0;
     let score = 0;
+    let currentLevel = '';
 
-    function startQuiz(level) {
-      currentQuiz = quizzes[level];
-      currentQuestion = 0;
-      score = 0;
-      document.getElementById('feedback').innerText = "";
-      document.getElementById('score-section').innerText = "";
-      showQuestion();
+    const quizSection = document.getElementById('quiz-section');
+    const feedbackEl = document.getElementById('feedback');
+    const scoreEl = document.getElementById('score-section');
+    const startHint = document.getElementById('start-hint');
+    const controls = document.getElementById('controls');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function clearFeedback() {
+      feedbackEl.innerHTML = '';
+    }
+
+    function showScore() {
+      scoreEl.textContent = `Score: ${score} / ${currentQuiz.length}`;
     }
 
     function showQuestion() {
+      clearFeedback();
+      quizSection.innerHTML = '';
+      controls.style.display = 'none';
+
       const qData = currentQuiz[currentQuestion];
       if (!qData) {
-        document.getElementById('quiz-section').innerHTML = <h4 class='text-info'>Quiz Completed!</h4> <p>Your score: ${score}/${currentQuiz.length}</p>;
+        showCompletion();
         return;
       }
 
-      let html = <div class="question">${qData.q}</div>;
-      qData.options.forEach((opt, index) => {
-        html += <div class="option"><button class="btn btn-outline-light w-100" onclick="checkAnswer(${index})">${opt}</button></div>;
+      startHint.style.display = 'none';
+
+      const qDiv = document.createElement('div');
+      qDiv.className = 'question-card';
+      
+      const qText = document.createElement('div');
+      qText.className = 'question';
+      qText.textContent = `Question ${currentQuestion + 1} of ${currentQuiz.length}: ${qData.q}`;
+      qDiv.appendChild(qText);
+
+      qData.options.forEach((opt, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'option';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleAnswer(idx, btn));
+        wrap.appendChild(btn);
+        qDiv.appendChild(wrap);
       });
 
-      document.getElementById('quiz-section').innerHTML = html;
+      quizSection.appendChild(qDiv);
+      showScore();
     }
 
-    function checkAnswer(selected) {
+    function handleAnswer(selectedIndex, buttonEl) {
       const qData = currentQuiz[currentQuestion];
-      const feedback = document.getElementById('feedback');
-      if (selected === qData.answer) {
+      const allButtons = quizSection.querySelectorAll('.option-btn');
+      allButtons.forEach(b => b.disabled = true);
+
+      const correctIndex = qData.answer;
+      
+      allButtons.forEach((b, i) => {
+        if (i === correctIndex) b.classList.add('correct');
+        if (i === selectedIndex && i !== correctIndex) b.classList.add('wrong');
+      });
+
+      if (selectedIndex === correctIndex) {
         score++;
-        feedback.innerHTML = "<span class='text-success'>✅ Correct!</span>";
+        feedbackEl.innerHTML = '<span class="correct-msg">✅ Correct!</span>';
       } else {
-        feedback.innerHTML = "<span class='text-danger'>❌ Wrong! Correct answer: " + qData.options[qData.answer] + "</span>";
+        const correctText = qData.options[correctIndex];
+        feedbackEl.innerHTML = '<span class="wrong-msg">❌ Wrong! Correct answer: ' + correctText + '</span>';
       }
-      currentQuestion++;
-      setTimeout(() => {
-        feedback.innerHTML = "";
-        showQuestion();
-      }, 1500);
+
+      showScore();
+      controls.style.display = 'flex';
+      nextBtn.style.display = (currentQuestion < currentQuiz.length - 1) ? 'block' : 'none';
+      restartBtn.style.display = 'block';
     }
+
+    function showCompletion() {
+      startHint.style.display = 'none';
+      quizSection.innerHTML = '';
+      
+      const percentage = Math.round((score / currentQuiz.length) * 100);
+      let message = '';
+      if (percentage >= 80) {
+        message = '🎉 Excellent! You have mastered Graph Theory!';
+      } else if (percentage >= 60) {
+        message = '👍 Good job! Keep practicing to improve!';
+      } else {
+        message = '📚 Keep studying! Review the concepts and try again!';
+      }
+
+      const completionDiv = document.createElement('div');
+      completionDiv.className = 'completion-card';
+      completionDiv.innerHTML = `
+        <h4>Quiz Completed! 🎊</h4>
+        <div class="final-score">${percentage}%</div>
+        <div class="score">Score: ${score} / ${currentQuiz.length}</div>
+        <div class="completion-message">${message}</div>
+      `;
+      
+      quizSection.appendChild(completionDiv);
+      
+      controls.style.display = 'flex';
+      nextBtn.style.display = 'none';
+      restartBtn.textContent = 'Try Another Quiz';
+      restartBtn.style.display = 'block';
+    }
+
+    function startQuiz(level) {
+      if (!quizzes[level]) return;
+      currentLevel = level;
+      currentQuiz = quizzes[level].slice();
+      currentQuestion = 0;
+      score = 0;
+      scoreEl.textContent = '';
+      showQuestion();
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentQuestion++;
+      showQuestion();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      if (currentQuestion >= currentQuiz.length) {
+        startHint.style.display = 'block';
+        quizSection.innerHTML = '';
+        scoreEl.textContent = '';
+        controls.style.display = 'none';
+        restartBtn.textContent = 'Restart Quiz';
+      } else {
+        currentQuestion = 0;
+        score = 0;
+        showQuestion();
+      }
+    });
+
+    document.querySelectorAll('.level-buttons [data-level]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lvl = btn.getAttribute('data-level');
+        startQuiz(lvl);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const focused = document.activeElement;
+        if (focused && focused.classList.contains('option-btn')) {
+          focused.click();
+        }
+      }
+    });
   </script>
 </body>
 </html>

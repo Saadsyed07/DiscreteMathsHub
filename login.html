@@ -1,113 +1,283 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Login — DiscreteMathsHub</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family: Inter, system-ui, Arial, sans-serif;
-    background:#E6DAF5;
-    color:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login — DiscreteMathsHub</title>
 
-  .login-container{
-    background:#ded1f8;
-    padding:40px 32px;
-    border-radius:16px;
-    width:100%;
-    max-width:400px;
-    box-shadow:0 8px 20px rgba(0,0,0,.5);
-    text-align:center;
-  }
+  <!-- Keep the same fonts as the home page -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  .login-container h1{
-    margin-bottom:24px;
-    font-size:28px;
-    font-weight:800;
-    color:#8A4FFF;
-  }
+  <!-- Inlined site theme (same visual system as home page) -->
+  <style>
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --nav-height:68px;
+      --radius-lg:18px;
+      --radius-md:10px;
+      --card-pad:24px;
+    }
 
-  .form-group{
-    margin-bottom:18px;
-    text-align:left;
-  }
-  .form-group label{
-    font-size:14px;
-    font-weight:600;
-    color:black;
-    display:block;
-    margin-bottom:6px;
-  }
-  .form-group input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:8px;
-    border:1px solid #333;
-    background:white;
-    color:black;
-    font-size:15px;
-    outline:none;
-    transition:border .2s;
-  }
-  .form-group input:focus{
-    border-color:#8A4FFF;
-  }
+    /* Base reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:var(--bg-dark);
+      color:var(--text-primary);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      overflow-x:hidden;
+    }
 
-  .btn{
-    width:100%;
-    padding:12px 0;
-    border-radius:28px;
-    background:#8A4FFF;
-    border:none;
-    color:#fff;
-    font-weight:700;
-    cursor:pointer;
-    font-size:16px;
-    margin-top:10px;
-    box-shadow:0 6px 18px rgba(16,120,65,.12);
-    transition:transform .2s;
-  }
-  .btn:hover{transform:translateY(-2px)}
+    /* Animated background orbs (same as homepage) */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--secondary); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
 
-  .extra-links{
-    margin-top:20px;
-    font-size:14px;
-    color:black;
-  }
-  .extra-links a{
-    color:#8A4FFF;
-    text-decoration:none;
-    margin-left:4px;
-  }
-  .extra-links a:hover{text-decoration:underline}
-</style>
+    /* NAV */
+    nav{ position:fixed; top:0; left:0; right:0; height:var(--nav-height); z-index:1200; padding:12px 0;
+      background: rgba(15,15,30,0.75); backdrop-filter: blur(12px); border-bottom:1px solid rgba(124,58,237,0.06); display:flex; align-items:center; }
+    .nav-container{ max-width:1400px; margin:0 auto; padding:0 28px; display:flex; align-items:center; justify-content:space-between; width:100%;}
+    .logo{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-0.3px; }
+
+    .nav-menu{ display:flex; gap:18px; align-items:center; list-style:none; }
+    .nav-menu a{ color:var(--text-secondary); text-decoration:none; font-weight:500; font-size:14px; position:relative; padding:8px 12px; border-radius:999px; }
+    .nav-menu a:hover{ color:var(--text-primary); background: rgba(124,58,237,0.06); transform:translateY(-2px); }
+
+    .home-link { background:transparent; border:1px solid rgba(255,255,255,0.04); }
+
+    /* Hamburger (mobile) */
+    .hamburger{ display:none; width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); align-items:center; justify-content:center; cursor:pointer; }
+    .hamburger .bar{ width:20px; height:2px; background:var(--text-primary); display:block; position:relative; }
+    .hamburger .bar::before, .hamburger .bar::after{ content:''; position:absolute; left:0; width:20px; height:2px; background:var(--text-primary); }
+    .hamburger .bar::before{ top:-6px; } .hamburger .bar::after{ top:6px; }
+
+    .mobile-nav{ display:none; }
+    body.nav-open .mobile-nav{
+      display:block; position:fixed; top:var(--nav-height); right:12px; left:12px; max-height:calc(100vh - var(--nav-height) - 24px); overflow:auto;
+      background: rgba(12,12,24,0.98); border:1px solid rgba(124,58,237,0.12); border-radius:14px; padding:16px; z-index:1199;
+    }
+    .mobile-nav a{ display:block; padding:12px 8px; color:var(--text-secondary); text-decoration:none; font-weight:600; border-radius:8px; }
+    .mobile-nav a:hover{ background: rgba(124,58,237,0.06); color:var(--text-primary); }
+
+    /* Page container (centered card) */
+    .page {
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: calc(var(--nav-height) + 24px) 20px 80px;
+    }
+
+    .auth-card{
+      width:100%;
+      max-width:420px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(124,58,237,0.06);
+      border-radius:16px;
+      padding:28px;
+      box-shadow: 0 20px 60px rgba(15,23,42,0.6);
+    }
+
+    .auth-card h1{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:28px;
+      margin-bottom:10px;
+      color:var(--primary);
+      text-align:center;
+    }
+    .auth-sub { text-align:center; color:var(--text-secondary); margin-bottom:18px; }
+
+    .form-group{ margin-bottom:14px; }
+    label{ display:block; font-weight:600; color:var(--text-secondary); margin-bottom:8px; font-size:13px; }
+    input[type="text"], input[type="password"], input[type="email"]{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      color:var(--text-primary);
+      font-size:15px;
+      outline:none;
+      transition: box-shadow .15s ease, border-color .15s ease;
+    }
+    input:focus{ box-shadow: 0 6px 20px rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.18); }
+
+    .actions{ margin-top:12px; display:flex; gap:10px; flex-direction:column; }
+    .btn {
+      padding:12px 16px;
+      border-radius:999px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn-primary{ background:var(--gradient-1); color:#fff; box-shadow:0 10px 30px rgba(124,58,237,0.18); }
+    .btn-secondary{ background: transparent; border:1px solid rgba(255,255,255,0.04); color:var(--text-primary); }
+
+    .helper { text-align:center; margin-top:14px; color:var(--text-secondary); font-size:14px; }
+    .helper a{ color:var(--primary); text-decoration:none; font-weight:700; }
+
+    footer.page-footer{ margin-top:28px; text-align:center; color:var(--text-secondary); font-size:13px; }
+
+    /* Responsive */
+    @media(max-width:768px){
+      .nav-menu{ display:none; }
+      .hamburger{ display:flex; }
+      .auth-card{ padding:20px; border-radius:12px; }
+    }
+  </style>
 </head>
 <body>
-
-<div class="login-container">
-  <h1>Login</h1>
-  <form>
-    <div class="form-group">
-      <label for="email">Email / Username</label>
-      <input type="text" id="email" placeholder="Enter your email or username" required />
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter your password" required />
-    </div>
-    <button type="submit" class="btn">Login</button>
-  </form>
-  <div class="extra-links">
-    Don’t have an account?
-    <a href="register.html">Register here</a>
+  <!-- Animated background orbs -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
   </div>
-</div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a class="logo" href="index.html">DiscreteMathsHub</a>
+
+      <ul class="nav-menu" role="menubar" aria-label="Primary">
+        <li role="none"><a role="menuitem" href="index.html" class="home-link">Back to Home</a></li>
+        <li role="none"><a role="menuitem" href="explore.html">Explore</a></li>
+        <li role="none"><a role="menuitem" href="about.html">About</a></li>
+        <li role="none"><a role="menuitem" href="register.html">Register</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false" type="button">
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="explore.html" class="mobile-link">Explore</a>
+      <a href="about.html" class="mobile-link">About</a>
+      <a href="register.html" class="mobile-link">Register</a>
+      <a href="profile.html" class="mobile-link">Profile</a>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="page" id="main-content" role="main">
+    <section class="auth-card" aria-labelledby="login-heading">
+      <h1 id="login-heading">Welcome back</h1>
+      <div class="auth-sub">Sign in to continue learning discrete mathematics</div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="email">Email or Username</label>
+          <input id="email" name="email" type="text" autocomplete="username" required aria-required="true" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required aria-required="true" />
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="button" id="guestBtn" class="btn btn-secondary">Continue as Guest</button>
+        </div>
+      </form>
+
+      <div class="helper">
+        Don't have an account? <a href="register.html">Register here</a>
+      </div>
+
+      <footer class="page-footer">© 2025 DiscreteMathsHub</footer>
+    </section>
+  </main>
+
+  <!-- scripts: mobile nav behavior and simple login handling -->
+  <script>
+    (function(){
+      const bodyEl = document.body;
+      const hamburger = document.getElementById('hamburger');
+      const mobileNav = document.getElementById('mobileNav');
+      const loginForm = document.getElementById('loginForm');
+      const guestBtn = document.getElementById('guestBtn');
+
+      function setMobileOpen(open){
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if(open) bodyEl.classList.add('nav-open'); else bodyEl.classList.remove('nav-open');
+      }
+
+      hamburger && hamburger.addEventListener('click', ()=>{
+        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+        setMobileOpen(!isOpen);
+      });
+
+      // close mobile menu when tapping a mobile link
+      mobileNav.querySelectorAll('a.mobile-link').forEach(a=>{
+        a.addEventListener('click', ()=> setMobileOpen(false));
+      });
+
+      // click outside to close mobile menu
+      document.addEventListener('click', (e)=>{
+        if(!bodyEl.classList.contains('nav-open')) return;
+        const path = e.composedPath ? e.composedPath() : (e.path || []);
+        const withinNav = path.includes(mobileNav) || path.includes(hamburger);
+        if(!withinNav) setMobileOpen(false);
+      });
+
+      // Escape to close mobile nav
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape') setMobileOpen(false);
+      });
+
+      // Simple form handling (demo): store a "currentUser" and navigate to profile
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        if(!email || !password){
+          alert('Please enter email/username and password.');
+          return;
+        }
+
+        // Save a simple currentUser record (demo only; replace with real auth)
+        const user = { name: email.split('@')[0] || email, email };
+        localStorage.setItem('currentUser', JSON.stringify(user));
+
+        // Redirect to profile page
+        window.location.href = 'profile.html';
+      });
+
+      // Guest flow: set guest user and continue
+      guestBtn && guestBtn.addEventListener('click', () => {
+        const guest = { name: 'Guest Learner', email: '' };
+        localStorage.setItem('currentUser', JSON.stringify(guest));
+        window.location.href = 'explore.html';
+      });
+
+      // Small accessibility improvement: focus first input on load
+      document.getElementById('email').focus();
+    })();
+  </script>
 
 </body>
 </html>

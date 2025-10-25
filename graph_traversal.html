@@ -1,219 +1,669 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graph Traversal | DiscreteMathsHub</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Graph Theory: Types of Graphs | DiscreteMathsHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+    }
+
     body {
-      background-color: #E6DAF5;
-      color: #e6edf3;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
+
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
+      overflow-y:auto;
+      z-index:1000;
+    }
+    
+    .sidebar h2{
+      text-align:center;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
+    }
+    
+    .sidebar a{
+      display:block;
+      padding:12px 24px;
+      color: var(--text-secondary);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
+    }
+    
+    .sidebar a.active{
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:260px; right:0;
+      height: 68px;
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px;
+      z-index:999;
+    }
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
+    .topnav a{
+      text-decoration:none;
+      color: var(--text-secondary);
+      font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin-left: 260px;
+      margin-top: 68px;
+      padding: 40px 50px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 6vw, 52px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin: 0 0 16px 0;
+      letter-spacing: -1px;
+    }
+
+    header p.lead {
+      color: var(--text-secondary);
+      text-align: center;
+      font-size: 17px;
+      margin: 0 auto 40px;
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    .modern-card {
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius: 24px;
+      padding: 45px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .highlight {
+      background: rgba(124,58,237,0.08);
+      border-left: 4px solid var(--primary);
+      padding: 20px 24px;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .highlight p {
+      color: var(--text-secondary);
       margin: 0;
+      line-height: 1.8;
+    }
+
+    .highlight strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .highlight ul {
+      margin: 12px 0 0 24px;
       padding: 0;
     }
 
-    .container {
-      margin-top: 60px;
-      max-width: 1000px;
-      background: #161b22;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.2);
+    .highlight li {
+      color: var(--text-secondary);
+      margin-bottom: 8px;
     }
 
-    h1, h2 {
-      text-align: center;
-      color: #36e26f;
-      margin-bottom: 20px;
+    .intro-highlight {
+      background: rgba(6,182,212,0.08);
+      border-left-color: var(--accent);
+    }
+
+    h4.section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 35px;
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    h4.section-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 24px;
+      background: var(--gradient-1);
+      border-radius: 3px;
+    }
+
+    h4.section-title:first-of-type {
+      margin-top: 0;
     }
 
     p {
+      color: var(--text-secondary);
+      line-height: 1.8;
       font-size: 16px;
-      line-height: 1.7;
-      color: #c9d1d9;
+      margin-bottom: 16px;
     }
 
-    .btn-custom {
-      background: #2fe07a;
-      color: #0f1110;
+    ul {
+      margin-left: 24px;
+      color: var(--text-secondary);
+    }
+
+    /* FAQ */
+    .faq {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(124,58,237,0.15);
+      background: rgba(15,15,30,0.6);
+      margin-top: 12px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .faq:hover {
+      border-color: rgba(124,58,237,0.3);
+    }
+
+    .faq > button {
+      width: 100%;
+      background: transparent;
       border: none;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
       font-weight: 600;
-      padding: 10px 24px;
-      border-radius: 25px;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+
+    .faq > button:hover {
+      background: rgba(124,58,237,0.08);
+    }
+
+    .faq > button:focus {
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.2);
+      outline: none;
+    }
+
+    .faq .content {
+      padding: 0 20px 20px;
+      color: var(--text-secondary);
+      display: none;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .faq.active .content {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chevron {
+      transition: transform .25s ease;
+      color: var(--primary);
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+
+    .faq.active .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Buttons */
+    .btn-custom {
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 12px;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      font-size: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(124,58,237,0.3);
     }
 
     .btn-custom:hover {
-      background: #26c36a;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.4);
+    }
+
+    .btn-custom.prev {
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+      box-shadow: none;
+    }
+
+    .btn-custom.prev:hover {
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+      transform: translateX(-4px);
+    }
+
+    .btn-custom.next:hover {
+      transform: translateX(4px);
     }
 
     .nav-buttons {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      margin-top: 40px;
+      gap: 16px;
     }
 
     footer {
       text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
       margin-top: 50px;
-      padding: 15px;
-      background: #1c1f1e;
-      color: #888;
-      border-top: 1px solid #2fe07a33;
+      padding: 30px 20px;
+      border-top: 1px solid rgba(124,58,237,0.06);
+      margin-left: 0;
     }
 
-    .simulator {
-      background-color: #0b0f14;
-      border: 1px solid #2fcf69;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 30px;
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      .page {
+        margin-left: 0;
+        margin-top: 68px;
+        padding: 40px 24px 60px;
+      }
     }
 
-    .output {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #11161c;
-      border-radius: 8px;
-      color: #29e43f;
-      font-weight: bold;
-      min-height: 50px;
+    @media (max-width: 768px) {
+      .page {
+        padding: 30px 20px 40px;
+      }
+
+      .modern-card {
+        padding: 32px 24px;
+      }
+
+      header h2 {
+        font-size: 32px;
+      }
+
+      header p.lead {
+        font-size: 16px;
+      }
+
+      h4.section-title {
+        font-size: 20px;
+      }
+
+      .topnav-links{
+        display: none;
+      }
+
+      .nav-buttons {
+        flex-direction: column;
+      }
+
+      .btn-custom {
+        width: 100%;
+        text-align: center;
+      }
     }
 
-    .highlight {
-      background-color: #29df42;
-      color: #000;
-      border-radius: 5px;
-      padding: 2px 6px;
-      margin: 2px;
-      display: inline-block;
+    @media (max-width: 420px) {
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+
+      .page {
+        padding: 20px 16px 30px;
+      }
+
+      .modern-card {
+        padding: 24px 18px;
+      }
+
+      header h2 {
+        font-size: 28px;
+      }
+
+      h4.section-title {
+        font-size: 18px;
+      }
+
+      .highlight {
+        padding: 16px 18px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Graph Traversal</h1>
-    <p>
-      Graph traversal is the process of visiting every vertex in a graph in a systematic way.
-      Traversing a graph helps us explore its structure and relationships between nodes.
-      There are two main types of graph traversal:
-      <strong>Breadth-First Search (BFS)</strong> and <strong>Depth-First Search (DFS)</strong>.
-    </p>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
-    <h2>Breadth-First Search (BFS)</h2>
-    <p>
-      BFS starts from a selected node and explores all its neighboring nodes first, before moving to the next level.
-      It uses a <strong>queue</strong> to keep track of vertices to be visited.
-    </p>
-    <p><strong>Example:</strong> If the graph has edges (A–B), (A–C), (B–D), (C–E), then starting BFS from A gives → A, B, C, D, E.</p>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Graph Theory</h2>
+    <a href="graph_introduction.html">Introduction</a>
+    <a href="graph_basicconcept.html">Basic Concepts</a>
+    <a href="graph_types.html" class="active">Types of Graphs</a>
+    <a href="graph_representation.html">Graph Representation</a>
+    <a href="graph_traversal.html">Graph Traversal</a>
+    <a href="graph_component.html">Connected Components</a>
+    <a href="graph_application.html">Applications</a>
+  </div>
 
-    <h2>Depth-First Search (DFS)</h2>
-    <p>
-      DFS explores as far as possible along a branch before backtracking. It uses a <strong>stack</strong> (or recursion).
-      DFS is useful in detecting cycles, path finding, and topological sorting.
-    </p>
-    <p><strong>Example:</strong> Using the same graph, DFS starting from A gives → A, B, D, C, E.</p>
-
-    <div class="simulator">
-      <h2>Traversal Simulator</h2>
-      <p>Enter your graph and choose traversal type to see the traversal order.</p>
-      <div class="mb-3">
-        <label class="form-label">Enter edges (e.g., A-B, A-C, B-D):</label>
-        <input type="text" id="edgesInput" class="form-control" placeholder="A-B, A-C, B-D, C-E">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Start Node:</label>
-        <input type="text" id="startNode" class="form-control" placeholder="A">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Select Traversal Type:</label>
-        <select id="traversalType" class="form-select">
-          <option value="BFS">Breadth-First Search (BFS)</option>
-          <option value="DFS">Depth-First Search (DFS)</option>
-        </select>
-      </div>
-      <button class="btn btn-custom" onclick="performTraversal()">Run Simulation</button>
-      <div class="output" id="outputArea"></div>
-    </div>
-
-    <div class="nav-buttons">
-      <a href="graph_representation.html" class="btn btn-custom">⬅ Previous</a>
-      <a href="graph_component.html" class="btn btn-custom">Next➡</a>
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
     </div>
   </div>
 
-  <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <main class="page">
+    <header>
+      <h2>Graph Theory: Types of Graphs</h2>
+      <p class="lead">Overview of common graph types with definitions and examples. Master the fundamental classifications of graphs.</p>
+    </header>
 
+    <section class="modern-card" aria-labelledby="types-overview">
+      <div id="types-overview" class="highlight intro-highlight" role="region" aria-label="What we'll cover">
+        <p><strong>What we'll cover:</strong> Simple graphs, multigraphs, directed graphs (digraphs), weighted graphs, complete graphs, bipartite graphs and pseudographs — with short examples and use-cases.</p>
+      </div>
+
+      <h4 class="section-title">Simple Graph</h4>
+      <div class="highlight" aria-hidden="false">
+        <p>
+          A <strong>simple graph</strong> is an undirected graph that has no loops (edges that connect a vertex to itself) and no multiple edges between the same pair of vertices.
+        </p>
+        <ul>
+          <li>Example: A small friendship network where any two people are connected by at most one friendship link.</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Multigraph</h4>
+      <div class="highlight">
+        <p>
+          A <strong>multigraph</strong> allows multiple (parallel) edges between the same pair of vertices.
+        </p>
+        <ul>
+          <li>Example: Airline routes where more than one flight connects the same two cities.</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Directed Graph (Digraph)</h4>
+      <div class="highlight">
+        <p>
+          In a <strong>directed graph</strong>, every edge has a direction (an ordered pair). Edges are written as (u → v). Directed graphs model one-way relationships.
+        </p>
+        <ul>
+          <li>Example: The "follows" relation on social networks (A follows B but B may not follow A).</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Weighted Graph</h4>
+      <div class="highlight">
+        <p>
+          A <strong>weighted graph</strong> assigns a numerical weight to each edge (distance, cost, time, capacity).
+        </p>
+        <ul>
+          <li>Example: Road network where edges carry distances between cities — used in shortest path algorithms.</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Complete Graph</h4>
+      <div class="highlight">
+        <p>
+          A <strong>complete graph</strong> (denoted K_n) connects every pair of distinct vertices with exactly one edge.
+        </p>
+        <ul>
+          <li>Example: Small fully-connected LAN where every device is directly connected to every other device.</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Bipartite Graph</h4>
+      <div class="highlight">
+        <p>
+          A <strong>bipartite graph</strong> splits vertices into two disjoint sets such that edges only connect vertices from different sets (no edges within the same part).
+        </p>
+        <ul>
+          <li>Example: A job-assignment problem where one partition is workers and the other is tasks.</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Pseudograph / Loops</h4>
+      <div class="highlight">
+        <p>
+          A <strong>pseudograph</strong> is a graph that may contain loops (edges connecting a vertex to itself) and multiple edges.
+        </p>
+        <ul>
+          <li>Example: Network modeling that allows self-transitions or feedback edges.</li>
+        </ul>
+      </div>
+
+      <h4 class="section-title">Interactive Section</h4>
+      <p>Click the questions below to reveal short answers:</p>
+
+      <div class="faq" id="faq-1">
+        <button type="button" aria-expanded="false" aria-controls="faq-1-content">
+          <span>What is the difference between simple and multigraph?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-1-content" class="content" aria-hidden="true">
+          A simple graph disallows multiple edges and loops. A multigraph can have multiple edges between the same vertices.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-2">
+        <button type="button" aria-expanded="false" aria-controls="faq-2-content">
+          <span>When do we use directed graphs?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-2-content" class="content" aria-hidden="true">
+          Use directed graphs when relationships are one-way (e.g., follower networks, page link graphs, one-way roads).
+        </div>
+      </div>
+
+      <div class="faq" id="faq-3">
+        <button type="button" aria-expanded="false" aria-controls="faq-3-content">
+          <span>Why are weighted graphs useful?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-3-content" class="content" aria-hidden="true">
+          Weights let algorithms (like Dijkstra) compute shortest/cheapest paths based on cost attributes (distance/time/price).
+        </div>
+      </div>
+
+      <nav class="nav-buttons" aria-label="Article navigation">
+        <a href="graph_basicconcept.html" class="btn-custom prev" rel="prev">⬅ Previous</a>
+        <a href="graph_representation.html" class="btn-custom next" rel="next">Next ➡</a>
+      </nav>
+    </section>
+
+    <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
+  </main>
+
+  <!-- FAQ toggle script -->
   <script>
-    function buildGraph(edgesInput) {
-      const edges = edgesInput.split(",").map(e => e.trim().split("-"));
-      const graph = {};
-      for (let [u, v] of edges) {
-        if (!graph[u]) graph[u] = [];
-        if (!graph[v]) graph[v] = [];
-        graph[u].push(v);
-        graph[v].push(u);
-      }
-      return graph;
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const faqs = Array.from(document.querySelectorAll('.faq'));
+      faqs.forEach(faq => {
+        const btn = faq.querySelector('button');
+        const contentId = btn.getAttribute('aria-controls');
+        const content = document.getElementById(contentId);
+        if (!btn || !content) return;
 
-    function performTraversal() {
-      const edgesInput = document.getElementById("edgesInput").value;
-      const startNode = document.getElementById("startNode").value.trim();
-      const traversalType = document.getElementById("traversalType").value;
-      const outputArea = document.getElementById("outputArea");
-      outputArea.innerHTML = "";
+        btn.addEventListener('click', () => {
+          const isOpen = faq.classList.toggle('active');
+          btn.setAttribute('aria-expanded', String(isOpen));
+          content.setAttribute('aria-hidden', String(!isOpen));
+        });
 
-      if (!edgesInput || !startNode) {
-        outputArea.innerHTML = "⚠ Please enter edges and start node!";
-        return;
-      }
-
-      const graph = buildGraph(edgesInput);
-      const visited = new Set();
-      const order = [];
-
-      if (traversalType === "BFS") {
-        const queue = [startNode];
-        visited.add(startNode);
-        while (queue.length > 0) {
-          const node = queue.shift();
-          order.push(node);
-          for (let neighbor of graph[node] || []) {
-            if (!visited.has(neighbor)) {
-              visited.add(neighbor);
-              queue.push(neighbor);
-            }
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
           }
-        }
-      } else {
-        function dfs(node) {
-          visited.add(node);
-          order.push(node);
-          for (let neighbor of graph[node] || []) {
-            if (!visited.has(neighbor)) dfs(neighbor);
-          }
-        }
-        dfs(startNode);
-      }
-
-      // Animate traversal
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < order.length) {
-          const nodeSpan = document.createElement("span");
-          nodeSpan.className = "highlight";
-          nodeSpan.textContent = order[i];
-          outputArea.appendChild(nodeSpan);
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 800);
-    }
+        });
+      });
+    });
   </script>
 </body>
 </html>

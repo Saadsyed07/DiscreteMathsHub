@@ -1,288 +1,528 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Explore - DiscreteMathsHub</title>
 
-  <!-- Bootstrap + AOS -->
+  <!-- Fonts (matching the main site) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap (kept for modal / grid) + AOS (optional animations) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
-    body {
-      background: #E6DAF5;
-      color: #fff;
-      font-family: 'Inter', system-ui, sans-serif;
+    /* ========== Theme variables (same as your main site) ========== */
+    :root{
+      --primary: #7C3AED;
+      --primary-2: #6D28D9;
+      --secondary: #FF5C9E;
+      --accent: #06B6D4;
+      --bg-dark: #0F0F1E;
+      --card-bg: rgba(26,26,46,0.6);
+      --glass-border: rgba(124,58,237,0.12);
+      --text-primary: #FFFFFF;
+      --text-muted: #A8A8B0;
+      --gradient-1: linear-gradient(135deg,#7C3AED 0%,#FF5C9E 100%);
+      --container-max: 1200px;
+      --nav-height: 72px;
     }
 
-    /* Navbar */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 48px;
-      background: transparent;
+    /* ========== Base ========== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg-dark);
+      color:var(--text-primary);
+      font-family: 'Inter',system-ui,Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
     }
 
-    .logo {
-      color: #8A4FFF;
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: 1px;
+    /* center container used across site */
+    .container-wide{
+      width:100%;
+      max-width:var(--container-max);
+      margin:0 auto;
+      padding:0 20px;
     }
 
-    .menu {
-      display: flex;
-      gap: 22px;
-      list-style: none;
-      margin: 0;
+    /* subtle animated background orbs (same look) */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.28; will-change:transform; }
+    .orb1{ width:520px;height:520px;background:var(--gradient-1); top:-200px; right:-200px; }
+    .orb2{ width:420px;height:420px;background:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%); bottom:-160px; left:-160px; }
+    .orb3{ width:360px;height:360px;background:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%); top:50%; left:50%; transform:translate(-50%,-50%); }
+
+    /* ========== NAV ========== */
+    nav{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:var(--nav-height);
+      display:flex;
+      align-items:center;
+      z-index:1200;
+      background: rgba(15,15,30,0.6);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(124,58,237,0.06);
+    }
+    .nav-inner{
+      width:100%;
+      max-width:var(--container-max);
+      margin:0 auto;
+      padding:0 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
 
-    .menu a {
-      color: #ddd;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
+    .logo{
+      font-family:'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background:var(--gradient-1);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      letter-spacing:-0.3px;
     }
 
-    .menu a:hover {
-      color: #8A4FFF;
+    .nav-menu{ display:flex; gap:18px; align-items:center; list-style:none; margin:0; padding:0; }
+    .nav-menu a{
+      color:var(--text-muted);
+      text-decoration:none;
+      font-weight:600;
+      font-size:14px;
+      padding:8px 10px;
+      border-radius:8px;
+      transition:all .18s ease;
+    }
+    .nav-menu a:hover{ color:var(--text-primary); background: rgba(255,255,255,0.02); }
+
+    .dropdown{ position:relative; }
+    .dropdown-content{
+      position:absolute; top:calc(100% + 8px); left:0;
+      background: rgba(18,18,30,0.98);
+      border:1px solid var(--glass-border);
+      border-radius:10px;
+      padding:6px 6px;
+      min-width:220px;
+      box-shadow:0 12px 40px rgba(2,2,8,0.6);
+      display:none;
+    }
+    .dropdown:hover .dropdown-content{ display:block; }
+    .dropdown-content a{
+      display:block; padding:10px 14px; color:var(--text-muted); text-decoration:none; border-radius:8px;
+    }
+    .dropdown-content a:hover{ background: rgba(124,58,237,0.08); color:var(--primary); padding-left:16px; }
+
+    .profile-icon{
+      width:44px;height:44px;border-radius:10px;background:var(--gradient-1);
+      display:inline-flex;align-items:center;justify-content:center; cursor:pointer; transition:transform .18s;
+      box-shadow:0 8px 26px rgba(124,58,237,0.16);
+    }
+    .profile-icon svg{ width:18px;height:18px; fill:#fff; }
+
+    /* mobile hamburger */
+    .hamburger{ display:none; width:44px;height:44px;border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); align-items:center; justify-content:center; cursor:pointer; }
+    .hamburger .bar{ width:20px;height:2px;background:var(--text-primary); position:relative; display:block; }
+    .hamburger .bar::before, .hamburger .bar::after{ content:''; position:absolute; left:0; width:20px;height:2px;background:var(--text-primary); }
+    .hamburger .bar::before{ top:-6px; } .hamburger .bar::after{ top:6px; }
+
+    /* mobile nav overlay */
+    .mobile-nav{ display:none; }
+    body.nav-open .mobile-nav{ display:block; position:fixed; top:var(--nav-height); left:12px; right:12px; background: rgba(12,12,24,0.96); border:1px solid var(--glass-border); border-radius:12px; padding:12px; max-height:calc(100vh - var(--nav-height) - 24px); overflow:auto; z-index:1199; }
+
+    /* ========== PAGE CONTENT ========== */
+    main{ padding-top: calc(var(--nav-height) + 28px); padding-bottom:56px; }
+
+    .page-head{
+      padding:36px 0 22px;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .page-head .title{
+      font-family:'Space Grotesk',sans-serif;
+      font-size: clamp(26px, 3.6vw, 36px);
+      font-weight:800;
+      color:var(--text-primary);
+      margin:0;
+    }
+    .page-sub{ color:var(--text-muted); margin-top:6px; font-size:15px; }
+
+    /* search (glass style) */
+    #searchBar{
+      width:100%;
+      max-width:560px;
+      margin-top:18px;
+      padding:14px 18px;
+      border-radius:999px;
+      border:1px solid var(--glass-border);
+      background: rgba(255,255,255,0.03);
+      color:var(--text-primary);
+      outline:none;
+    }
+    #searchBar::placeholder{ color: #9B9BA4; }
+
+    /* topic cards (consistent with main theme) */
+    .topic-card{
+      background:var(--card-bg);
+      border:1px solid var(--glass-border);
+      padding:22px;
+      border-radius:14px;
+      transition: transform .28s ease, box-shadow .28s ease;
+      cursor:pointer;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .topic-card:hover{ transform:translateY(-8px); box-shadow:0 22px 48px rgba(124,58,237,0.12); }
+    .topic-card h3{
+      margin:0 0 8px 0;
+      font-family:'Space Grotesk',sans-serif;
+      color:var(--primary);
+      font-size:18px;
+      letter-spacing:-0.2px;
+    }
+    .topic-card p{ color:var(--text-muted); font-size:14px; margin:0 0 12px 0; }
+
+    .topic-cta{ display:flex; gap:10px; align-items:center; margin-top:12px; }
+
+    /* footer */
+    footer{
+      padding:28px 0;
+      margin-top:40px;
+      border-top:1px solid rgba(124,58,237,0.06);
+      text-align:center;
+      color:var(--text-muted);
+      font-size:14px;
     }
 
-    /* Dropdown */
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      background: #1c1f1e;
-      min-width: 180px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      z-index: 100;
+    /* modal customizations */
+    .modal-content{
+      background: linear-gradient(180deg, rgba(12,12,22,0.96), rgba(18,18,30,0.96));
+      color:var(--text-primary);
+      border:1px solid var(--glass-border);
+    }
+    .modal-header{ border-bottom:1px solid rgba(124,58,237,0.04); }
+    .modal-title{ color:var(--primary); font-weight:700; }
+
+    /* responsive tweaks */
+    @media (max-width: 992px){
+      .page-head{ text-align:center; flex-direction:column; align-items:center; gap:6px; }
+      .page-head .title{ text-align:center; }
+      .nav-menu{ display:none; }
+      .hamburger{ display:flex; }
+      .hero-orbs-hide{ display:none; }
     }
 
-    .dropdown:hover .dropdown-content {
-      display: block;
+    @media (max-width: 640px){
+      .container-wide{ padding:0 14px; }
+      .visual-grid { grid-template-columns: 1fr !important; }
     }
-
-    .dropdown-content a {
-      display: block;
-      padding: 10px 14px;
-      color: #ddd;
-      text-decoration: none;
-    }
-
-    .dropdown-content a:hover {
-      background: #8A4FFF;
-      color: #0f1110;
-    }
-
-    /* Search bar */
-    #searchBar {
-      max-width: 400px;
-      margin: 30px auto;
-      display: block;
-      border-radius: 50px;
-      background: white;
-      color:black;
-      border: 2px solid #8A4FFF;
-    }
-
-    /* Cards */
-    .topic-card {
-      background: #1c1f1e;
-      padding: 25px;
-      border-radius: 12px;
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-    }
-
-    .topic-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 0 20px #8A4FFF;
-    }
-
-    .topic-card h3 {
-      color: #8A4FFF;
-      font-weight: 600;
-    }
-
-    .topic-card p {
-      color: #ccc;
-      font-size: 15px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: black;
-      background: #ded1fd;
-      margin-top: 40px;
-      border-top: 1px solid #8A4FFF;
-    }
-    /* Profile icon */
-  .profile-icon{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:#8A4FFF;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:transform .2s;
-  }
-  .profile-icon:hover{
-    transform:scale(1.1);
-  }
-  .profile-icon svg{
-    width:22px;
-    height:22px;
-    fill:#0f1110;
-  }
-
   </style>
 </head>
 <body>
+  <!-- Animated background orbs -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
-  <!-- Navbar -->
+  <!-- NAV -->
   <nav>
-  <div class="logo">DiscreteMathsHub</div>
-  <ul class="menu">
-    <li><a href="index.html">HOME</a></li>
-      <li class="dropdown">
-        <a href="#">EXPLORE ▾</a>
-        <div class="dropdown-content">
-          <!-- UPDATED: point to separate pages (make sure these files exist in the same folder) -->
-          <a href="set_theory.html">Set Theory</a>
-          <a href="graph.html">Graph Theory</a>
-          <a href="tree.html">Trees</a>
-          <a href="logic.html">Logic</a>
-          <a href="combinatorics.html">Combinatorics</a>
-          <a href="relations.html">Relations & Functions</a>
-        </div>
-      </li>
-    <li><a href="about.html">ABOUT</a></li>
-    <li><a href="login.html">LOGIN</a></li>
-    <li><a href="register.html">REGISTER</a></li>
-    <li>
-      <!-- Profile Icon with Person -->
-      <a href="profile.html" class="profile-icon" title="Profile">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-        </svg>
-      </a>
-    </li>
-</ul>
-</nav>
-
-
-  <!-- Main Content -->
-  <main class="container text-center mt-4">
-    <h1 class="mb-3 text-success fw-bold">Explore Discrete Mathematics</h1>
-    <p class="text-secondary mb-4">Select a topic or search below to start learning.</p>
-
-    <input type="text" id="searchBar" class="form-control" placeholder="🔍 Search Topics...">
-
-    <div class="row g-4 mt-4" id="topics">
-      <div class="col-md-4" data-aos="fade-up">
-        <div class="topic-card shadow-lg">
-          <h3>Set Theory</h3>
-          <p>Learn about sets, subsets, operations on sets, and Venn diagrams.</p>
-          <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#setModal">Learn More</button>
-        </div>
+    <div class="nav-inner">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="logo">DiscreteMathsHub</div>
       </div>
 
-      <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
-        <div class="topic-card shadow-lg">
-          <h3>Graph Theory</h3>
-          <p>Study graphs, edges, vertices, paths, and their real-world applications.</p>
-          <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#graphModal">Learn More</button>
-        </div>
-      </div>
+      <ul class="nav-menu" role="menubar" aria-label="Primary navigation">
+        <li><a href="index.html">HOME</a></li>
+        <li class="dropdown">
+          <a href="#" aria-haspopup="true">EXPLORE ▾</a>
+          <div class="dropdown-content" role="menu" aria-label="Explore topics">
+            <a href="set_theory.html">Set Theory</a>
+            <a href="graph.html">Graph Theory</a>
+            <a href="tree.html">Trees</a>
+            <a href="logic.html">Logic</a>
+            <a href="combinatorics.html">Combinatorics</a>
+            <a href="relations.html">Relations & Functions</a>
+          </div>
+        </li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="login.html">LOGIN</a></li>
+        <li><a href="register.html">REGISTER</a></li>
+      </ul>
 
-      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-        <div class="topic-card shadow-lg">
-          <h3>Logic</h3>
-          <p>Understand propositional and predicate logic through examples.</p>
-          <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#logicModal">Learn More</button>
-        </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="profile.html" class="profile-icon" title="Profile" aria-label="Profile">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        </a>
+
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false" type="button">
+          <span class="bar" aria-hidden="true"></span>
+        </button>
       </div>
+    </div>
+
+    <!-- Mobile nav (toggled) -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a class="d-block p-2 mb-1 text-muted" href="index.html">HOME</a>
+      <details style="padding:6px 4px; border-radius:8px;">
+        <summary style="cursor:pointer; color:var(--text-muted); font-weight:700;">EXPLORE ▾</summary>
+        <div style="margin-top:8px; padding-left:8px;">
+          <a class="d-block p-2 text-muted" href="set_theory.html">Set Theory</a>
+          <a class="d-block p-2 text-muted" href="graph.html">Graph Theory</a>
+          <a class="d-block p-2 text-muted" href="tree.html">Trees</a>
+          <a class="d-block p-2 text-muted" href="logic.html">Logic</a>
+          <a class="d-block p-2 text-muted" href="combinatorics.html">Combinatorics</a>
+          <a class="d-block p-2 text-muted" href="relations.html">Relations & Functions</a>
+        </div>
+      </details>
+      <a class="d-block p-2 text-muted" href="about.html">ABOUT</a>
+      <a class="d-block p-2 text-muted" href="login.html">LOGIN</a>
+      <a class="d-block p-2 text-muted" href="register.html">REGISTER</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container-wide">
+      <header class="page-head">
+        <div>
+          <h1 class="title">Explore Discrete Mathematics</h1>
+          <div class="page-sub">Select a topic or search below to start learning.</div>
+        </div>
+
+        <!-- search (keeps visual alignment like your site) -->
+        <div style="margin-left:auto;">
+          <input id="searchBar" type="search" placeholder="🔍 Search topics, e.g. Graph Theory" />
+        </div>
+      </header>
+
+      <!-- topics grid -->
+      <section class="mt-4">
+        <div class="row g-4" id="topicsGrid">
+          <div class="col-lg-4 col-md-6" data-aos="fade-up">
+            <div class="topic-card">
+              <div>
+                <div class="card-icon" aria-hidden="true" style="margin-bottom:8px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:var(--gradient-1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">∪</div>
+                </div>
+                <h3>Set Theory</h3>
+                <p>Learn sets, subsets, unions, intersections, operations and Venn diagrams — with visuals and exercises.</p>
+              </div>
+              <div class="topic-cta">
+                <a href="set_theory.html" class="btn btn-sm" style="background:var(--primary); color:white; border-radius:12px; padding:8px 14px;">Open Topic</a>
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#setModal" style="border-radius:12px; padding:8px 14px;">Preview</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="topic-card">
+              <div>
+                <div style="margin-bottom:8px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#06B6D4, #7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">⊙</div>
+                </div>
+                <h3>Graph Theory</h3>
+                <p>Study graphs, edges, vertices, trees, connectivity and algorithms — with interactive visuals.</p>
+              </div>
+              <div class="topic-cta">
+                <a href="graph.html" class="btn btn-sm" style="background:var(--primary); color:white; border-radius:12px; padding:8px 14px;">Open Topic</a>
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#graphModal" style="border-radius:12px; padding:8px 14px;">Preview</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="topic-card">
+              <div>
+                <div style="margin-bottom:8px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:var(--gradient-1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">∧</div>
+                </div>
+                <h3>Logic & Proofs</h3>
+                <p>Propositional/predicate logic, truth tables and proof techniques explained clearly and visually.</p>
+              </div>
+              <div class="topic-cta">
+                <a href="logic.html" class="btn btn-sm" style="background:var(--primary); color:white; border-radius:12px; padding:8px 14px;">Open Topic</a>
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#logicModal" style="border-radius:12px; padding:8px 14px;">Preview</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- additional sample cards -->
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="topic-card">
+              <div>
+                <div style="margin-bottom:8px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#FF5C9E,#F59E0B);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">∑</div>
+                </div>
+                <h3>Combinatorics</h3>
+                <p>Counting principles, permutations, combinations, and problem solving with guided examples.</p>
+              </div>
+              <div class="topic-cta">
+                <a href="combinatorics.html" class="btn btn-sm" style="background:var(--primary); color:white; border-radius:12px; padding:8px 14px;">Open Topic</a>
+                <a href="combinatorics.html" class="btn btn-outline-secondary btn-sm" style="border-radius:12px; padding:8px 14px;">Preview</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="350">
+            <div class="topic-card">
+              <div>
+                <div style="margin-bottom:8px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#06B6D4,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">↔</div>
+                </div>
+                <h3>Relations & Functions</h3>
+                <p>Equivalence relations, partial orders and function properties with intuitive visuals.</p>
+              </div>
+              <div class="topic-cta">
+                <a href="relations.html" class="btn btn-sm" style="background:var(--primary); color:white; border-radius:12px; padding:8px 14px;">Open Topic</a>
+                <a href="relations.html" class="btn btn-outline-secondary btn-sm" style="border-radius:12px; padding:8px 14px;">Preview</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="topic-card">
+              <div>
+                <div style="margin-bottom:8px;">
+                  <div style="width:48px;height:48px;border-radius:10px;background:var(--gradient-1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">#</div>
+                </div>
+                <h3>Number Theory</h3>
+                <p>Primes, modular arithmetic, GCD, LCM and cryptographic applications explained simply.</p>
+              </div>
+              <div class="topic-cta">
+                <a href="number_theory.html" class="btn btn-sm" style="background:var(--primary); color:white; border-radius:12px; padding:8px 14px;">Open Topic</a>
+                <a href="number_theory.html" class="btn btn-outline-secondary btn-sm" style="border-radius:12px; padding:8px 14px;">Preview</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
     </div>
   </main>
 
-  <!-- Set Theory Modal -->
-  <div class="modal fade" id="setModal" tabindex="-1">
+  <!-- Modals (styled to match theme) -->
+  <div class="modal fade" id="setModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-light">
-        <div class="modal-header border-success">
-          <h5 class="modal-title text-success">Set Theory Overview</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Set Theory — Preview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Set Theory forms the foundation of Discrete Mathematics. It focuses on the study of sets, operations, and relationships between elements.
+          <p>Set Theory is the language of modern discrete math: sets, membership, unions, intersections, and Venn diagrams. Our lessons include interactive visuals and practice problems.</p>
         </div>
         <div class="modal-footer">
-          <a href="set_theory.html" class="btn btn-success">Go to Topic</a>
+          <a href="set_theory.html" class="btn" style="background:var(--primary); color:white;">Open Topic</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Graph Theory Modal -->
-  <div class="modal fade" id="graphModal" tabindex="-1">
+  <div class="modal fade" id="graphModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-light">
-        <div class="modal-header border-success">
-          <h5 class="modal-title text-success">Graph Theory Overview</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Graph Theory — Preview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Graph Theory helps model relationships between objects using vertices and edges — vital in networks, AI, and optimization problems.
+          <p>Graph Theory focuses on vertices, edges, connectivity and algorithms. Visualizations make it easier to reason about paths, trees and networks.</p>
         </div>
         <div class="modal-footer">
-          <a href="graph.html" class="btn btn-success">Go to Topic</a>
+          <a href="graph.html" class="btn" style="background:var(--primary); color:white;">Open Topic</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Logic Modal -->
-  <div class="modal fade" id="logicModal" tabindex="-1">
+  <div class="modal fade" id="logicModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-light">
-        <div class="modal-header border-success">
-          <h5 class="modal-title text-success">Logic Overview</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Logic & Proofs — Preview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Logic provides tools for reasoning and decision-making using propositions, truth tables, and logical operations.
+          <p>Logic provides the formal tools used in proofs and computation. We show truth tables, inference rules and proof patterns with examples.</p>
         </div>
         <div class="modal-footer">
-          <a href="#" class="btn btn-success">Go to Topic</a>
+          <a href="logic.html" class="btn" style="background:var(--primary); color:white;">Open Topic</a>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    © 2025 DiscreteMathsHub | Learn, Visualize & Master Discrete Mathematics
+    <div class="container-wide">
+      © 2025 DiscreteMathsHub — Learn, Visualize & Master Discrete Mathematics
+    </div>
   </footer>
 
-  <!-- Bootstrap + AOS + Search Script -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
-
   <script>
-    // Search filter
-    const searchBar = document.getElementById("searchBar");
-    searchBar.addEventListener("keyup", () => {
-      const filter = searchBar.value.toLowerCase();
-      document.querySelectorAll(".topic-card").forEach(card => {
+    AOS.init({ once: true, duration: 550 });
+
+    // Mobile nav toggle (simple accessible pattern)
+    const bodyEl = document.body;
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function setMobileOpen(open){
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if(open) bodyEl.classList.add('nav-open'); else bodyEl.classList.remove('nav-open');
+    }
+    if(hamburger){
+      hamburger.addEventListener('click', (e)=>{
+        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+        setMobileOpen(!isOpen);
+      });
+      // close mobile nav on outside click
+      document.addEventListener('click', (e)=>{
+        if(!bodyEl.classList.contains('nav-open')) return;
+        const path = e.composedPath ? e.composedPath() : (e.path || []);
+        if(!path.includes(mobileNav) && !path.includes(hamburger)) setMobileOpen(false);
+      });
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') setMobileOpen(false); });
+    }
+
+    // Simple search (filters topic cards)
+    const searchBar = document.getElementById('searchBar');
+    searchBar.addEventListener('input', () => {
+      const q = searchBar.value.trim().toLowerCase();
+      document.querySelectorAll('#topicsGrid .col-lg-4, #topicsGrid .col-md-6').forEach(col => {
+        const card = col.querySelector('.topic-card');
+        if(!card) return;
         const text = card.innerText.toLowerCase();
-        card.parentElement.style.display = text.includes(filter) ? "block" : "none";
+        col.style.display = (!q || text.includes(q)) ? '' : 'none';
+      });
+    });
+
+    // subtle parallax for orbs (lightweight)
+    document.addEventListener('mousemove', (e)=>{
+      const mx = e.clientX / window.innerWidth;
+      const my = e.clientY / window.innerHeight;
+      document.querySelectorAll('.gradient-orb').forEach((orb, i)=>{
+        const speed = (i + 1) * 14;
+        const x = (mx - 0.5) * speed;
+        const y = (my - 0.5) * speed;
+        orb.style.transform = `translate(${x}px, ${y}px)`;
       });
     });
   </script>

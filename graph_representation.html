@@ -3,274 +3,790 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Graph Representation | DiscreteMathsHub</title>
+  <title>Graph Representation — DiscreteMathsHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root{
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
+    }
+
     body {
-      background-color: #E6DAF5;
-      color: #e0e0e0;
-      font-family: 'Poppins', sans-serif;
-      padding: 20px;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
-    h2 {
-      color: #00ff8c;
-      font-weight: 700;
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
+
+    /* Sidebar */
+    .sidebar{
+      position: fixed;
+      top:0; left:0; bottom:0;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
+      overflow-y:auto;
+      z-index:1000;
+    }
+    
+    .sidebar h2{
+      text-align:center;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
+    }
+    
+    .sidebar a{
+      display:block;
+      padding:12px 24px;
+      color: var(--text-secondary);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
+    }
+    
+    .sidebar a.active{
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Top Navbar */
+    .topnav{
+      position: fixed;
+      top:0; left:260px; right:0;
+      height: var(--nav-height);
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px;
+      z-index:999;
+    }
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
+    .topnav a{
+      text-decoration:none;
+      color: var(--text-secondary);
+      font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
+    }
+
+    /* Main Content */
+    main.container-main{
+      margin-left:260px;
+      margin-top: var(--nav-height);
+      padding:40px 50px;
+      min-height:100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Page Title */
+    h1{
+      text-align:center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .page-intro{
       text-align: center;
-      margin-top: 20px;
-      margin-bottom: 10px;
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 30px;
+      line-height: 1.6;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
+    /* Content Cards */
+    .content{
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-bottom:28px;
+      color: var(--text-primary);
     }
 
-    .highlight-box {
-      background: #1a1a1a;
-      border-left: 4px solid #0bcd5c;
-      padding: 15px 20px;
-      border-radius: 10px;
+    /* Highlight/Definition Box */
+    .highlight{
+      background: rgba(124,58,237,0.08);
+      border-left:4px solid var(--primary);
+      padding:20px 24px;
+      border-radius:10px;
+      margin-bottom:24px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .highlight strong{
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .highlight p{
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .highlight p:last-child{
+      margin-bottom: 0;
+    }
+
+    .highlight ul{
+      margin-top: 12px;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .highlight ul li{
+      padding: 6px 0;
+      padding-left: 24px;
+      position: relative;
+      color: var(--text-secondary);
+    }
+
+    .highlight ul li::before{
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Section Headers */
+    h2{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      margin-top: 30px;
+      position: relative;
+      padding-left: 18px;
+    }
+    
+    h2::before{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 24px;
+      background: var(--gradient-1);
+      border-radius: 3px;
+    }
+
+    p{
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    /* Simulator Box */
+    .simulator{
+      background: rgba(15,15,30,0.8);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 16px;
+      padding: 28px;
+      margin-top: 28px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .simulator h3{
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .simulator p{
+      color: var(--text-secondary);
+      text-align: center;
       margin-bottom: 20px;
     }
 
-    h4 {
-      color: #1dbe35;
-      margin-top: 25px;
+    .simulator-controls{
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    p, ul {
-      color: #cccccc;
-      line-height: 1.7;
-    }
-
-    ul { margin-left: 20px; }
-
-    .faq {
-      background-color: #1a1a1a;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    .faq button {
-      background: none;
-      border: none;
+    .input-select{
       width: 100%;
-      text-align: left;
-      color: #00ff99;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 10px;
+      max-width: 400px;
+      border: 2px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23B4B4BF' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
     }
 
-    .faq .content {
+    .input-select:focus{
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(15,15,30,0.8);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .input-select option{
+      background: #1a1a2e;
+      color: var(--text-primary);
+      padding: 10px;
+    }
+
+    .result-box{
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(26,26,46,0.6);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 12px;
+      min-height: 120px;
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+    }
+
+    .result-box:empty::after{
+      content: 'Select a representation type to see an example...';
+      color: var(--text-secondary);
+      font-style: italic;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .result-box strong{
+      color: var(--accent);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+    }
+
+    /* FAQ Accordion */
+    .faq{
+      background: rgba(15,15,30,0.6);
+      border: 1px solid rgba(124,58,237,0.15);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq:hover{
+      border-color: rgba(124,58,237,0.3);
+    }
+
+    .faq > button{
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .faq > button:hover{
+      background: rgba(124,58,237,0.08);
+    }
+
+    .faq > button:focus{
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .faq .content{
+      padding: 0 20px 16px;
+      color: var(--text-secondary);
       display: none;
-      padding: 0 15px 10px;
-      color: #cccccc;
+      line-height: 1.7;
+      font-size: 15px;
     }
 
-    .faq.active .content {
+    .faq.active .content{
       display: block;
     }
 
-    
-    .btn-custom {
-      background: #2fe07a;
-      color: #0f1110;
-      border: none;
-      font-weight: 600;
-      padding: 10px 24px;
-      border-radius: 25px;
-      text-decoration: none;
+    .faq .content strong{
+      color: var(--text-primary);
+      font-weight: 700;
     }
 
-    .btn-custom:hover {
-      background: #26c36a;
+    .chevron{
+      transition: transform 0.3s ease;
+      color: var(--primary);
+      font-size: 18px;
+      flex-shrink: 0;
     }
 
-    .nav-buttons {
+    .faq.active .chevron{
+      transform: rotate(180deg);
+    }
+
+    /* Navigation Row */
+    .nav-row{
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    
+    .nav-btn{
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block;
+    }
+    
+    .nav-btn.prev{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+    }
+    
+    .nav-btn.prev:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+      transform: translateX(-4px);
+    }
+    
+    .nav-btn.next{
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(124,58,237,0.3);
+    }
+    
+    .nav-btn.next:hover{
+      transform: translateX(4px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.4);
     }
 
-    footer {
+    /* Footer */
+    footer{
       text-align: center;
-      margin-top: 50px;
-      padding: 15px;
-      background: #1c1f1e;
-      color: #888;
-      border-top: 1px solid #2fe07a33;
-    }
-    /* Interactive simulator styles */
-    .simulator {
-      background: #1a1a1a;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 30px;
-      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-left: 260px;
+      border-top: 1px solid rgba(124,58,237,0.06);
     }
 
-    select {
-      background: #0d0d0d;
-      color: #00ff99;
-      border: 2px solid #00ff99;
-      padding: 8px 10px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-weight: 600;
+    /* Responsive */
+    @media(max-width:992px){
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      main.container-main{
+        margin-left: 0;
+        padding: 30px 24px;
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      footer{
+        margin-left: 0;
+      }
     }
 
-    .result-box {
-      background: #111;
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #00ff99;
-      color: #d4d4d4;
-      text-align: left;
+    @media(max-width:768px){
+      main.container-main{
+        padding: 24px 20px;
+      }
+      
+      .content{
+        padding: 24px;
+      }
+      
+      h1{
+        font-size: 32px;
+      }
+      
+      h2{
+        font-size: 20px;
+      }
+      
+      .topnav-links{
+        display: none;
+      }
+      
+      .nav-row{
+        flex-direction: column;
+      }
+
+      .input-select{
+        max-width: 100%;
+      }
     }
 
-    /*@media (max-width:600px){
-      .highlight-box { padding: 12px; }
-      .btn-nav { padding: 8px 14px; font-size: 14px; }
-    }*/
+    @media(max-width:420px){
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+      
+      main.container-main{
+        padding: 20px 16px;
+      }
+      
+      .content, .simulator{
+        padding: 20px;
+      }
+      
+      h1{
+        font-size: 28px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Graph Representation</h2>
-    <p class="text-center">Understanding how graphs can be represented in computer memory and algorithms.</p>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
-    <div class="highlight-box">
-      <p>
-        Graph representation refers to how we store and visualize graphs in a program or system.  
-        The main types are <strong>Adjacency Matrix</strong>, <strong>Adjacency List</strong>, and <strong>Incidence Matrix</strong>.  
-        Each has its own advantages depending on the application.
-      </p>
-    </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Graph Theory</h2>
+    <a href="graph.html">Introduction</a>
+    <a href="graph_basicconcept.html">Basic Concepts</a>
+    <a href="graph_type.html">Types of Graphs</a>
+    <a href="graph_representation.html" class="active">Graph Representation</a>
+    <a href="graph_traversal.html">Graph Traversal</a>
+    <a href="connected_components.html">Connected Components</a>
+    <a href="graph_application.html">Applications</a>
+  </div>
 
-    <h4>1. Adjacency Matrix</h4>
-    <div class="highlight-box">
-      <p>
-        A 2D matrix (V×V) where each cell (i, j) indicates whether an edge exists between vertex i and j.
-      </p>
-      <ul>
-        <li>Efficient for dense graphs.</li>
-        <li>Easy to check edge existence.</li>
-        <li>Space complexity: O(V²).</li>
-      </ul>
-    </div>
-
-    <h4>2. Adjacency List</h4>
-    <div class="highlight-box">
-      <p>
-        Stores each vertex and its list of connected vertices (neighbors).
-      </p>
-      <ul>
-        <li>Space-efficient for sparse graphs.</li>
-        <li>Easy to iterate through connected vertices.</li>
-        <li>Space complexity: O(V + E).</li>
-      </ul>
-    </div>
-
-    <h4>3. Incidence Matrix</h4>
-    <div class="highlight-box">
-      <p>
-        A matrix that shows the relationship between vertices and edges.  
-        Rows represent vertices, columns represent edges.
-      </p>
-      <ul>
-        <li>Used for algebraic graph theory and network analysis.</li>
-      </ul>
-    </div>
-
-    <h4>Interactive Simulation</h4>
-    <div class="simulator">
-      <p><strong>Choose a representation type to visualize how it works:</strong></p>
-      <select id="representation">
-        <option value="">-- Select Representation --</option>
-        <option value="matrix">Adjacency Matrix</option>
-        <option value="list">Adjacency List</option>
-        <option value="incidence">Incidence Matrix</option>
-      </select>
-      <div id="output" class="result-box"></div>
-    </div>
-
-    <h4>Quick Questions</h4>
-    <div class="faq">
-      <button>Which representation is best for dense graphs?</button>
-      <div class="content">Adjacency Matrix — it allows constant-time edge lookup.</div>
-    </div>
-
-    <div class="faq">
-      <button>Which representation uses less memory?</button>
-      <div class="content">Adjacency List — ideal for sparse graphs.</div>
-    </div>
-
-    <div class="faq">
-      <button>Where is the incidence matrix mainly used?</button>
-      <div class="content">In mathematical graph analysis and electrical network modeling.</div>
-    </div>
-
-      <!-- Navigation Buttons -->
-    <div class="nav-buttons">
-      <a href="graph_type.html" class="btn btn-custom">⬅ Previous</a>
-      <a href="graph_traversal.html" class="btn btn-custom">Next➡</a>
+  <!-- Top Navbar -->
+  <div class="topnav">
+    <h3>Discrete Mathematics</h3>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">Help</a>
     </div>
   </div>
 
+  <!-- Main Content -->
+  <main class="container-main">
+    <h1>Graph Representation</h1>
+    <p class="page-intro">Understanding how graphs can be represented in memory and used by algorithms.</p>
+
+    <div class="content">
+      <div class="highlight">
+        <p>
+          Graph representation refers to how we store and visualize graphs in a program.  
+          The main types are <strong>Adjacency Matrix</strong>, <strong>Adjacency List</strong>, and <strong>Incidence Matrix</strong>.
+        </p>
+      </div>
+
+      <h2>1. Adjacency Matrix</h2>
+      <div class="highlight">
+        <p>
+          A V×V matrix where each cell (i, j) indicates whether an edge exists between vertex i and j.
+        </p>
+        <ul>
+          <li>Efficient for dense graphs with many edges</li>
+          <li>Constant-time edge existence checks: O(1)</li>
+          <li>Space complexity: O(V²)</li>
+          <li>Easy to check if graph is complete or symmetric</li>
+        </ul>
+      </div>
+
+      <h2>2. Adjacency List</h2>
+      <div class="highlight">
+        <p>
+          Stores each vertex and its list of neighbors. Space-efficient for sparse graphs.
+        </p>
+        <ul>
+          <li>Space complexity: O(V + E) - much better for sparse graphs</li>
+          <li>Efficient iteration over neighbors</li>
+          <li>Faster for graph traversal algorithms (BFS, DFS)</li>
+          <li>Most common representation in practice</li>
+        </ul>
+      </div>
+
+      <h2>3. Incidence Matrix</h2>
+      <div class="highlight">
+        <p>
+          Rows represent vertices and columns represent edges, used in algebraic graph theory.
+        </p>
+        <ul>
+          <li>Useful in specialized mathematical analysis</li>
+          <li>Space complexity: O(V × E)</li>
+          <li>Good for network flow and electrical circuit analysis</li>
+          <li>Less commonly used than adjacency representations</li>
+        </ul>
+      </div>
+
+      <h2>Interactive Simulation</h2>
+      <div class="simulator">
+        <h3>Visualize Representations</h3>
+        <p>Choose a type to see a small example and explanation.</p>
+
+        <div class="simulator-controls">
+          <select id="representation" class="input-select">
+            <option value="">-- Select Representation --</option>
+            <option value="matrix">Adjacency Matrix</option>
+            <option value="list">Adjacency List</option>
+            <option value="incidence">Incidence Matrix</option>
+          </select>
+        </div>
+
+        <div id="output" class="result-box"></div>
+      </div>
+
+      <h2>Quick Questions</h2>
+
+      <div class="faq" id="faq-1">
+        <button type="button" aria-expanded="false" aria-controls="faq-1-content">
+          <span>Which representation is best for dense graphs?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-1-content" class="content" aria-hidden="true">
+          <strong>Adjacency Matrix</strong> is best for dense graphs. It provides constant-time edge lookup O(1) and is suitable when many edges exist. When the number of edges approaches V², a matrix is more efficient than a list.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-2">
+        <button type="button" aria-expanded="false" aria-controls="faq-2-content">
+          <span>Which representation uses less memory?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-2-content" class="content" aria-hidden="true">
+          <strong>Adjacency List</strong> uses less memory with O(V + E) space complexity. It stores only existing edges and is ideal for sparse graphs where E << V². This is the most common representation in real-world applications.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-3">
+        <button type="button" aria-expanded="false" aria-controls="faq-3-content">
+          <span>Where is the incidence matrix mainly used?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-3-content" class="content" aria-hidden="true">
+          <strong>Incidence matrices</strong> are commonly used in algebraic graph theory, network flow problems, and electrical network analysis. They're particularly useful when you need to analyze properties of edges rather than just vertices.
+        </div>
+      </div>
+
+      <div class="faq" id="faq-4">
+        <button type="button" aria-expanded="false" aria-controls="faq-4-content">
+          <span>Can I convert between representations?</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div id="faq-4-content" class="content" aria-hidden="true">
+          Yes! You can convert between adjacency matrix and adjacency list representations. Matrix to list takes O(V²) time, while list to matrix takes O(V + E) time. Choose the representation based on your algorithm's needs.
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <a href="graph_type.html" class="nav-btn prev">⬅ Previous</a>
+        <a href="graph_traversal.html" class="nav-btn next">Next ➡</a>
+      </div>
+    </div>
+  </main>
+
   <footer>© 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics</footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // Accordion for FAQ
-    //document.querySelectorAll(".faq button").forEach(btn => {
-      //btn.addEventListener("click", () => {
-        //btn.parentElement.classList.toggle("active");
-      //});
-    //});
-
-    // Interactive simulation logic
-    const output = document.getElementById("output");
-    const select = document.getElementById("representation");
-
     const examples = {
-      matrix: `
-        <strong>Adjacency Matrix Example (Graph with 3 vertices):</strong><br><br>
-        Vertices: A, B, C <br>
-        <pre>
-          &nbsp;   A B C
-          A [0 1 1]
-          B [1 0 0]
-          C [1 0 0]
-        </pre>
-        <p>Each '1' means an edge between two vertices. (e.g., A–B, A–C)</p>
-      `,
-      list: `
-        <strong>Adjacency List Example:</strong><br><br>
-        A → B, C <br>
-        B → A <br>
-        C → A <br>
-        <p>Each vertex lists its direct connections. Space-efficient for sparse graphs.</p>
-      `,
-      incidence: `
-        <strong>Incidence Matrix Example:</strong><br><br>
-        Vertices: A, B, C <br>
-        Edges: e1(A–B), e2(A–C)<br>
-        <pre>
-          &nbsp;   e1 e2
-          A [1 1]
-          B [1 0]
-          C [0 1]
-        </pre>
-        <p>Shows which vertices are connected by which edges.</p>
-      `
+      matrix: `<strong>Adjacency Matrix Example (3 vertices)</strong>
+
+Vertices: A, B, C
+Edges: A-B, A-C
+
+    A  B  C
+A [ 0  1  1 ]
+B [ 1  0  0 ]
+C [ 1  0  0 ]
+
+• Each cell (i,j) = 1 means edge exists between i and j
+• Cell (i,j) = 0 means no edge
+• Symmetric matrix for undirected graphs
+• For directed graphs, matrix may not be symmetric`,
+      list: `<strong>Adjacency List Example</strong>
+
+Vertices: A, B, C
+Edges: A-B, A-C
+
+A → [B, C]
+B → [A]
+C → [A]
+
+• Each vertex has a list of its neighbors
+• Space-efficient: only stores existing edges
+• Fast neighbor iteration for traversal algorithms
+• Most common in real-world graph problems`,
+      incidence: `<strong>Incidence Matrix Example</strong>
+
+Vertices: A, B, C
+Edges: e₁(A-B), e₂(A-C)
+
+      e₁  e₂
+A  [  1   1  ]
+B  [  1   0  ]
+C  [  0   1  ]
+
+• Rows = vertices, Columns = edges
+• Cell (v,e) = 1 if vertex v is incident to edge e
+• For directed graphs: use -1 for outgoing, +1 for incoming
+• Useful in algebraic graph theory and network analysis`
     };
 
-    select.addEventListener("change", () => {
-      const val = select.value;
-      output.innerHTML = val ? examples[val] : "";
+    document.addEventListener('DOMContentLoaded', () => {
+      const select = document.getElementById('representation');
+      const output = document.getElementById('output');
+
+      select.addEventListener('change', () => {
+        const v = select.value;
+        output.innerHTML = v ? examples[v] : '';
+      });
+
+      // FAQ toggles
+      const faqs = Array.from(document.querySelectorAll('.faq'));
+      faqs.forEach(faq => {
+        const btn = faq.querySelector('button');
+        const contentId = btn.getAttribute('aria-controls');
+        const content = document.getElementById(contentId);
+        if (!btn || !content) return;
+
+        btn.addEventListener('click', () => {
+          const isOpen = faq.classList.toggle('active');
+          btn.setAttribute('aria-expanded', String(isOpen));
+          content.setAttribute('aria-hidden', String(!isOpen));
+        });
+
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
     });
   </script>
 </body>

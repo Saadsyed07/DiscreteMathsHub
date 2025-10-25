@@ -1,198 +1,244 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Set Introduction — DiscreteMathsHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Introduction to Set Theory — DiscreteMathsHub</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Fonts (same as home) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Page-local theme (exact same visual system as home page) -->
   <style>
     :root{
-      --bg:#f9f9f9;
-      --card:#ffffff;
-      --text:#1c1c1c;
-      --muted:#555;
-      --accent:#6f42c1;
-      --accent-light:rgba(111,66,193,0.1);
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --card-bg:#151525;
+      --text-primary:#FFFFFF;
+      --text-muted:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --nav-height:68px;
+      --radius-lg:18px;
+      --radius-md:10px;
+      --card-pad:24px;
     }
 
+    /* Reset & base */
     *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
     body{
-      font-family: Inter, system-ui, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:var(--bg-dark);
+      color:var(--text-primary);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      overflow-x:hidden;
     }
 
-    /* Sidebar */
-    .sidebar{
-      position: fixed;
-      top:0; left:0; bottom:0;
-      width:240px;
-      background:#2c2f33;
-      color:#fff;
-      padding-top:20px;
-      overflow-y:auto;
-      z-index:1000;
-    }
-    .sidebar h2{
-      text-align:center;
-      font-size:20px;
-      color:var(--accent);
-      margin-bottom:15px;
-    }
-    .sidebar a{
-      display:block;
-      padding:10px 20px;
-      color:#fff;
-      text-decoration:none;
-      font-size:14px;
-    }
-    .sidebar a:hover,
-    .sidebar a.active{
-      background:var(--accent);
-      color:#fff;
-      border-radius:6px;
-    }
+    /* Animated background orbs (same as homepage) */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.28; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:520px;height:520px;background:var(--gradient-1); top:-220px; right:-200px; animation-delay:0s; }
+    .orb2{ width:420px;height:420px;background:var(--gradient-2); bottom:-160px; left:-160px; animation-delay:5s; }
+    .orb3{ width:360px;height:360px;background:var(--secondary); top:48%; left:48%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.05);}66%{transform:translate(-100px,100px) scale(.95);}}
 
-    /* Top Navbar */
-    .topnav{
-      position: fixed;
-      top:0; left:240px; right:0;
-      height:60px;
-      background:#fff;
-      border-bottom:1px solid #ddd;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 20px;
-      z-index:999;
-    }
-    .topnav h3{margin:0;color:var(--accent);}
-    .topnav a{
-      margin-left:15px;
-      text-decoration:none;
-      color:var(--accent);
-      font-weight:500;
-    }
+    /* NAV */
+    nav{ position:fixed; top:0; left:0; right:0; height:var(--nav-height); z-index:1200; padding:12px 0;
+      background: rgba(15,15,30,0.75); backdrop-filter: blur(12px); border-bottom:1px solid rgba(124,58,237,0.06); display:flex; align-items:center; }
+    .nav-container{ max-width:1400px; margin:0 auto; padding:0 28px; display:flex; align-items:center; justify-content:space-between; width:100%;}
 
-    /* Main Content */
-    main.container-main{
-      margin-left:240px;
-      margin-top:60px;
-      padding:20px 40px;
-      min-height:100vh;
-    }
+    .logo{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-0.3px; }
 
-    /* Content Cards */
-    .content{
-      background:var(--card);
-      border-radius:12px;
-      padding:25px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    .nav-menu{ display:flex; gap:18px; align-items:center; list-style:none; }
+    .nav-menu a{ color:var(--text-muted); text-decoration:none; font-weight:600; font-size:14px; padding:8px 12px; border-radius:999px; }
+    .nav-menu a.home-cta{ background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--text-primary); }
+    .nav-menu a:hover{ color:var(--primary); background: rgba(124,58,237,0.06); transform:translateY(-2px); }
+
+    .hamburger{ display:none; width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); align-items:center; justify-content:center; cursor:pointer; }
+    .hamburger .bar{ width:20px; height:2px; background:var(--text-primary); display:block; position:relative; }
+    .hamburger .bar::before, .hamburger .bar::after{ content:''; position:absolute; left:0; width:20px; height:2px; background:var(--text-primary); }
+    .hamburger .bar::before{ top:-6px; } .hamburger .bar::after{ top:6px; }
+
+    .mobile-nav{ display:none; }
+    body.nav-open .mobile-nav{
+      display:block; position:fixed; top:var(--nav-height); right:12px; left:12px; max-height:calc(100vh - var(--nav-height) - 24px); overflow:auto;
+      background: rgba(12,12,24,0.98); border:1px solid rgba(124,58,237,0.12); border-radius:14px; padding:16px; z-index:1199;
+    }
+    .mobile-nav a{ display:block; padding:12px 8px; color:var(--text-muted); text-decoration:none; font-weight:600; border-radius:8px; }
+    .mobile-nav a:hover{ background: rgba(124,58,237,0.06); color:var(--text-primary); }
+
+    /* Page container */
+    .page { max-width:1100px; margin: calc(var(--nav-height) + 36px) auto; padding: 20px; }
+
+    /* Content card */
+    .content-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid rgba(124,58,237,0.06);
+      box-shadow: 0 18px 50px rgba(15,23,42,0.6);
       margin-bottom:20px;
-      color:var(--text);
     }
-    h1{
-      text-align:center;
-      color:var(--accent);
-      margin-bottom:15px;
-      font-weight:800;
-    }
-    h2{color:var(--accent);margin-top:20px;}
-    .lead{color:var(--muted);line-height:1.6}
 
-    /* Examples */
+    h1{ font-family:'Space Grotesk',sans-serif; color:var(--primary); text-align:center; margin-bottom:8px; font-size:32px; }
+    h2{ color:var(--primary); margin-top:18px; font-size:20px; }
+    p, li { color:var(--text-muted); line-height:1.7; margin-bottom:12px; }
+    ul { margin-left:1.05rem; }
+
     .example-box{
-      background:var(--accent-light);
-      border-left:4px solid var(--accent);
-      padding:12px;
-      border-radius:8px;
+      background: linear-gradient(180deg, rgba(124,58,237,0.06), rgba(255,92,158,0.02));
+      border-left: 4px solid var(--primary);
+      padding:12px 14px;
+      border-radius:10px;
       margin-top:12px;
-      color:#333;
+      color:var(--text-primary);
     }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 10px;
-    }
+    /* Small utilities */
+    .muted { color:var(--text-muted); }
 
-    /* Responsive */
+    /* Entrance animation */
+    .content-card{ opacity:0; transform:translateY(18px); transition: all .6s cubic-bezier(.2,.9,.2,1); }
+
     @media(max-width:768px){
-      main.container-main{margin-left:0;padding:20px;}
-      .sidebar{width:100%;position:relative;}
-      .topnav{left:0;}
+      .page{ margin-top: calc(var(--nav-height) + 20px); padding:16px; }
+      .nav-menu{ display:none; }
+      .hamburger{ display:flex; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>Set Theory</h2>
-    <a href="set_defination.html" class="active">Set Introduction</a>
-    <a href="set_operation.html">Set Operations</a>
-    <a href="set_venndiagram.html">Venn Diagrams</a>
-    <a href="subset.html">Subsets</a>
-   <a href="set_property.html">Properties Sets</a>
-    <a href="cartesian.html">Cartesian Products</a>
-    <a href="applications.html">Applications</a>
+  <!-- Animated background orbs -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
   </div>
 
-  <!-- Top Navbar -->
-  <div class="topnav">
-    <h3>Discrete Mathematics</h3>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="#">About</a>
-      <a href="#">Help</a>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a class="logo" href="index.html">DiscreteMathsHub</a>
+
+      <ul class="nav-menu" role="menubar" aria-label="Primary">
+        <li role="none"><a role="menuitem" href="index.html" class="home-cta">Home</a></li>
+        <li role="none"><a role="menuitem" href="explore.html">Explore</a></li>
+        <li role="none"><a role="menuitem" href="about.html">About</a></li>
+        <li role="none"><a role="menuitem" href="login.html">Login</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false" type="button">
+        <span class="bar" aria-hidden="true"></span>
+      </button>
     </div>
-  </div>
 
-  <!-- Main Content -->
-  <main class="container-main">
-    <h1>Introduction to Set Theory</h1>
+    <!-- Mobile menu -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="explore.html" class="mobile-link">Explore</a>
+      <a href="about.html" class="mobile-link">About</a>
+      <a href="login.html" class="mobile-link">Login</a>
+    </div>
+  </nav>
 
-    <div class="content">
-      <p class="lead">
-        A <strong>set</strong> is a well-defined collection of distinct objects considered as a single entity.
-        These objects are called <strong>elements</strong> or <strong>members</strong> of the set.
-      </p>
+  <!-- Page content -->
+  <main class="page" id="main-content" role="main">
+    <section class="content-card" aria-labelledby="heading">
+      <h1 id="heading">Introduction to Set Theory</h1>
 
-      <div class="example-box">
-        <strong>Example:</strong><br>
-        - A = {1, 2, 3, 4, 5} represents the set of first five natural numbers.<br>
-        - B = {Apple, Mango, Banana} represents a set of fruits.<br>
-        - C = {x | x is a vowel in the English alphabet} → {a, e, i, o, u}.
+      <p class="muted">A <strong>set</strong> is a well-defined collection of distinct objects considered as a single entity. These objects are called <strong>elements</strong> or <strong>members</strong> of the set.</p>
+
+      <div class="example-box" role="region" aria-label="Examples">
+        <strong>Example:</strong><br/>
+        A = {1, 2, 3, 4, 5} — first five natural numbers.<br/>
+        B = {Apple, Mango, Banana} — fruits.<br/>
+        C = {x | x is a vowel in the English alphabet} → {a, e, i, o, u}.
       </div>
-    </div>
+    </section>
 
-    <div class="content">
-      <h2>Real-Life Examples</h2>
-      <p class="lead">Set theory appears everywhere around us:</p>
+    <section class="content-card" aria-labelledby="real-life">
+      <h2 id="real-life">Real-Life Examples</h2>
+      <p class="muted">Set theory appears everywhere around us. A few common examples:</p>
       <ul>
         <li>The set of all students in your class.</li>
         <li>The set of even numbers between 1 and 20.</li>
         <li>The set of books available in the library.</li>
         <li>The set of movies you have watched this year.</li>
       </ul>
-    </div>
+    </section>
 
-    <div class="content">
-      <h2>Representation of Sets</h2>
-      <p class="lead">Sets can be represented in two common ways:</p>
+    <section class="content-card" aria-labelledby="representation">
+      <h2 id="representation">Representation of Sets</h2>
+      <p class="muted">Sets can be represented in two common ways:</p>
       <div class="example-box">
-        <strong>Roster Form:</strong> Elements are listed inside curly braces.<br>
-        Example: A = {1, 2, 3, 4}<br><br>
-        <strong>Set Builder Form:</strong> Describes the property of elements.<br>
+        <strong>Roster Form:</strong> Elements are listed inside curly braces.<br/>
+        Example: A = {1, 2, 3, 4}<br/><br/>
+        <strong>Set Builder Form:</strong> Describes the property of elements.<br/>
         Example: B = {x | x is an even number less than 10}
       </div>
+    </section>
+
+    <div style="display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:8px;">
+      <a class="cta-link" href="set_property.html" style="padding:10px 16px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--text-muted);text-decoration:none;">⬅ Previous</a>
+      <a class="cta-link home" href="index.html" style="padding:10px 16px;border-radius:999px;background:var(--gradient-1);color:#fff;text-decoration:none;">🏠 Back to Home</a>
     </div>
   </main>
 
+  <!-- Small scripts reused across pages (mobile menu toggle, entrance animation) -->
+  <script>
+    (function(){
+      const bodyEl = document.body;
+      const hamburger = document.getElementById('hamburger');
+      const mobileNav = document.getElementById('mobileNav');
+
+      function setMobileOpen(open){
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if(open) bodyEl.classList.add('nav-open'); else bodyEl.classList.remove('nav-open');
+      }
+
+      hamburger && hamburger.addEventListener('click', ()=>{
+        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+        setMobileOpen(!isOpen);
+      });
+
+      mobileNav.querySelectorAll('a.mobile-link').forEach(a=>{
+        a.addEventListener('click', ()=> setMobileOpen(false));
+      });
+
+      document.addEventListener('click', (e)=>{
+        if(!bodyEl.classList.contains('nav-open')) return;
+        const path = e.composedPath ? e.composedPath() : (e.path || []);
+        const withinNav = path.includes(mobileNav) || path.includes(hamburger);
+        if(!withinNav) setMobileOpen(false);
+      });
+
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape') setMobileOpen(false);
+      });
+
+      // Entrance animations for cards
+      const cards = document.querySelectorAll('.content-card');
+      cards.forEach((card, i) => {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 80 * i);
+        });
+      });
+
+      // focus heading for accessibility
+      const heading = document.getElementById('heading');
+      if (heading) heading.setAttribute('tabindex', '-1');
+    })();
+  </script>
 </body>
 </html>

@@ -4,172 +4,556 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Set Operations — DiscreteMathsHub</title>
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     :root{
-      --bg:#f9f9f9;
-      --card:#ffffff;
-      --text:#1c1c1c;
-      --muted:#555;
-      --accent:#6f42c1;
-      --accent-light:rgba(111,66,193,0.1);
+      --primary:#7C3AED;
+      --primary-2:#6D28D9;
+      --secondary:#FF5C9E;
+      --accent:#06B6D4;
+      --bg-dark:#0E0E1A;
+      --bg-card:#151525;
+      --text-primary:#FFFFFF;
+      --text-secondary:#B4B4BF;
+      --gradient-1:linear-gradient(135deg,#7C3AED 0%, #FF5C9E 100%);
+      --gradient-2:linear-gradient(135deg,#06B6D4 0%, #7C3AED 100%);
+      --gradient-3:linear-gradient(135deg,#FF5C9E 0%, #F59E0B 100%);
+      --nav-height:68px;
     }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family: Inter, system-ui, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
+
+    /* Animated Background */
+    .bg-animation{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
+    .gradient-orb{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.3; animation:float 20s infinite ease-in-out; }
+    .orb1{ width:500px;height:500px;background:var(--gradient-1); top:-200px; right:-200px; animation-delay:0s; }
+    .orb2{ width:400px;height:400px;background:var(--gradient-2); bottom:-150px; left:-150px; animation-delay:5s; }
+    .orb3{ width:350px;height:350px;background:var(--gradient-3); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:10s; }
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(100px,-100px) scale(1.1);}66%{transform:translate(-100px,100px) scale(.9);}}
 
     /* Sidebar */
     .sidebar{
       position: fixed;
       top:0; left:0; bottom:0;
-      width:240px;
-      background:#2c2f33;
-      color:#fff;
-      padding-top:20px;
+      width:260px;
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(124,58,237,0.12);
+      color: var(--text-primary);
+      padding-top:30px;
       overflow-y:auto;
       z-index:1000;
     }
+    
     .sidebar h2{
       text-align:center;
-      font-size:20px;
-      color:var(--accent);
-      margin-bottom:15px;
+      font-size:22px;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:25px;
+      font-weight:700;
     }
+    
     .sidebar a{
       display:block;
-      padding:10px 20px;
-      color:#fff;
+      padding:12px 24px;
+      color: var(--text-secondary);
       text-decoration:none;
       font-size:14px;
+      font-weight:500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
     }
-    .sidebar a:hover,
+    
+    .sidebar a:hover{
+      background: rgba(124,58,237,0.1);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      padding-left: 28px;
+    }
+    
     .sidebar a.active{
-      background:var(--accent);
-      color:#fff;
-      border-radius:6px;
+      background: rgba(124,58,237,0.15);
+      color: var(--text-primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
     }
 
     /* Top Navbar */
     .topnav{
       position: fixed;
-      top:0; left:240px; right:0;
-      height:60px;
-      background:#fff;
-      border-bottom:1px solid #ddd;
+      top:0; left:260px; right:0;
+      height: var(--nav-height);
+      background: rgba(15,15,30,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.06);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 20px;
+      padding:0 32px;
       z-index:999;
     }
-    .topnav h3{margin:0;color:var(--accent);}
+    
+    .topnav h3{
+      margin:0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight:700;
+      font-size:20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .topnav-links{
+      display: flex;
+      gap: 24px;
+    }
+    
     .topnav a{
-      margin-left:15px;
       text-decoration:none;
-      color:var(--accent);
+      color: var(--text-secondary);
       font-weight:500;
+      font-size:14px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    
+    .topnav a::after{
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width 0.25s ease;
+    }
+    
+    .topnav a:hover{
+      color: var(--text-primary);
+    }
+    
+    .topnav a:hover::after{
+      width: 100%;
     }
 
     /* Main Content */
     main.container-main{
-      margin-left:240px;
-      margin-top:60px;
-      padding:20px 40px;
+      margin-left:260px;
+      margin-top: var(--nav-height);
+      padding:40px 50px;
       min-height:100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Page Title */
+    h1{
+      text-align:center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 30px;
+      letter-spacing: -1px;
     }
 
     /* Content Cards */
     .content{
-      background:var(--card);
-      border-radius:12px;
-      padding:25px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom:20px;
-      color:var(--text);
+      background: rgba(26,26,46,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius:20px;
+      padding:35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      margin-bottom:28px;
+      color: var(--text-primary);
     }
-    h1{
-      text-align:center;
-      color:var(--accent);
-      margin-bottom:15px;
-      font-weight:800;
+    
+    .lead{
+      color: var(--text-secondary);
+      line-height:1.8;
+      font-size: 16px;
     }
-    .lead{color:var(--muted);line-height:1.6}
+
+    /* Section Headers */
+    h2{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      position: relative;
+      padding-left: 18px;
+    }
+    
+    h2::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 28px;
+      background: var(--gradient-1);
+      border-radius: 3px;
+    }
+
+    /* Operation Descriptions */
+    .op-desc{
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+    
+    .op-desc strong{
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 16px;
+    }
 
     /* Examples */
     .example-box{
-      background:var(--accent-light);
-      border-left:4px solid var(--accent);
-      padding:12px;
-      border-radius:8px;
-      margin-top:12px;
-      color:#333;
+      background: rgba(124,58,237,0.08);
+      border-left:4px solid var(--primary);
+      padding:18px 20px;
+      border-radius:10px;
+      margin-top:14px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+    
+    .example-box strong{
+      color: var(--text-primary);
+      font-weight: 700;
     }
 
-    /* Inputs & Buttons */
-    label{color:var(--accent);font-weight:600;margin-top:10px;display:block;}
+    /* Form Elements */
+    label{
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      display: block;
+      font-size: 15px;
+    }
+    
     .form-control{
-      border:1px solid rgba(111,66,193,0.3);
-      padding:8px 12px;
-      border-radius:6px;
-      margin-bottom:10px;
-      color:#333;
+      width: 100%;
+      border: 2px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
     }
-    .form-control::placeholder{color:#aaa}
+    
+    .form-control:focus{
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(15,15,30,0.8);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+    
+    .form-control::placeholder{
+      color: rgba(180,180,191,0.5);
+    }
 
-    .btn-custom{
-      background: linear-gradient(90deg,var(--accent),#a77de0);
-      color:#fff;
-      border:none;
-      padding:8px 18px;
-      border-radius:20px;
-      font-weight:600;
-      cursor:pointer;
-      margin-top:5px;
+    /* Buttons */
+    .btn-group{
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .btn-custom:hover{opacity:0.9}
-    .btn-custom:active{transform:translateY(1px)}
+    
+    .btn-custom{
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+    }
+    
+    .btn-custom:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124,58,237,0.35);
+    }
+    
+    .btn-custom:active{
+      transform: translateY(0);
+    }
+    
+    .btn-secondary{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+      box-shadow: none;
+    }
+    
+    .btn-secondary:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+    }
 
     /* Results Box */
     .results{
-      margin-top:15px;
-      padding:12px;
-      border-radius:8px;
-      border:1px solid rgba(111,66,193,0.3);
-      background:#f5f5f5;
-      color:#333;
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(124,58,237,0.2);
+      background: rgba(15,15,30,0.6);
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    
+    .results p{
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .results p:last-child{
+      margin-bottom: 0;
+    }
+    
+    .results b{
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    
+    .results hr{
+      border: none;
+      border-top: 1px solid rgba(124,58,237,0.2);
+      margin: 16px 0;
+    }
+    
+    .results.warning{
+      border-color: rgba(245,158,11,0.3);
+      background: rgba(245,158,11,0.05);
     }
 
     /* Accordion */
+    .accordion-item{
+      background: rgba(15,15,30,0.6);
+      border: 1px solid rgba(124,58,237,0.15);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    
     .accordion-button{
-      font-weight:600;
-      color:var(--text);
+      font-weight: 600;
+      color: var(--text-primary);
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .accordion-button:hover{
+      background: rgba(124,58,237,0.08);
+    }
+    
+    .accordion-button::after{
+      content: '▼';
+      float: right;
+      transition: transform 0.3s ease;
+      color: var(--primary);
+    }
+    
+    .accordion-button.collapsed::after{
+      transform: rotate(-90deg);
+    }
+    
+    .accordion-collapse{
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .accordion-collapse.show{
+      max-height: 300px;
+    }
+    
+    .accordion-body{
+      padding: 16px 20px;
+      color: var(--text-secondary);
+      background: rgba(124,58,237,0.05);
+      font-size: 15px;
+      line-height: 1.7;
     }
 
     /* Navigation Row */
     .nav-row{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    
+    .nav-btn{
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block;
+    }
+    
+    .nav-btn.prev{
+      background: rgba(124,58,237,0.1);
+      border: 2px solid rgba(124,58,237,0.2);
+      color: var(--primary);
+    }
+    
+    .nav-btn.prev:hover{
+      background: rgba(124,58,237,0.2);
+      border-color: var(--primary);
+      transform: translateX(-4px);
+    }
+    
+    .nav-btn.next{
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(124,58,237,0.3);
+    }
+    
+    .nav-btn.next:hover{
+      transform: translateX(4px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.4);
+    }
+
+    /* Footer */
+    footer{
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-left: 260px;
+      border-top: 1px solid rgba(124,58,237,0.06);
     }
 
     /* Responsive */
+    @media(max-width:992px){
+      .sidebar{
+        width: 100%;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(124,58,237,0.12);
+      }
+      
+      main.container-main{
+        margin-left: 0;
+        padding: 30px 24px;
+      }
+      
+      .topnav{
+        left: 0;
+      }
+      
+      footer{
+        margin-left: 0;
+      }
+    }
+
     @media(max-width:768px){
-      main.container-main{margin-left:0;padding:20px;}
-      .sidebar{width:100%;position:relative;}
-      .topnav{left:0;}
-      .nav-row{flex-direction:column;}
+      main.container-main{
+        padding: 24px 20px;
+      }
+      
+      .content{
+        padding: 24px;
+      }
+      
+      h1{
+        font-size: 32px;
+      }
+      
+      h2{
+        font-size: 22px;
+      }
+      
+      .topnav-links{
+        display: none;
+      }
+      
+      .nav-row{
+        flex-direction: column;
+      }
+      
+      .btn-group{
+        flex-direction: column;
+      }
+      
+      .btn-custom{
+        width: 100%;
+      }
+    }
+
+    @media(max-width:420px){
+      .topnav{
+        padding: 0 16px;
+      }
+      
+      .topnav h3{
+        font-size: 18px;
+      }
+      
+      main.container-main{
+        padding: 20px 16px;
+      }
+      
+      .content{
+        padding: 20px;
+      }
+      
+      h1{
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="gradient-orb orb1"></div>
+    <div class="gradient-orb orb2"></div>
+    <div class="gradient-orb orb3"></div>
+  </div>
 
   <!-- Sidebar -->
   <div class="sidebar">
@@ -178,15 +562,14 @@
     <a href="set_operation.html" class="active">Set Operations</a>
     <a href="set_venndiagram.html">Venn Diagrams</a>
     <a href="subset.html">Subsets</a>
-     <a href="set_property.html">Properties Sets</a>
-    <a href="cartesian.html">Cartesian Products</a>
-    <a href="applications.html">Applications</a>
+    <a href="set_property.html">Properties Sets</a>
+    <a href="set_application.html">Applications</a>
   </div>
 
   <!-- Top Navbar -->
   <div class="topnav">
     <h3>Discrete Mathematics</h3>
-    <div>
+    <div class="topnav-links">
       <a href="index.html">Home</a>
       <a href="#">About</a>
       <a href="#">Help</a>
@@ -199,37 +582,37 @@
 
     <div class="content">
       <p class="lead">
-        Set operations let us combine and compare sets to form new sets. Below you will find definitions, examples, and an interactive simulator — fully styled like the Set Definition page.
+        Set operations let us combine and compare sets to form new sets. Below you will find definitions, examples, and an interactive simulator to explore set operations in real-time.
       </p>
     </div>
 
     <section class="content" aria-labelledby="ops-heading">
-      <h2 id="ops-heading" style="color:var(--accent);margin-bottom:10px">Common Operations</h2>
+      <h2 id="ops-heading">Common Operations</h2>
 
-      <div class="muted small">
+      <div class="op-desc">
         <strong>Union (A ∪ B)</strong><br>The union returns all elements in A or B (or both).
       </div>
       <div class="example-box"><strong>Example:</strong> A = {1,2,3}, B = {3,4,5} → <strong>A ∪ B = {1,2,3,4,5}</strong></div>
 
-      <div class="muted small" style="margin-top:10px">
-        <strong>Intersection (A ∩ B)</strong><br>Elements common to A and B.
+      <div class="op-desc">
+        <strong>Intersection (A ∩ B)</strong><br>Elements common to both A and B.
       </div>
       <div class="example-box"><strong>Example:</strong> A = {1,2,3}, B = {3,4,5} → <strong>A ∩ B = {3}</strong></div>
 
-      <div class="muted small" style="margin-top:10px">
-        <strong>Difference (A − B)</strong><br>Elements in A not in B.
+      <div class="op-desc">
+        <strong>Difference (A − B)</strong><br>Elements in A that are not in B.
       </div>
       <div class="example-box"><strong>Example:</strong> A = {1,2,3}, B = {3,4,5} → <strong>A − B = {1,2}</strong></div>
 
-      <div class="muted small" style="margin-top:10px">
-        <strong>Complement (A′)</strong><br>All elements in universal set U not in A.
+      <div class="op-desc">
+        <strong>Complement (A′)</strong><br>All elements in universal set U that are not in A.
       </div>
       <div class="example-box"><strong>Example:</strong> U = {1,2,3,4,5}, A = {1,2} → <strong>A′ = {3,4,5}</strong></div>
     </section>
 
     <section class="content">
-      <h2 style="color:var(--accent);margin-bottom:10px">Interactive Simulator</h2>
-      <p class="muted small">Type elements separated by commas. Duplicates removed automatically.</p>
+      <h2>Interactive Simulator</h2>
+      <p class="lead">Type elements separated by commas. Duplicates are removed automatically.</p>
 
       <label for="aInput">Set A</label>
       <input id="aInput" class="form-control" placeholder="1,2,3" type="text">
@@ -240,29 +623,27 @@
       <label for="uInput">Universal Set U (optional)</label>
       <input id="uInput" class="form-control" placeholder="1,2,3,4,5" type="text">
 
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <div class="btn-group">
         <button class="btn-custom" onclick="runAll()">Show All Results</button>
-        <button class="btn-custom" onclick="doOp('union')">A ∪ B</button>
-        <button class="btn-custom" onclick="doOp('intersection')">A ∩ B</button>
-        <button class="btn-custom" onclick="doOp('a-b')">A − B</button>
-        <button class="btn-custom" onclick="doOp('b-a')">B − A</button>
+        <button class="btn-custom btn-secondary" onclick="doOp('union')">A ∪ B</button>
+        <button class="btn-custom btn-secondary" onclick="doOp('intersection')">A ∩ B</button>
+        <button class="btn-custom btn-secondary" onclick="doOp('a-b')">A − B</button>
+        <button class="btn-custom btn-secondary" onclick="doOp('b-a')">B − A</button>
       </div>
 
-      <div id="out" class="results" aria-live="polite"></div>
+      <div id="out" class="results" aria-live="polite" style="display:none;"></div>
     </section>
 
     <section class="content">
-      <h2 style="color:var(--accent);margin-bottom:10px">Quick Questions</h2>
+      <h2>Quick Questions</h2>
       <div class="accordion" id="qaAccordion">
-        <div class="accordion-item" style="border:none">
-          <h2 class="accordion-header" id="qOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQ1">
-              Why remove duplicates in sets?
-            </button>
-          </h2>
-          <div id="collapseQ1" class="accordion-collapse collapse" data-bs-parent="#qaAccordion">
+        <div class="accordion-item">
+          <button class="accordion-button collapsed" onclick="toggleAccordion(this, 'collapseQ1')">
+            Why remove duplicates in sets?
+          </button>
+          <div id="collapseQ1" class="accordion-collapse">
             <div class="accordion-body">
-              A set contains distinct elements, so duplicates are removed in results.
+              A set contains only distinct elements, so duplicates are automatically removed in results.
             </div>
           </div>
         </div>
@@ -270,17 +651,16 @@
     </section>
 
     <div class="nav-row">
-      <a href="set_notation.html" class="btn-custom">⬅ Previous</a>
-      <a href="set_type.html" class="btn-custom">Next➡</a>
+      <a href="set_notation.html" class="nav-btn prev">⬅ Previous</a>
+      <a href="set_type.html" class="nav-btn next">Next ➡</a>
     </div>
 
   </main>
 
-  <footer style="max-width:900px;margin:30px auto;text-align:center;color:#555">
+  <footer>
     © 2025 DiscreteMathsHub | Interactive Learning for Discrete Mathematics
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function parse(str){ return [...new Set(str.split(',').map(s=>s.trim()).filter(s=>s!==''))]; }
     function union(a,b){ return [...new Set([...a,...b])]; }
@@ -293,38 +673,73 @@
       const A=parse(document.getElementById('aInput').value);
       const B=parse(document.getElementById('bInput').value);
       const U=parse(document.getElementById('uInput').value);
+      const outEl = document.getElementById('out');
+      
       if(A.length===0||B.length===0){
-        document.getElementById('out').innerHTML="<div class='results' style='border-color:#f0ad4e;color:#856404'>⚠ Please enter both Set A and Set B.</div>";
+        outEl.innerHTML="⚠ Please enter both Set A and Set B.";
+        outEl.className = "results warning";
+        outEl.style.display = "block";
         return;
       }
+      
       let resHtml='';
-      if(op==='union') resHtml="<b>A ∪ B:</b> "+formatSet(union(A,B));
-      if(op==='intersection') resHtml="<b>A ∩ B:</b> "+formatSet(intersection(A,B));
-      if(op==='a-b') resHtml="<b>A − B:</b> "+formatSet(difference(A,B));
-      if(op==='b-a') resHtml="<b>B − A:</b> "+formatSet(difference(B,A));
-      document.getElementById('out').innerHTML="<div class='results'>"+resHtml+"</div>";
+      if(op==='union') resHtml="<p><b>A ∪ B:</b> "+formatSet(union(A,B))+"</p>";
+      if(op==='intersection') resHtml="<p><b>A ∩ B:</b> "+formatSet(intersection(A,B))+"</p>";
+      if(op==='a-b') resHtml="<p><b>A − B:</b> "+formatSet(difference(A,B))+"</p>";
+      if(op==='b-a') resHtml="<p><b>B − A:</b> "+formatSet(difference(B,A))+"</p>";
+      
+      outEl.innerHTML=resHtml;
+      outEl.className = "results";
+      outEl.style.display = "block";
     }
 
     function runAll(){
       const A=parse(document.getElementById('aInput').value);
       const B=parse(document.getElementById('bInput').value);
       const U=parse(document.getElementById('uInput').value);
+      const outEl = document.getElementById('out');
+      
       if(A.length===0||B.length===0){
-        document.getElementById('out').innerHTML="<div class='results' style='border-color:#f0ad4e;color:#856404'>⚠ Please enter both Set A and Set B.</div>";
+        outEl.innerHTML="⚠ Please enter both Set A and Set B.";
+        outEl.className = "results warning";
+        outEl.style.display = "block";
         return;
       }
-      let html="<div class='results'>";
+      
+      let html="";
       html+="<p><b>A ∪ B:</b> "+formatSet(union(A,B))+"</p>";
       html+="<p><b>A ∩ B:</b> "+formatSet(intersection(A,B))+"</p>";
       html+="<p><b>A − B:</b> "+formatSet(difference(A,B))+"</p>";
       html+="<p><b>B − A:</b> "+formatSet(difference(B,A))+"</p>";
+      
       if(U.length>0){
         html+="<hr>";
         html+="<p><b>A′:</b> "+formatSet(complement(A,U))+" (relative to U)</p>";
         html+="<p><b>B′:</b> "+formatSet(complement(B,U))+" (relative to U)</p>";
       }
-      html+="</div>";
-      document.getElementById('out').innerHTML=html;
+      
+      outEl.innerHTML=html;
+      outEl.className = "results";
+      outEl.style.display = "block";
+    }
+    
+    function toggleAccordion(button, targetId) {
+      const target = document.getElementById(targetId);
+      const isCollapsed = button.classList.contains('collapsed');
+      
+      // Close all accordions
+      document.querySelectorAll('.accordion-button').forEach(btn => {
+        btn.classList.add('collapsed');
+      });
+      document.querySelectorAll('.accordion-collapse').forEach(collapse => {
+        collapse.classList.remove('show');
+      });
+      
+      // Open clicked accordion if it was closed
+      if (isCollapsed) {
+        button.classList.remove('collapsed');
+        target.classList.add('show');
+      }
     }
   </script>
 
